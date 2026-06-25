@@ -2592,6 +2592,266 @@ print(solution(inputs[0], inputs[1], inputs[2]))
       { input: "100 10 250", output: "3" },
       { input: "50 49 50", output: "1" }
     ]
+  },
+  {
+    id: 66,
+    classLevel: 2,
+    title: "[3차] [문제 6] 타일 색칠 순서 구하기 (빈칸 채우기)",
+    type: "blank",
+    description: "타일을 'R', 'G', 'B' 색으로 칠하려 합니다. R 색으로는 3칸을 한 번에, G 색으로는 2칸을 한 번에 칠할 수 있으며, B 색으로는 1칸을 칠할 수 있습니다. 색은 R, G, B 순서로 한 번씩 번갈아 가면서 사용해야 하며, 타일의 길이를 넘겨서 칠할 수는 없습니다. 타일 길이가 매개변수 tile_length로 주어질 때, 타일을 색칠한 순서를 문자열로 return하는 solution 함수를 작성하려 합니다. 빈칸을 채워 전체 코드를 완성해주세요. 순서에 맞게 타일을 칠할 수 없다면 -1을 문자열 '-1'로 return 해주세요.",
+    input_desc: "타일 길이 tile_length가 1,000 이하의 자연수로 주어집니다.",
+    output_desc: "타일을 칠한 패턴 문자열을 출력하거나, 올바르게 칠하지 못하면 '-1'을 출력합니다.",
+    examples: [
+      { input: "11", output: "RRRGGBRRRGG" },
+      { input: "16", output: "-1" }
+    ],
+    starter_code: `def solution(tile_length):
+    answer = ''
+    com = 'RRRGGB'
+    if tile_length % 6 == 1 or tile_length % 6 == 2 or @@@:
+        answer = '-1'
+    else:
+        for i in range(tile_length):
+            answer += com[i % 6]
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+tile_length = int(input())
+print(solution(tile_length))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 하나의 완성 주기는 'RRRGGB'로 총 6칸입니다.
+# 2. R을 칠하려다 실패하는 케이스(길이가 6으로 나눈 나머지가 1 또는 2인 경우)와, G를 칠하려다 실패하는 케이스(나머지가 4인 경우)가 예외 상황입니다. 
+# 3. 나머지가 3, 5, 0인 경우에는 타일 길이를 초과하지 않고 딱 나누어 떨어지거나 단위를 맞출 수 있습니다. 따라서 조건식에 tile_length % 6 == 4 를 작성해 줍니다.
+
+def solution(tile_length):
+    answer = ''
+    com = 'RRRGGB'
+    if tile_length % 6 == 1 or tile_length % 6 == 2 or tile_length % 6 == 4:
+        answer = '-1'
+    else:
+        for i in range(tile_length):
+            answer += com[i % 6]
+    return answer
+
+tile_length = int(input())
+print(solution(tile_length))
+`,
+    test_cases: [
+      { input: "11", output: "RRRGGBRRRGG" },
+      { input: "16", output: "-1" },
+      { input: "6", output: "RRRGGB" }
+    ]
+  },
+  {
+    id: 67,
+    classLevel: 2,
+    title: "[3차] [문제 7] 주스 제조 최대 잔수 구하기 (한 줄 수정)",
+    type: "code",
+    description: "주스 1잔을 만들려면 사과 3개와 당근 1개가 필요합니다. 그런데 키우는 토끼에게 먹이를 주기 위해 사과와 당근 종류에 상관없이 k개를 빼놓으려고 합니다. 주스는 최대한 많이 만들수록 좋습니다. 사과 개수 num_apple과 당근 개수 num_carrot, 토끼에게 줄 먹이 개수 k가 주어질 때 주스를 최대 몇 잔 만들 수 있는지 return 하도록 solution 함수를 작성했습니다. 코드 일부분을 한 줄만 변경해서 모든 입력에 대해 올바르게 동작하도록 수정하세요.",
+    input_desc: "사과 수 num_apple, 당근 수 num_carrot, 토끼 먹이 수 k가 공백으로 구분되어 주어집니다.",
+    output_desc: "만들 수 있는 최대 주스 잔수를 출력합니다.",
+    examples: [
+      { input: "5 1 2", output: "1" },
+      { input: "10 5 4", output: "2" }
+    ],
+    starter_code: `def solution(num_apple, num_carrot, k):
+    answer = 0
+
+    if num_apple < num_carrot * 3:
+        answer = num_apple // 3
+    else:
+        answer = num_carrot    
+
+    num_apple -= answer * 3
+    num_carrot -= answer
+
+    i = 0
+    while k - (num_apple + num_carrot + i) > 0:
+        if i % 4 == 0:
+            answer += 1
+        i = i + 1
+
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+inputs = list(map(int, input().split()))
+print(solution(inputs[0], inputs[1], inputs[2]))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 1차적으로 주스를 다 만든 후, 남은 재료(num_apple + num_carrot)로 먹이 k개를 우선 차감합니다. 
+# 2. 만약 재료가 모자라면 주스를 허물어야(answer -= 1) 하며, 주스 1잔을 허물 때마다 과일 4개(사과 3개, 당근 1개)가 추가로 확보됩니다.
+# 3. while 조건식 'while k - (num_apple + num_carrot + i) > 0:' 에 따라, 1잔을 줄여서 사과 3개와 당근 1개를 복원하므로 answer가 1 감소해야 합니다. 기존 코드는 answer += 1로 잘못 증가시켰으므로 answer -= 1로 수정합니다.
+
+def solution(num_apple, num_carrot, k):
+    answer = 0
+
+    if num_apple < num_carrot * 3:
+        answer = num_apple // 3
+    else:
+        answer = num_carrot    
+
+    num_apple -= answer * 3
+    num_carrot -= answer
+
+    i = 0
+    while k - (num_apple + num_carrot + i) > 0:
+        if i % 4 == 0:
+            answer -= 1
+        i = i + 1
+
+    return answer
+
+inputs = list(map(int, input().split()))
+print(solution(inputs[0], inputs[1], inputs[2]))
+`,
+    test_cases: [
+      { input: "5 1 2", output: "1" },
+      { input: "10 5 4", output: "2" },
+      { input: "3 1 1", output: "1" }
+    ]
+  },
+  {
+    id: 68,
+    classLevel: 2,
+    title: "[3차] [문제 8] TV 2대 이상 시청 시간 구하기 (한 줄 수정)",
+    type: "code",
+    description: "A씨가 하루에 TV를 두 대 이상 틀는 시간을 알아내려 합니다. A씨는 매일 세 프로그램을 시청합니다. 프로그램 방송 시간이 겹칠 때는 TV를 여러 대 켜서 모든 프로그램을 봅니다. 세 프로그램 방영 시작 시각과 끝 시각이 담긴 2차원 배열 programs가 매개변수로 주어질 때, 하루에 TV를 2대 이상 틀는 총 시간을 return 하도록 solution 함수를 작성했습니다. 한 줄만 변경해서 올바르게 동작하도록 수정하세요.",
+    input_desc: "3개 프로그램의 시작 및 끝 시각이 순서대로 공백 구분으로 주어집니다. (예: 1 6 3 5 2 8)",
+    output_desc: "TV를 2대 이상 시청하는 시간(시간 단위)을 정수로 출력합니다.",
+    examples: [
+      { input: "1 6 3 5 2 8", output: "4" }
+    ],
+    starter_code: `def solution(programs):
+    answer = 0
+    used_tv = [0] * 25
+
+    for program in programs:
+        for i in range(program[0], program[1]):
+            used_tv[i] = used_tv[i] + 1
+
+    for i in used_tv:
+        if i >= 1:
+            answer = answer + 1
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+inputs = list(map(int, input().split()))
+programs = [[inputs[0], inputs[1]], [inputs[2], inputs[3]], [inputs[4], inputs[5]]]
+print(solution(programs))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. used_tv 리스트에 시각별 켜져 있는 TV 개수를 저장했습니다.
+# 2. 문제 조건에 맞춰 'TV를 2대 이상 틀어놓는 시간'을 합산해야 하므로, 조건식 if i >= 1: 을 if i >= 2: 로 한 줄 변경해야 합니다.
+
+def solution(programs):
+    answer = 0
+    used_tv = [0] * 25
+
+    for program in programs:
+        for i in range(program[0], program[1]):
+            used_tv[i] = used_tv[i] + 1
+
+    for i in used_tv:
+        if i >= 2:
+            answer = answer + 1
+    return answer
+
+inputs = list(map(int, input().split()))
+programs = [[inputs[0], inputs[1]], [inputs[2], inputs[3]], [inputs[4], inputs[5]]]
+print(solution(programs))
+`,
+    test_cases: [
+      { input: "1 6 3 5 2 8", output: "4" },
+      { input: "1 2 2 3 3 4", output: "0" },
+      { input: "1 5 1 5 1 5", output: "4" }
+    ]
+  },
+  {
+    id: 69,
+    classLevel: 2,
+    title: "[3차] [문제 9] 차량 2부제 통과 차량수 구하기 (한 줄 수정)",
+    type: "code",
+    description: "관공서 주차장에서는 차량 2부제를 실시합니다. 차량 2부제는 차량 번호 끝자리가 홀수인 차량은 홀수 일에만, 짝수인 차량은 짝수 일에만 주차장에 들어올 수 있도록 하는 제도입니다. 며칠인지를 나타내는 day와 그날 주차장에 들어오려고 하는 차들의 번호를 담고 있는 배열 numbers가 매개변수로 주어질 때, 주차장에 들어올 수 있는 차량의 수를 return 하도록 solution 함수를 작성했습니다. 코드에서 한 줄만 변경해서 올바르게 동작하도록 수정해주세요.",
+    input_desc: "첫 번째 줄에 날짜 day가 주어집니다. 두 번째 줄에 주차장에 입차를 시도하는 차들의 번호 numbers가 공백으로 구분되어 주어집니다.",
+    output_desc: "2부제를 위반하지 않고 입차 가능한 차량 대수를 출력합니다.",
+    examples: [
+      { input: "17\n3285 1724 4438 2988 3131 2998", output: "2" }
+    ],
+    starter_code: `def solution(day, numbers):
+    count = 0
+    for number in numbers:
+        if number % 2 != day % 2:
+            count += 1
+    return count
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+day = int(input())
+numbers = list(map(int, input().split()))
+print(solution(day, numbers))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 2부제에 따라 날짜의 홀짝 여부(day % 2)와 차량 번호 마지막 자리의 홀짝 여부(number % 2)가 '동일해야' 진입이 허용됩니다.
+# 2. 기존 코드는 'number % 2 != day % 2'로 서로 일치하지 않는 경우 카운트하고 있습니다. 이를 일치하는 조건 'number % 2 == day % 2'로 수정해 줍니다.
+
+def solution(day, numbers):
+    count = 0
+    for number in numbers:
+        if number % 2 == day % 2:
+            count += 1
+    return count
+
+day = int(input())
+numbers = list(map(int, input().split()))
+print(solution(day, numbers))
+`,
+    test_cases: [
+      { input: "17\n3285 1724 4438 2988 3131 2998", output: "2" },
+      { input: "20\n1000 2001 3002", output: "2" },
+      { input: "1\n1111 2222 3333 4444", output: "2" }
+    ]
+  },
+  {
+    id: 70,
+    classLevel: 2,
+    title: "[3차] [문제 10] 절반값이 배열에 있는 원소 개수 세기 (한 줄 수정)",
+    type: "code",
+    description: "배열 원소 중에서 '자신을 2로 나눈 값'이 해당 배열에 똑같이 존재하는 수의 개수를 구하려고 합니다. 예를 들어, 배열이 [4, 8, 3, 6, 7]인 경우, 6 / 2 = 3이고 3이 배열에 존재하며, 8 / 2 = 4이고 4가 배열에 존재하므로 조건에 맞는 수는 총 2개입니다. 숫자가 담긴 배열 arr가 주어졌을 때, 조건에 만족하는 수의 개수를 return 하도록 작성된 코드입니다. 문법적 오류 혹은 논리적 오류가 있는 한 줄만 변경해서 올바르게 동작하도록 수정해주세요.",
+    input_desc: "공백으로 구분된 양의 정수 배열 arr가 주어집니다.",
+    output_desc: "자신을 2로 나눈 값이 배열 내에 들어있는 수의 총 개수를 출력합니다.",
+    examples: [
+      { input: "4 8 3 6 7", output: "2" }
+    ],
+    starter_code: `def solution(arr):
+    answer = 0
+    for i in arr:
+        for i/2 in arr:
+            answer += 1
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+arr = list(map(int, input().split()))
+print(solution(arr))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 안쪽 for 루프의 'for i/2 in arr:'는 파이썬에서 문법 오류(SyntaxError)를 발생시킵니다.
+# 2. 루프 내에서 조건문을 이용해 i / 2가 배열 arr에 포함되어 있는지(if i / 2 in arr:) 검사하도록 한 줄을 수정해 줍니다.
+
+def solution(arr):
+    answer = 0
+    for i in arr:
+        if i / 2 in arr:
+            answer += 1
+    return answer
+
+arr = list(map(int, input().split()))
+print(solution(arr))
+`,
+    test_cases: [
+      { input: "4 8 3 6 7", output: "2" },
+      { input: "10 20 5", output: "2" },
+      { input: "1 3 5", output: "0" }
+    ]
   }
 ];
 
