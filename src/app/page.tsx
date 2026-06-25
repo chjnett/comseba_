@@ -294,22 +294,21 @@ export default function Home() {
 
   // Compare actual vs expected
   const checkMatch = (actual: string, expected: string): boolean => {
+    // Normalize function to strip all trailing/leading spaces, replace any sequence of whitespaces (including newlines) with a single space
     const normalize = (text: string) => {
       return text.trim()
-        .split("\n")
-        .map(line => line.trim().replace(/\s+/g, " "))
-        .filter(Boolean);
+        .replace(/[\r\n]+/g, " ")  // Replace line breaks with single space to treat line breaks as normal spaces
+        .replace(/\s+/g, " ")      // Replace any consecutive whitespaces with a single space
+        .trim();
     };
 
-    const actualLines = normalize(actual);
-    const expectedLines = normalize(expected);
+    const actualNormalized = normalize(actual);
+    const expectedNormalized = normalize(expected);
     
-    if (actualLines.length >= expectedLines.length) {
-      // Extract the last expectedLines.length lines to match the solution output
-      const sliced = actualLines.slice(-expectedLines.length);
-      return sliced.every((val, idx) => val === expectedLines[idx]);
-    }
-    return false;
+    // Check if the normalized expected string exists inside or matches the tail of the normalized actual string.
+    // Online Judge solutions can output prompts or extra text before the final output.
+    // By checking if the actual output ends with or contains the expected output, we make it highly robust.
+    return actualNormalized.endsWith(expectedNormalized) || actualNormalized.includes(expectedNormalized);
   };
 
   // Run Test cases
