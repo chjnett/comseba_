@@ -2,7 +2,16 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Script from "next/script";
-import Editor from "@monaco-editor/react";
+import Editor, { loader } from "@monaco-editor/react";
+
+// Pre-configure Monaco editor path to fetch reliably from official CDN and avoid loader errors
+if (typeof window !== "undefined") {
+  loader.config({
+    paths: {
+      vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.43.0/min/vs"
+    }
+  });
+}
 import { 
   Play, 
   Send, 
@@ -285,10 +294,18 @@ export default function Home() {
 
   // Compare actual vs expected
   const checkMatch = (actual: string, expected: string): boolean => {
-    const actualLines = actual.trim().split("\n").map(l => l.trim()).filter(Boolean);
-    const expectedLines = expected.trim().split("\n").map(l => l.trim()).filter(Boolean);
+    const normalize = (text: string) => {
+      return text.trim()
+        .split("\n")
+        .map(line => line.trim().replace(/\s+/g, " "))
+        .filter(Boolean);
+    };
+
+    const actualLines = normalize(actual);
+    const expectedLines = normalize(expected);
     
     if (actualLines.length >= expectedLines.length) {
+      // Extract the last expectedLines.length lines to match the solution output
       const sliced = actualLines.slice(-expectedLines.length);
       return sliced.every((val, idx) => val === expectedLines[idx]);
     }
