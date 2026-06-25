@@ -942,5 +942,306 @@ print(f"{cnt} {hap} {avg:.2f}")
 n, m = map(int, input().split())
 print(n % m)
 `
+  },
+  {
+    id: 31,
+    title: "문제 31 - 성적 테이블 출력 (소스코드 작성)",
+    type: "code",
+    description: "지정된 형식에 맞추어 성적 테이블을 출력하는 프로그램을 작성하세요. 각 항목(name, kor, mat, tot, avg)과 데이터들은 **10칸씩 공간을 확보하여 오른쪽 정렬**하여 출력해야 합니다.",
+    input_desc: "입력 데이터는 없습니다.",
+    output_desc: "각 열마다 10자리의 너비를 확보하고 우측 정렬하여 성적 데이터를 출력하세요.",
+    examples: [
+      { input: "", output: "      name       kor       mat       tot       avg\n       aaa        55        95       150        75\n       bbb       100        90       190        95\n       ggg        88       100       188        94" }
+    ],
+    starter_code: `# 성적 테이블을 10칸씩 우측 정렬하여 출력하세요.
+`,
+    test_cases: [
+      { input: "", output: "      name       kor       mat       tot       avg\n       aaa        55        95       150        75\n       bbb       100        90       190        95\n       ggg        88       100       188        94" }
+    ],
+    solution_code: `# [정답 및 해설]
+# 1. 포맷 스트링의 우측 정렬 너비 10(>10)을 활용하여 성적 테이블을 출력합니다.
+# 2. 각 항목명과 데이터를 동일한 방식으로 포맷하여 한 줄씩 출력합니다.
+
+print(f"{'name':>10}{'kor':>10}{'mat':>10}{'tot':>10}{'avg':>10}")
+print(f"{'aaa':>10}{55:>10}{95:>10}{150:>10}{75:>10}")
+print(f"{'bbb':>10}{100:>10}{90:>10}{190:>10}{95:>10}")
+print(f"{'ggg':>10}{88:>10}{100:>10}{188:>10}{94:>10}")
+`
+  },
+  {
+    id: 32,
+    title: "문제 32 - 문자 집계 (소스코드 작성)",
+    type: "code",
+    description: "영문자, 숫자, 특수문자로 구성된 문자열을 입력받아 대문자, 소문자, 숫자의 개수를 각각 세어 출력하는 프로그램을 작성하세요. (공백은 포함되지 않습니다.)",
+    input_desc: "표준 입력으로 공백이 없는 문자열 한 개가 주어집니다.",
+    output_desc: "문자열에 포함된 대문자의 개수, 소문자의 개수, 숫자의 개수를 공백으로 구분하여 차례대로 한 줄에 출력하세요.",
+    examples: [
+      { input: "Coding-C++/Python", output: "3 10 0" },
+      { input: "C++456Programming!!!", output: "2 10 3" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    test_cases: [
+      { input: "Coding-C++/Python", output: "3 10 0" },
+      { input: "C++456Programming!!!", output: "2 10 3" }
+    ],
+    solution_code: `# [정답 및 해설]
+# 1. 문자열을 입력받습니다.
+# 2. 각 문자를 순회하며 대문자(isupper), 소문자(islower), 숫자(isdigit)의 개수를 셉니다.
+
+s = input()
+upper_cnt = sum(1 for c in s if c.isupper())
+lower_cnt = sum(1 for c in s if c.islower())
+digit_cnt = sum(1 for c in s if c.isdigit())
+print(f"{upper_cnt} {lower_cnt} {digit_cnt}")
+`
+  },
+  {
+    id: 33,
+    title: "문제 33 - 우측 정렬 직각삼각형 (소스코드 작성)",
+    type: "code",
+    description: "별(\"*\")을 사용하여 밑변과 높이가 N인 직각삼각형을 우측 정렬 형태로 출력하려고 합니다. 표준 입력으로 자연수 N을 입력받아 형태에 맞는 삼각형을 출력하세요.",
+    input_desc: "표준 입력으로 자연수 N이 주어집니다. (1 <= N <= 100)",
+    output_desc: "우측 정렬된 형태의 밑변과 높이가 N인 별 삼각형을 출력하세요.",
+    examples: [
+      { input: "5", output: "    *\n   **\n  ***\n ****\n*****" }
+    ],
+    starter_code: `n = int(input())
+# 여기에 코드를 작성하세요.
+`,
+    test_cases: [
+      { input: "5", output: "    *\n   **\n  ***\n ****\n*****" },
+      { input: "2", output: " *\n**" }
+    ],
+    solution_code: `# [정답 및 해설]
+# 1. 입력받은 자연수 N에 대해 반복을 순회합니다.
+# 2. i번째 줄에는 공백 N-i개와 별 i개를 출력하여 우측 정렬 효과를 냅니다.
+
+n = int(input())
+for i in range(1, n + 1):
+    print(" " * (n - i) + "*" * i)
+`
+  },
+  {
+    id: 34,
+    title: "문제 34 - 성적 총합과 평균 (빈칸 채우기)",
+    type: "blank",
+    description: "국어, 영어, 수학, 컴퓨터 점수를 공백으로 구분하여 한 줄로 입력받은 뒤, 총점(sum)과 평균(avg)을 구하는 프로그램을 작성하세요. (평균은 소수점 첫째자리까지 출력합니다.)",
+    input_desc: "표준 입력으로 정수 4개가 공백으로 구분되어 주어집니다.",
+    output_desc: "총점과 평균을 형식에 맞춰 출력하세요.",
+    examples: [
+      { input: "70 85 61 99", output: "sum = 315\navg = 78.8" }
+    ],
+    starter_code: `a, b, c, d = @@@
+
+print( @@@ )
+print( @@@ )
+`,
+    test_cases: [
+      { input: "70 85 61 99", output: "sum = 315\navg = 78.8" }
+    ],
+    solution_code: `# [정답 및 해설]
+# 1. 입력되는 4개의 정수를 map(int, input().split())으로 분할하여 저장합니다.
+# 2. sum과 avg를 계산해 지정된 형식에 맞추어 출력합니다.
+
+a, b, c, d = map(int, input().split())
+
+print(f"sum = {a + b + c + d}")
+print(f"avg = {(a + b + c + d) / 4:.1f}")
+`
+  },
+  {
+    id: 35,
+    title: "문제 35 - 짝홀 조건 연산 (빈칸 채우기)",
+    type: "blank",
+    description: "2개의 정수를 입력받아서 두 수가 모두 짝수이면 두 수의 합을 출력하고, 그렇지 않으면 큰 짝수에서 홀수를 뺀 값을 출력하세요. (즉, 한 수가 짝수이고 다른 수가 홀수일 때, 짝수에서 홀수를 뺀 결과를 출력합니다.)",
+    input_desc: "표준 입력으로 1 이상 1,000 이하인 정수 두 개가 공백으로 구분되어 주어집니다.",
+    output_desc: "문제 조건에 따른 연산 결과를 출력하세요.",
+    examples: [
+      { input: "10 6", output: "16" },
+      { input: "8 7", output: "1" },
+      { input: "11 20", output: "9" }
+    ],
+    starter_code: `a, b = map(int, input("").split())
+
+if @@@ :
+    print(a+b)
+else:
+    if @@@ :
+        print(a-b)
+    else:
+        print(b-a)
+`,
+    test_cases: [
+      { input: "10 6", output: "16" },
+      { input: "8 7", output: "1" },
+      { input: "11 20", output: "9" }
+    ],
+    solution_code: `# [정답 및 해설]
+# 1. 두 수가 모두 짝수인 조건식: a % 2 == 0 and b % 2 == 0
+# 2. 첫 번째 수만 짝수이고 두 번째 수는 홀수인 조건식 (a가 짝수이고 b가 홀수): a % 2 == 0
+
+a, b = map(int, input("").split())
+
+if a % 2 == 0 and b % 2 == 0 :
+    print(a+b)
+else:
+    if a % 2 == 0 :
+        print(a-b)
+    else:
+        print(b-a)
+`
+  },
+  {
+    id: 36,
+    title: "문제 36 - 배수 가로 출력 (빈칸 채우기)",
+    type: "blank",
+    description: "\`while\`문을 이용하여 1부터 입력받은 자연수 n 사이에서 3의 배수이거나 7의 배수인 수를 모두 찾아 공백으로 구분하여 가로로 출력하는 프로그램을 완성하세요.",
+    input_desc: "표준 입력으로 자연수 n이 주어집니다.",
+    output_desc: "1 이상 n 이하의 수 중 3 또는 7의 배수를 공백으로 구분하여 한 줄에 출력하세요.",
+    examples: [
+      { input: "30", output: "3 6 7 9 12 14 15 18 21 24 27 28 30" }
+    ],
+    starter_code: `n = int(input(""))
+
+a = 1;
+
+while @@@ :
+    if @@@ :
+        print(a, end=' ')
+    a += 1
+`,
+    test_cases: [
+      { input: "30", output: "3 6 7 9 12 14 15 18 21 24 27 28 30" }
+    ],
+    solution_code: `# [정답 및 해설]
+# 1. a가 n 이하일 때까지 반복합니다: a <= n
+# 2. 3의 배수이거나 7의 배수인 조건식: a % 3 == 0 or a % 7 == 0
+
+n = int(input(""))
+
+a = 1;
+
+while a <= n :
+    if a % 3 == 0 or a % 7 == 0 :
+        print(a, end=' ')
+    a += 1
+`
+  },
+  {
+    id: 37,
+    title: "문제 37 - 구구단 정렬 출력 (빈칸 채우기)",
+    type: "blank",
+    description: "입력받은 자연수 n에 해당하는 구구단 단수를 출력 서식에 맞춰 출력하는 프로그램을 완성하세요. 결과값의 정렬 방식을 출력 예시를 보고 구현하세요.",
+    input_desc: "표준 입력으로 1 이상 9 이하의 자연수 n이 주어집니다.",
+    output_desc: "n단의 곱셈 결과를 형식에 맞춰 출력하세요. 결과값(곱한 값)은 3칸의 자리를 오른쪽 정렬 확보해야 합니다.",
+    examples: [
+      { input: "3", output: "3 x 1 =   3\n3 x 2 =   6\n3 x 3 =   9\n3 x 4 =  12\n3 x 5 =  15\n3 x 6 =  18\n3 x 7 =  21\n3 x 8 =  24\n3 x 9 =  27" }
+    ],
+    starter_code: `n = int(input(""))
+
+a = 1;
+
+while a<=9:
+    print( @@@ )
+    a += 1
+`,
+    test_cases: [
+      { input: "3", output: "3 x 1 =   3\n3 x 2 =   6\n3 x 3 =   9\n3 x 4 =  12\n3 x 5 =  15\n3 x 6 =  18\n3 x 7 =  21\n3 x 8 =  24\n3 x 9 =  27" }
+    ],
+    solution_code: `# [정답 및 해설]
+# 1. 출력 결과값은 총 3자리의 우측 정렬을 이용합니다.
+# 2. print(f"{n} x {a} = {n * a:>3}") 방식을 이용해 포맷팅합니다.
+
+n = int(input(""))
+
+a = 1;
+
+while a<=9:
+    print( f"{n} x {a} = {n*a:>3}" )
+    a += 1
+`
+  },
+  {
+    id: 38,
+    title: "문제 38 - 숫자 격자 사각형 (빈칸 채우기)",
+    type: "blank",
+    description: "자연수 n과 m을 입력받아 n행 m열 크기의 정수 격자 사각형을 출력하는 프로그램을 완성하세요. 격자의 값은 각 행마다 \`행 번호\`부터 시작하여 1씩 증가하는 숫자로 채워집니다.",
+    input_desc: "표준 입력으로 자연수 n과 m이 공백으로 구분되어 주어집니다. (2 <= n, m <= 50)",
+    output_desc: "행과 열의 규칙에 맞는 n x m 크기의 숫자 사각형을 출력하세요. 각 원소는 공백으로 구분합니다.",
+    examples: [
+      { input: "4 6", output: "1 2 3 4 5 6\n2 3 4 5 6 7\n3 4 5 6 7 8\n4 5 6 7 8 9" }
+    ],
+    starter_code: `n, m = map(int, input("").split())
+
+for i in range( @@@ ):
+    for j in range( @@@ ):
+        print( @@@ , end=' ')
+    print()
+`,
+    test_cases: [
+      { input: "4 6", output: "1 2 3 4 5 6\n2 3 4 5 6 7\n3 4 5 6 7 8\n4 5 6 7 8 9" }
+    ],
+    solution_code: `# [정답 및 해설]
+# 1. 행 개수만큼 반복합니다: range(n)
+# 2. 열 개수만큼 반복합니다: range(m)
+# 3. 값은 각 행마다 행 번호 i+1부터 1씩 증가하므로 \`i + 1 + j\`를 출력합니다.
+
+n, m = map(int, input("").split())
+
+for i in range( n ):
+    for j in range( m ):
+        print( i + 1 + j , end=' ')
+    print()
+`
+  },
+  {
+    id: 39,
+    title: "문제 39 - 역순 및 구간 필터링 (소스코드 작성)",
+    type: "code",
+    description: "표준 입력으로 10개의 정수를 입력받아 배열(리스트)에 저장합니다. 첫 번째 줄에는 입력받은 10개의 정수를 입력된 순서의 **역순**으로 출력하고, 두 번째 줄에는 입력받은 수 중 **30 이상 50 이하**에 속하는 수만 필터링하여 순서대로 출력하세요.",
+    input_desc: "표준 입력으로 줄바꿈으로 구분된 10개의 정수가 차례대로 주어집니다.",
+    output_desc: "첫 번째 줄에는 역순으로, 두 번째 줄에는 30 이상 50 이하인 정수를 공백으로 구분해 출력하세요.",
+    examples: [
+      { input: "12\n25\n31\n10\n58\n100\n95\n46\n78\n60", output: "60 78 46 95 100 58 10 31 25 12\n31 46" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    test_cases: [
+      { input: "12\n25\n31\n10\n58\n100\n95\n46\n78\n60", output: "60 78 46 95 100 58 10 31 25 12\n31 46" }
+    ],
+    solution_code: `# [정답 및 해설]
+# 1. 10개의 정수를 줄바꿈으로 입력받아 리스트에 담습니다.
+# 2. 역순 출력을 위해 arr[::-1]을 사용합니다.
+# 3. 30 이상 50 이하인 정수들을 필터링하여 출력합니다.
+
+arr = [int(input()) for _ in range(10)]
+print(*(arr[::-1]))
+filtered = [x for x in arr if 30 <= x <= 50]
+print(*filtered)
+`
+  },
+  {
+    id: 40,
+    title: "문제 40 - 최댓값과 최솟값 (소스코드 작성)",
+    type: "code",
+    description: "표준 입력으로 10개의 정수를 입력받아 배열에 저장한 뒤, 10개의 수 중 **최댓값**과 **최솟값**을 찾아 공백으로 구분하여 한 줄에 출력하는 프로그램을 작성하세요.",
+    input_desc: "표준 입력으로 공백으로 구분된 10개의 자연수가 차례대로 주어집니다.",
+    output_desc: "입력받은 정수 데이터 중 최댓값과 최솟값을 순서대로 출력하세요.",
+    examples: [
+      { input: "12 25 31 10 58 100 95 46 78 60", output: "100 10" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    test_cases: [
+      { input: "12 25 31 10 58 100 95 46 78 60", output: "100 10" }
+    ],
+    solution_code: `# [정답 및 해설]
+# 1. 공백으로 분할된 10개의 정수를 입력받아 리스트로 만듭니다.
+# 2. max()와 min() 내장 함수를 활용해 최댓값과 최솟값을 구해 출력합니다.
+
+arr = list(map(int, input().split()))
+print(f"{max(arr)} {min(arr)}")
+`
   }
 ];
