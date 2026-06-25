@@ -576,14 +576,14 @@ export default function Home() {
       {/* Main Panel split */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
         {/* Left Side: Sidebar Problems List */}
-        <aside className="w-full lg:w-80 border-r border-[#25283c] bg-[#161725] flex flex-col shrink-0 overflow-hidden">
-          <div className="p-4 border-b border-[#25283c] flex items-center justify-between">
+        <aside className="w-full lg:w-80 border-r border-[#25283c] bg-[#161725] flex flex-col shrink-0 overflow-hidden h-full">
+          <div className="p-4 border-b border-[#25283c] flex items-center justify-between shrink-0">
             <span className="text-sm font-bold text-[#89b4fa] flex items-center gap-1.5">
               <BookOpen size={16} /> {selectedClass}급 문제 목록 ({problems.filter(p => (p.classLevel || 3) === selectedClass).length})
             </span>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-2 space-y-1">
+          <div className="flex-1 overflow-y-auto p-2 space-y-1 min-h-0">
             {problems
               .filter((p) => (p.classLevel || 3) === selectedClass)
               .map((prob) => {
