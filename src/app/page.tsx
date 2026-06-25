@@ -50,6 +50,7 @@ ${code}
 export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [selectedClass, setSelectedClass] = useState<2 | 3>(3);
   const [problems, setProblems] = useState<Problem[]>(initialProblems);
   const [currentProblem, setCurrentProblem] = useState<Problem>(initialProblems[0]);
   const [code, setCode] = useState<string>(initialProblems[0].starter_code);
@@ -74,6 +75,7 @@ export default function Home() {
   // New Problem Form States
   const [newTitle, setNewTitle] = useState("");
   const [newType, setNewType] = useState<"code" | "blank">("code");
+  const [newClassLevel, setNewClassLevel] = useState<2 | 3>(3);
   const [newDesc, setNewDesc] = useState("");
   const [newInDesc, setNewInDesc] = useState("");
   const [newOutDesc, setNewOutDesc] = useState("");
@@ -117,9 +119,6 @@ export default function Home() {
 
   const handleMouseMoveWidth = (e: MouseEvent) => {
     if (!isResizingWidth.current) return;
-    // Calculate clientX relative to window width
-    // Offset slightly for sidebar width (approx 320px) if we want absolute precision,
-    // but relative to the split container width is even simpler and very clean.
     const pct = (e.clientX / window.innerWidth) * 100;
     if (pct > 20 && pct < 80) {
       setLeftWidth(pct);
@@ -132,14 +131,15 @@ export default function Home() {
     document.removeEventListener("mouseup", stopResizingWidth);
   };
 
-
   // Load progress and custom problems on mount
   useEffect(() => {
     // Load custom problems if any
     const savedProblems = localStorage.getItem("oj_problems");
+    let loadedProblems = initialProblems;
     if (savedProblems) {
       try {
-        setProblems(JSON.parse(savedProblems));
+        loadedProblems = JSON.parse(savedProblems);
+        setProblems(loadedProblems);
       } catch (e) {
         console.error(e);
       }
@@ -153,13 +153,27 @@ export default function Home() {
       try {
         const parsed = JSON.parse(savedSubmissions);
         setSubmissions(parsed);
-        // Pre-populate code for the default problem
-        const pid = initialProblems[0].id.toString();
-        if (parsed[pid]) {
-          setCode(parsed[pid]);
+        // Find default problem for the default selected class (3)
+        const class3Probs = loadedProblems.filter(p => (p.classLevel || 3) === 3);
+        if (class3Probs.length > 0) {
+          const defaultProb = class3Probs[0];
+          setCurrentProblem(defaultProb);
+          const pid = defaultProb.id.toString();
+          if (parsed[pid]) {
+            setCode(parsed[pid]);
+          } else {
+            setCode(defaultProb.starter_code);
+          }
         }
       } catch (e) {
         console.error(e);
+      }
+    } else {
+      // Set to first class 3 problem
+      const class3Probs = loadedProblems.filter(p => (p.classLevel || 3) === 3);
+      if (class3Probs.length > 0) {
+        setCurrentProblem(class3Probs[0]);
+        setCode(class3Probs[0].starter_code);
       }
     }
     
@@ -428,6 +442,7 @@ export default function Home() {
     const newId = Math.max(...problems.map(p => p.id), 0) + 1;
     const newProb: Problem = {
       id: newId,
+      classLevel: newClassLevel,
       title: newTitle,
       type: newType,
       description: newDesc,
@@ -493,12 +508,50 @@ export default function Home() {
             <FileCode2 size={24} />
           </div>
           <div>
-            <h1 className="text-lg font-bold tracking-wide text-[#89b4fa]">COS Pro 3급 Python Online Judge</h1>
+            <h1 className="text-lg font-bold tracking-wide text-[#89b4fa]">
+              COS Pro {selectedClass}급 Python Online Judge
+            </h1>
             <p className="text-xs text-[#a6adc8]">Pure Web Online Judge - No DB Connection Required</p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
+          {/* Class Level Selector */}
+          <div className="flex bg-[#25283c] p-1 rounded-xl border border-[#313552]">
+            <button
+              onClick={() => {
+                setSelectedClass(3);
+                const class3 = problems.filter(p => (p.classLevel || 3) === 3);
+                if (class3.length > 0) {
+                  handleSelectProblem(class3[0]);
+                }
+              }}
+              className={"px-4 py-1.5 rounded-lg text-sm font-bold transition-all duration-200 " + (
+                selectedClass === 3
+                  ? "bg-[#89b4fa] text-[#11121d]"
+                  : "text-[#a6adc8] hover:text-[#cdd6f4]"
+              )}
+            >
+              COS Pro 3급
+            </button>
+            <button
+              onClick={() => {
+                setSelectedClass(2);
+                const class2 = problems.filter(p => (p.classLevel || 3) === 2);
+                if (class2.length > 0) {
+                  handleSelectProblem(class2[0]);
+                }
+              }}
+              className={"px-4 py-1.5 rounded-lg text-sm font-bold transition-all duration-200 " + (
+                selectedClass === 2
+                  ? "bg-[#89b4fa] text-[#11121d]"
+                  : "text-[#a6adc8] hover:text-[#cdd6f4]"
+              )}
+            >
+              COS Pro 2급
+            </button>
+          </div>
+
           <button 
             onClick={handleAdminToggle}
             className={"flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold border transition-all duration-200 " + (
@@ -526,45 +579,47 @@ export default function Home() {
         <aside className="w-full lg:w-80 border-r border-[#25283c] bg-[#161725] flex flex-col shrink-0">
           <div className="p-4 border-b border-[#25283c] flex items-center justify-between">
             <span className="text-sm font-bold text-[#89b4fa] flex items-center gap-1.5">
-              <BookOpen size={16} /> 문제 목록 ({problems.length})
+              <BookOpen size={16} /> {selectedClass}급 문제 목록 ({problems.filter(p => (p.classLevel || 3) === selectedClass).length})
             </span>
           </div>
 
           <div className="flex-1 overflow-y-auto p-2 space-y-1 max-h-[250px] lg:max-h-none">
-            {problems.map((prob) => {
-              const pid = prob.id.toString();
-              const active = currentProblem.id === prob.id;
-              const probStatus = status[pid] || "Unsolved";
-              
-              return (
-                <button
-                  key={prob.id}
-                  onClick={() => handleSelectProblem(prob)}
-                  className={"w-full text-left p-3 rounded-xl flex items-center justify-between transition-all duration-150 " + (
-                    active 
-                      ? "bg-[#25283c] border border-[#89b4fa]/20 text-[#89b4fa]" 
-                      : "hover:bg-[#1e1f2f] text-[#cdd6f4]"
-                  )}
-                >
-                  <div className="flex-1 min-w-0 pr-2">
-                    <h3 className="text-sm font-semibold truncate">{prob.title}</h3>
-                    <span className="text-[10px] uppercase font-bold text-[#a6adc8] bg-[#25283c] px-2 py-0.5 rounded-full mt-1 inline-block">
-                      {prob.type === "blank" ? "빈칸 채우기" : "소스코드 작성"}
-                    </span>
-                  </div>
-
-                  <div>
-                    {probStatus === "Solved" ? (
-                      <CheckCircle2 size={18} className="text-[#a6e3a1]" />
-                    ) : probStatus === "Attempted" ? (
-                      <AlertTriangle size={18} className="text-[#f9e2af]" />
-                    ) : (
-                      <HelpCircle size={18} className="text-[#6c7086]" />
+            {problems
+              .filter((p) => (p.classLevel || 3) === selectedClass)
+              .map((prob) => {
+                const pid = prob.id.toString();
+                const active = currentProblem.id === prob.id;
+                const probStatus = status[pid] || "Unsolved";
+                
+                return (
+                  <button
+                    key={prob.id}
+                    onClick={() => handleSelectProblem(prob)}
+                    className={"w-full text-left p-3 rounded-xl flex items-center justify-between transition-all duration-150 " + (
+                      active 
+                        ? "bg-[#25283c] border border-[#89b4fa]/20 text-[#89b4fa]" 
+                        : "hover:bg-[#1e1f2f] text-[#cdd6f4]"
                     )}
-                  </div>
-                </button>
-              );
-            })}
+                  >
+                    <div className="flex-1 min-w-0 pr-2">
+                      <h3 className="text-sm font-semibold truncate">{prob.title}</h3>
+                      <span className="text-[10px] uppercase font-bold text-[#a6adc8] bg-[#25283c] px-2 py-0.5 rounded-full mt-1 inline-block">
+                        {prob.type === "blank" ? "빈칸 채우기" : "소스코드 작성"}
+                      </span>
+                    </div>
+
+                    <div>
+                      {probStatus === "Solved" ? (
+                        <CheckCircle2 size={18} className="text-[#a6e3a1]" />
+                      ) : probStatus === "Attempted" ? (
+                        <AlertTriangle size={18} className="text-[#f9e2af]" />
+                      ) : (
+                        <HelpCircle size={18} className="text-[#6c7086]" />
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
           </div>
         </aside>
 
@@ -821,6 +876,17 @@ export default function Home() {
                   >
                     <option value="code">소스코드 작성</option>
                     <option value="blank">빈칸 채우기</option>
+                  </select>
+                </div>
+                <div className="flex-1">
+                  <label className="block text-xs font-bold uppercase text-[#a6adc8] mb-1">급수 선택</label>
+                  <select 
+                    value={newClassLevel}
+                    onChange={(e) => setNewClassLevel(Number(e.target.value) as 2 | 3)}
+                    className="w-full bg-[#11121d] border border-[#25283c] rounded-xl px-4 py-2.5 text-sm text-[#cdd6f4] focus:outline-none focus:border-[#89b4fa]"
+                  >
+                    <option value={3}>COS Pro 3급</option>
+                    <option value={2}>COS Pro 2급</option>
                   </select>
                 </div>
               </div>

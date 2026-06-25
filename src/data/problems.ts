@@ -14,11 +14,13 @@ export interface Problem {
   starter_code: string;
   solution_code?: string;
   test_cases: Example[];
+  classLevel?: 2 | 3;
 }
 
 export const problems: Problem[] = [
   {
     id: 1,
+    classLevel: 3,
     title: "문제 1 - 세 수의 합과 평균 (빈칸 채우기)",
     type: "blank",
     description: "세 수의 합과 평균을 구하려 합니다. 표준 입력으로 수 세 개를 입력받아, 세 수의 합과 평균을 출력하도록 코드를 작성하려 합니다. 빈칸을 채워 전체 코드를 완성해주세요. (평균은 소수 셋째자리에서 반올림하여 둘째자리까지 출력하세요)",
@@ -1243,5 +1245,277 @@ print(*filtered)
 arr = list(map(int, input().split()))
 print(f"{max(arr)} {min(arr)}")
 `
+  },
+  {
+    id: 41,
+    classLevel: 2,
+    title: "[문제 1] 티셔츠 주문 수량 구하기 (소스코드 작성)",
+    type: "code",
+    description: "A 학교에서는 단체 티셔츠를 주문하기 위해 학생별로 원하는 티셔츠 사이즈를 조사했습니다. 선택할 수 있는 티셔츠 사이즈는 작은 순서대로 \"XS\", \"S\", \"M\", \"L\", \"XL\", \"XXL\" 총 6종류가 있습니다. 학생별로 원하는 티셔츠 사이즈를 조사한 결과가 들어있는 배열 shirt_size가 매개변수로 주어질 때, 사이즈별로 티셔츠가 몇 벌씩 필요한지 가장 작은 사이즈부터 순서대로 배열에 담아 return 하도록 solution 함수를 완성해주세요.",
+    input_desc: "입력값으로 shirt_size를 모사한 문자열이 주어집니다. (예: 공백으로 구분된 티셔츠 사이즈 목록)",
+    output_desc: "[\"XS\" 개수, \"S\" 개수, \"M\" 개수, \"L\" 개수, \"XL\" 개수, \"XXL\" 개수] 순서의 리스트를 반환하거나 출력합니다.",
+    examples: [
+      { input: "XS S L L XL S", output: "[1, 2, 0, 2, 1, 0]" }
+    ],
+    starter_code: `def solution(shirt_size):
+    # 여기에 코드를 작성하세요.
+    answer = []
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+shirt_size = input().split()
+print(solution(shirt_size))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. XS부터 XXL까지의 티셔츠 사이즈 순서를 리스트로 정의합니다.
+# 2. 각 사이즈에 대응하는 카운트값을 세어 결과 리스트에 순서대로 담아 반환합니다.
+
+def solution(shirt_size):
+    sizes = ["XS", "S", "M", "L", "XL", "XXL"]
+    answer = [0] * 6
+    for size in shirt_size:
+        if size in sizes:
+            idx = sizes.index(size)
+            answer[idx] += 1
+    return answer
+
+shirt_size = input().split()
+print(solution(shirt_size))
+`,
+    test_cases: [
+      { input: "XS S L L XL S", output: "[1, 2, 0, 2, 1, 0]" },
+      { input: "XXL XL L M S XS", output: "[1, 1, 1, 1, 1, 1]" },
+      { input: "M M M XS", output: "[1, 0, 3, 0, 0, 0]" }
+    ]
+  },
+  {
+    id: 42,
+    classLevel: 2,
+    title: "[문제 2] 회원 등급별 할인율 적용 (소스코드 작성)",
+    type: "code",
+    description: "A 쇼핑몰에서는 회원 등급에 따라 할인 서비스를 제공합니다. 회원 등급에 따른 할인율은 다음과 같습니다. (\"S\" = 실버, \"G\" = 골드, \"V\" = VIP)\n- \"S\": 5%\n- \"G\": 10%\n- \"V\": 15%\n상품의 가격 price와 구매자의 회원 등급을 나타내는 문자열 grade가 매개변수로 주어질 때, 할인 서비스를 적용한 가격을 return 하도록 solution 함수를 완성해주세요. (단, 할인된 가격은 정수형태로 반환합니다.)",
+    input_desc: "입력값으로 상품의 가격 price와 회원 등급 grade가 공백으로 구분되어 주어집니다.",
+    output_desc: "할인이 적용된 가격을 정수로 반환하거나 출력합니다.",
+    examples: [
+      { input: "2500 V", output: "2125" },
+      { input: "96900 S", output: "92055" }
+    ],
+    starter_code: `def solution(price, grade):
+    # 여기에 코드를 작성하세요.
+    answer = 0
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+inputs = input().split()
+price = int(inputs[0])
+grade = inputs[1]
+print(solution(price, grade))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 회원 등급("S", "G", "V")에 따른 할인율을 조건문이나 딕셔너리로 관리합니다.
+# 2. 할인된 금액을 차감한 뒤, int()를 사용해 소수점을 버리고 정수로 반환합니다.
+
+def solution(price, grade):
+    discount = 0
+    if grade == "S":
+        discount = 0.05
+    elif grade == "G":
+        discount = 0.10
+    elif grade == "V":
+        discount = 0.15
+    return int(price * (1 - discount))
+
+inputs = input().split()
+price = int(inputs[0])
+grade = inputs[1]
+print(solution(price, grade))
+`,
+    test_cases: [
+      { input: "2500 V", output: "2125" },
+      { input: "96900 S", output: "92055" },
+      { input: "10000 G", output: "9000" }
+    ]
+  },
+  {
+    id: 43,
+    classLevel: 2,
+    title: "[문제 3] 날짜 간격 구하기 (빈칸 채우기)",
+    type: "blank",
+    description: "시작 날짜와 끝 날짜가 주어질 때, 두 날짜가 며칠만큼 떨어져 있는지(D-day)를 구하려 합니다. 이를 위해 다음과 같이 3단계로 프로그램 구조를 작성했습니다. (단, 윤년은 고려하지 않습니다.)\n1. 시작 날짜가 1월 1일로부터 며칠만큼 떨어져 있는지 구합니다.\n2. 끝 날짜가 1월 1일로부터 며칠만큼 떨어져 있는지 구합니다.\n3. (2단계에서 구한 날짜) - (1단계에서 구한 날짜)를 구합니다.\n시작 날짜의 월, 일을 나타내는 start_month, start_day, 끝 날짜의 월, 일을 나타내는 end_month, end_day가 매개변수로 주어질 때, 시작 날짜와 끝 날짜가 며칠만큼 떨어져 있는지 return 하도록 solution 함수를 완성해 주세요. 중복되는 계산 부분은 func_a라는 함수로 작성되어 있습니다.",
+    input_desc: "공백으로 구분된 시작월, 시작일, 종료월, 종료일이 주어집니다.",
+    output_desc: "두 날짜 간의 일수(차이)를 반환하거나 출력합니다.",
+    examples: [
+      { input: "1 2 2 2", output: "31" }
+    ],
+    starter_code: `def func_a(month, day):
+    month_list = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    total = 0;
+    for i in @@@:
+        total += @@@
+    total += @@@
+    return total - 1
+
+def solution(start_month, start_day, end_month, end_day):
+    start_total = func_a(start_month, start_day)
+    end_total = func_a(end_month, end_day)
+    return end_total - start_total
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+inputs = list(map(int, input().split()))
+print(solution(inputs[0], inputs[1], inputs[2], inputs[3]))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 1월 1일부터 특정 날짜까지의 총 일수를 계산하기 위해 이전 월(month - 1)까지의 일수를 누적합니다.
+# 2. range(month - 1) 또는 range(0, month - 1)을 순회하며 month_list[i]를 더해줍니다.
+# 3. 마지막으로 현재 달의 일수(day)를 누적 더해줍니다.
+
+def func_a(month, day):
+    month_list = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    total = 0
+    for i in range(month - 1):
+        total += month_list[i]
+    total += day
+    return total - 1
+
+def solution(start_month, start_day, end_month, end_day):
+    start_total = func_a(start_month, start_day)
+    end_total = func_a(end_month, end_day)
+    return end_total - start_total
+
+inputs = list(map(int, input().split()))
+print(solution(inputs[0], inputs[1], inputs[2], inputs[3]))
+`,
+    test_cases: [
+      { input: "1 2 2 2", output: "31" },
+      { input: "2 10 3 12", output: "30" },
+      { input: "1 1 12 31", output: "364" }
+    ]
+  },
+  {
+    id: 44,
+    classLevel: 2,
+    title: "[문제 4] 최빈값과 최저빈도 비율 (빈칸 채우기)",
+    type: "blank",
+    description: "자연수가 들어있는 배열이 있습니다. 이 배열에서 가장 많이 등장하는 숫자의 개수는 가장 적게 등장하는 숫자 개수의 몇 배인지 구하려 합니다. 이를 위해 다음과 같이 프로그램 구조를 작성했습니다.\n1. 배열에 들어있는 각 자연수의 개수를 셉니다. (func_a)\n2. 가장 많이 등장하는 수의 개수를 구합니다. (func_b)\n3. 가장 적게 등장하는 수의 개수를 구합니다. (func_c)\n4. 가장 많이 등장하는 수가 가장 적게 등장하는 수보다 몇 배 더 많은지 구합니다.\n단, 몇 배 더 많은지 구할 때는 소수 부분은 버리고 정수 부분만 구하면 됩니다. 자연수가 들어있는 배열 arr가 매개변수로 주어질 때, 알맞은 함수와 매개변수를 빈칸에 채워 solution 함수를 완성해주세요.",
+    input_desc: "공백으로 구분된 자연수 리스트가 주어집니다.",
+    output_desc: "최다 빈도를 최소 빈도로 나눈 몫(정수)을 반환하거나 출력합니다.",
+    examples: [
+      { input: "1 2 3 3 1 3 3 2 3 2", output: "2" }
+    ],
+    starter_code: `def func_a(arr):
+    counter = [0 for _ in range(1001)]
+    for x in arr:
+        counter[x] += 1
+    return counter
+
+def func_b(arr):
+    ret = 0
+    for x in arr:
+        if ret < x:
+            ret = x
+    return ret
+
+def func_c(arr):
+    INF = 1001
+    ret = INF
+    for x in arr:
+        if x != 0 and ret > x:
+            ret = x
+    return ret
+
+def solution(arr):
+    counter = func_@@@(@@@)
+    max_cnt = func_@@@(@@@)
+    min_cnt = func_@@@(@@@)
+    return max_cnt // min_cnt
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+arr = list(map(int, input().split()))
+print(solution(arr))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 각 수의 등장 횟수를 기록한 빈도 카운터 배열을 얻기 위해 func_a(arr)를 호출합니다.
+# 2. 카운터 배열에서 최다 빈도를 구하기 위해 func_b(counter)를 호출합니다.
+# 3. 카운터 배열에서 최소 빈도를 구하기 위해 func_c(counter)를 호출합니다.
+
+def func_a(arr):
+    counter = [0 for _ in range(1001)]
+    for x in arr:
+        counter[x] += 1
+    return counter
+
+def func_b(arr):
+    ret = 0
+    for x in arr:
+        if ret < x:
+            ret = x
+    return ret
+
+def func_c(arr):
+    INF = 1001
+    ret = INF
+    for x in arr:
+        if x != 0 and ret > x:
+            ret = x
+    return ret
+
+def solution(arr):
+    counter = func_a(arr)
+    max_cnt = func_b(counter)
+    min_cnt = func_c(counter)
+    return max_cnt // min_cnt
+
+arr = list(map(int, input().split()))
+print(solution(arr))
+`,
+    test_cases: [
+      { input: "1 2 3 3 1 3 3 2 3 2", output: "2" },
+      { input: "5 5 5 5 5", output: "1" },
+      { input: "1 1 2 2 3 3 3 3", output: "2" }
+    ]
+  },
+  {
+    id: 45,
+    classLevel: 2,
+    title: "[문제 5] 배열 순서 뒤집기 (빈칸 채우기)",
+    type: "blank",
+    description: "주어진 배열의 순서를 뒤집으려고 합니다. 예를 들어 주어진 배열이 [1, 4, 2, 3]이면, 순서를 뒤집은 배열은 [3, 2, 4, 1]입니다. 정수가 들어있는 배열 arr가 매개변수로 주어졌을 때, 투 포인터(Two Pointer) 형태로 arr를 스왑(swap)하며 뒤집어서 return 하도록 빈칸을 채워 전체 코드를 완성해주세요.",
+    input_desc: "공백으로 구분된 정수 리스트가 주어집니다.",
+    output_desc: "뒤집힌 배열 리스트를 반환하거나 출력합니다.",
+    examples: [
+      { input: "1 4 2 3", output: "[3, 2, 4, 1]" }
+    ],
+    starter_code: `def solution(arr):
+    left, right = 0, len(arr)-1
+    while @@@:
+        arr[left], arr[right] = arr[right], arr[left]
+        left += 1
+        right -= 1
+    return arr
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+arr = list(map(int, input().split()))
+print(solution(arr))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. left 포인터가 right 포인터보다 작을 때(left < right) 동안 계속 스왑을 진행합니다.
+
+def solution(arr):
+    left, right = 0, len(arr)-1
+    while left < right:
+        arr[left], arr[right] = arr[right], arr[left]
+        left += 1
+        right -= 1
+    return arr
+
+arr = list(map(int, input().split()))
+print(solution(arr))
+`,
+    test_cases: [
+      { input: "1 4 2 3", output: "[3, 2, 4, 1]" },
+      { input: "10 20 30", output: "[30, 20, 10]" },
+      { input: "5", output: "[5]" }
+    ]
   }
 ];
+
