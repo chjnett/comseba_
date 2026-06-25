@@ -49,6 +49,7 @@ ${code}
 
 export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [problems, setProblems] = useState<Problem[]>(initialProblems);
   const [currentProblem, setCurrentProblem] = useState<Problem>(initialProblems[0]);
   const [code, setCode] = useState<string>(initialProblems[0].starter_code);
@@ -169,6 +170,13 @@ export default function Home() {
         console.error(e);
       }
     }
+    
+    // Load admin state
+    const savedAdmin = localStorage.getItem("oj_isAdmin");
+    if (savedAdmin === "true") {
+      setIsAdmin(true);
+    }
+    
     setIsMounted(true);
   }, []);
 
@@ -446,6 +454,24 @@ export default function Home() {
     alert("새 문제가 추가되었습니다!");
   };
 
+  const handleAdminToggle = () => {
+    if (isAdmin) {
+      if (window.confirm("관리자 모드에서 로그아웃 하시겠습니까?")) {
+        setIsAdmin(false);
+        localStorage.removeItem("oj_isAdmin");
+      }
+    } else {
+      const password = window.prompt("관리자 비밀번호를 입력하세요:");
+      if (password === "1000") {
+        setIsAdmin(true);
+        localStorage.setItem("oj_isAdmin", "true");
+        alert("관리자 모드로 로그인되었습니다.");
+      } else if (password !== null) {
+        alert("비밀번호가 틀렸습니다.");
+      }
+    }
+  };
+
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
     setCopiedId(id);
@@ -472,13 +498,26 @@ export default function Home() {
           </div>
         </div>
 
-        <button 
-          onClick={() => setIsAddModalOpen(true)}
-          className="flex items-center gap-2 bg-[#25283c] border border-[#313552] hover:bg-[#313552] text-[#f5c2e7] px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200"
-        >
-          <Plus size={16} />
-          새 문제 추가
-        </button>
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={handleAdminToggle}
+            className={"flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold border transition-all duration-200 " + (
+              isAdmin 
+                ? "bg-[#f5c2e7] text-[#11121d] border-[#f5c2e7] hover:bg-[#f2cdcd] hover:border-[#f2cdcd]" 
+                : "bg-[#25283c] text-[#a6adc8] border-[#313552] hover:bg-[#313552] hover:text-white"
+            )}
+          >
+            <span>{isAdmin ? "관리자 로그아웃" : "관리자 로그인"}</span>
+          </button>
+
+          <button 
+            onClick={() => setIsAddModalOpen(true)}
+            className="flex items-center gap-2 bg-[#25283c] border border-[#313552] hover:bg-[#313552] text-[#f5c2e7] px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200"
+          >
+            <Plus size={16} />
+            새 문제 추가
+          </button>
+        </div>
       </header>
 
       {/* Main Panel split */}
@@ -614,6 +653,24 @@ export default function Home() {
                   })}
                 </div>
               </div>
+
+              {isAdmin && currentProblem.solution_code && (
+                <div className="mt-6 border-t border-[#f5c2e7]/30 pt-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="text-sm font-bold text-[#f5c2e7] uppercase tracking-wide">■ 관리자용 정답 및 해설</h4>
+                    <button 
+                      onClick={() => copyToClipboard(currentProblem.solution_code!, "admin-sol")}
+                      className="flex items-center gap-1 text-xs text-[#a6adc8] hover:text-[#f5c2e7] transition-colors bg-[#1e1f2f] px-2.5 py-1.5 rounded-lg border border-[#25283c]"
+                    >
+                      {copiedId === "admin-sol" ? <Check size={12} /> : <Copy size={12} />}
+                      <span>정답 복사</span>
+                    </button>
+                  </div>
+                  <pre className="text-xs font-mono bg-[#161725] border border-[#25283c] p-4 rounded-xl text-[#a6e3a1] overflow-x-auto whitespace-pre-wrap leading-relaxed">
+                    {currentProblem.solution_code}
+                  </pre>
+                </div>
+              )}
             </div>
           </div>
 
