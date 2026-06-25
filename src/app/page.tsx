@@ -48,6 +48,7 @@ ${code}
 }
 
 export default function Home() {
+  const [isMounted, setIsMounted] = useState(false);
   const [problems, setProblems] = useState<Problem[]>(initialProblems);
   const [currentProblem, setCurrentProblem] = useState<Problem>(initialProblems[0]);
   const [code, setCode] = useState<string>(initialProblems[0].starter_code);
@@ -76,12 +77,60 @@ export default function Home() {
   const [newInDesc, setNewInDesc] = useState("");
   const [newOutDesc, setNewOutDesc] = useState("");
   const [newStarter, setNewStarter] = useState("");
-  const [newTestCases, setNewTestCases] = useState(`[
-  {
-    "input": "입력값",
-    "output": "출력값"
-  }
-]`);
+  const [newTestCases, setNewTestCases] = useState("[\n  {\n    \"input\": \"입력값\",\n    \"output\": \"출력값\"\n  }\n]");
+  
+  // Resizable panel states
+  const [consoleHeight, setConsoleHeight] = useState<number>(256); // default 256px
+  const [leftWidth, setLeftWidth] = useState<number>(45); // default 45% of width
+  
+  const isResizingConsole = useRef(false);
+  const isResizingWidth = useRef(false);
+
+  const startResizingConsole = (e: React.MouseEvent) => {
+    e.preventDefault();
+    isResizingConsole.current = true;
+    document.addEventListener("mousemove", handleMouseMoveConsole);
+    document.addEventListener("mouseup", stopResizingConsole);
+  };
+
+  const handleMouseMoveConsole = (e: MouseEvent) => {
+    if (!isResizingConsole.current) return;
+    const newHeight = window.innerHeight - e.clientY;
+    if (newHeight > 100 && newHeight < window.innerHeight - 200) {
+      setConsoleHeight(newHeight);
+    }
+  };
+
+  const stopResizingConsole = () => {
+    isResizingConsole.current = false;
+    document.removeEventListener("mousemove", handleMouseMoveConsole);
+    document.removeEventListener("mouseup", stopResizingConsole);
+  };
+
+  const startResizingWidth = (e: React.MouseEvent) => {
+    e.preventDefault();
+    isResizingWidth.current = true;
+    document.addEventListener("mousemove", handleMouseMoveWidth);
+    document.addEventListener("mouseup", stopResizingWidth);
+  };
+
+  const handleMouseMoveWidth = (e: MouseEvent) => {
+    if (!isResizingWidth.current) return;
+    // Calculate clientX relative to window width
+    // Offset slightly for sidebar width (approx 320px) if we want absolute precision,
+    // but relative to the split container width is even simpler and very clean.
+    const pct = (e.clientX / window.innerWidth) * 100;
+    if (pct > 20 && pct < 80) {
+      setLeftWidth(pct);
+    }
+  };
+
+  const stopResizingWidth = () => {
+    isResizingWidth.current = false;
+    document.removeEventListener("mousemove", handleMouseMoveWidth);
+    document.removeEventListener("mouseup", stopResizingWidth);
+  };
+
 
   // Load progress and custom problems on mount
   useEffect(() => {
@@ -120,6 +169,7 @@ export default function Home() {
         console.error(e);
       }
     }
+    setIsMounted(true);
   }, []);
 
   // Update editor code when current problem changes
@@ -164,7 +214,7 @@ export default function Home() {
   const initPyodide = async () => {
     if (pyodideLoaded || pyodideLoading) return;
     setPyodideLoading(true);
-    setConsoleLogs([{ text: "⚙ Pyodide (Python WebAssembly) 로딩 중...", type: "info" }]);
+    setConsoleLogs([{ text: String.fromCodePoint(0x2699) + " Pyodide (Python WebAssembly) 로딩 중...", type: "info" }]);
     
     try {
       // @ts-ignore
@@ -174,11 +224,11 @@ export default function Home() {
       setPyodide(py);
       setPyodideLoaded(true);
       setPyodideLoading(false);
-      setConsoleLogs([{ text: "✔ 파이썬 실행 엔진 준비 완료!", type: "success" }]);
+      setConsoleLogs([{ text: String.fromCodePoint(0x2714) + " 파이썬 실행 엔진 준비 완료!", type: "success" }]);
     } catch (err: any) {
       setPyodideLoading(false);
       setConsoleLogs([
-        { text: "❌ 파이썬 엔진 로드 실패. 네트워크 연결을 확인하세요.", type: "error" },
+        { text: String.fromCodePoint(0x274C) + " 파이썬 엔진 로드 실패. 네트워크 연결을 확인하세요.", type: "error" },
         { text: err.message || "", type: "error" }
       ]);
     }
@@ -225,7 +275,7 @@ export default function Home() {
     let activePy = pyodide;
     if (!pyodideLoaded) {
       setRunning(true);
-      setConsoleLogs([{ text: "⚙ Pyodide 로딩 중...", type: "info" }]);
+      setConsoleLogs([{ text: String.fromCodePoint(0x2699) + " Pyodide 로딩 중...", type: "info" }]);
       try {
         // @ts-ignore
         activePy = await window.loadPyodide({
@@ -236,41 +286,41 @@ export default function Home() {
         setPyodideLoading(false);
       } catch (err: any) {
         setRunning(false);
-        setConsoleLogs([{ text: `❌ 엔진 로드 실패: ${err.message}`, type: "error" }]);
+        setConsoleLogs([{ text: String.fromCodePoint(0x274C) + " 엔진 로드 실패: " + err.message, type: "error" }]);
         return;
       }
     }
 
     setRunning(true);
-    setConsoleLogs([{ text: "🚀 예제 테스트 케이스 검사 시작...", type: "info" }]);
+    setConsoleLogs([{ text: String.fromCodePoint(0x1F680) + " 예제 테스트 케이스 검사 시작...", type: "info" }]);
 
     let passedCount = 0;
     const examples = currentProblem.examples;
 
     for (let i = 0; i < examples.length; i++) {
       const ex = examples[i];
-      setConsoleLogs(prev => [...prev, { text: `\n테스트 케이스 ${i + 1}:`, type: "info" }]);
-      setConsoleLogs(prev => [...prev, { text: `  - 입력: ${ex.input.replace(/\n/g, " | ")}`, type: "muted" }]);
+      setConsoleLogs(prev => [...prev, { text: "\n테스트 케이스 " + (i + 1) + ":", type: "info" }]);
+      setConsoleLogs(prev => [...prev, { text: "  - 입력: " + ex.input.replace(/\n/g, " | "), type: "muted" }]);
 
       const { stdout, stderr } = await runSingle(activePy, code, ex.input);
 
       if (stderr) {
         setConsoleLogs(prev => [
           ...prev, 
-          { text: `  - 결과: [실행 에러]`, type: "error" },
+          { text: "  - 결과: [실행 에러]", type: "error" },
           { text: stderr, type: "error" }
         ]);
       } else {
         const passed = checkMatch(stdout, ex.output);
         if (passed) {
           passedCount++;
-          setConsoleLogs(prev => [...prev, { text: `  - 결과: [성공]`, type: "success" }]);
+          setConsoleLogs(prev => [...prev, { text: "  - 결과: [성공]", type: "success" }]);
         } else {
           setConsoleLogs(prev => [
             ...prev, 
-            { text: `  - 결과: [실패]`, type: "error" },
-            { text: `    * 기대 출력:\n${ex.output}`, type: "muted" },
-            { text: `    * 실제 출력:\n${stdout.trim()}`, type: "muted" }
+            { text: "  - 결과: [실패]", type: "error" },
+            { text: "    * 기대 출력:\n" + ex.output, type: "muted" },
+            { text: "    * 실제 출력:\n" + stdout.trim(), type: "muted" }
           ]);
         }
       }
@@ -278,7 +328,7 @@ export default function Home() {
 
     setConsoleLogs(prev => [
       ...prev, 
-      { text: `\n🏁 요약: ${passedCount}/${examples.length} 통과`, type: passedCount === examples.length ? "success" : "info" }
+      { text: "\n" + String.fromCodePoint(0x1F3C1) + " 요약: " + passedCount + "/" + examples.length + " 통과", type: passedCount === examples.length ? "success" : "info" }
     ]);
     setRunning(false);
   };
@@ -291,7 +341,7 @@ export default function Home() {
     let activePy = pyodide;
     if (!pyodideLoaded) {
       setRunning(true);
-      setConsoleLogs([{ text: "⚙ Pyodide 로딩 중...", type: "info" }]);
+      setConsoleLogs([{ text: "\u2699 Pyodide 로딩 중...", type: "info" }]);
       try {
         // @ts-ignore
         activePy = await window.loadPyodide({
@@ -302,13 +352,13 @@ export default function Home() {
         setPyodideLoading(false);
       } catch (err: any) {
         setRunning(false);
-        setConsoleLogs([{ text: `❌ 엔진 로드 실패: ${err.message}`, type: "error" }]);
+        setConsoleLogs([{ text: "\u274c 엔진 로드 실패: " + err.message, type: "error" }]);
         return;
       }
     }
 
     setRunning(true);
-    setConsoleLogs([{ text: "⚙ 채점 엔진 가동 중...", type: "info" }]);
+    setConsoleLogs([{ text: "\u2699 채점 엔진 가동 중...", type: "info" }]);
 
     let passedCount = 0;
     const testCases = currentProblem.test_cases;
@@ -319,9 +369,9 @@ export default function Home() {
 
       if (!stderr && checkMatch(stdout, tc.output)) {
         passedCount++;
-        setConsoleLogs(prev => [...prev, { text: `테스트 케이스 ${i + 1}: 성공`, type: "success" }]);
+        setConsoleLogs(prev => [...prev, { text: "테스트 케이스 " + (i + 1) + ": 성공", type: "success" }]);
       } else {
-        setConsoleLogs(prev => [...prev, { text: `테스트 케이스 ${i + 1}: 실패`, type: "error" }]);
+        setConsoleLogs(prev => [...prev, { text: "테스트 케이스 " + (i + 1) + ": 실패", type: "error" }]);
       }
     }
 
@@ -335,12 +385,12 @@ export default function Home() {
     if (isSuccess) {
       setConsoleLogs(prev => [
         ...prev, 
-        { text: `\n✔ 정답입니다! (${passedCount}/${testCases.length} 통과)`, type: "success" }
+        { text: "\n" + String.fromCodePoint(0x2714) + " 정답입니다! (" + passedCount + "/" + testCases.length + " 통과)", type: "success" }
       ]);
     } else {
       setConsoleLogs(prev => [
         ...prev, 
-        { text: `\n❌ 오답 또는 실행 에러가 있습니다. (${passedCount}/${testCases.length} 통과)`, type: "error" }
+        { text: "\n" + String.fromCodePoint(0x274C) + " 오답 또는 실행 에러가 있습니다. (" + passedCount + "/" + testCases.length + " 통과)", type: "error" }
       ]);
     }
 
@@ -363,7 +413,7 @@ export default function Home() {
         throw new Error("테스트 케이스는 1개 이상의 객체 배열이어야 합니다.");
       }
     } catch (err: any) {
-      alert(`테스트 케이스 형식이 잘못되었습니다: ${err.message}`);
+      alert("테스트 케이스 형식이 잘못되었습니다: " + err.message);
       return;
     }
 
@@ -390,7 +440,7 @@ export default function Home() {
     setNewInDesc("");
     setNewOutDesc("");
     setNewStarter("");
-    setNewTestCases(`[\n  {\n    "input": "입력값",\n    "output": "출력값"\n  }\n]`);
+    setNewTestCases("[\n  {\n    \"input\": \"입력값\",\n    \"output\": \"출력값\"\n  }\n]");
 
     setIsAddModalOpen(false);
     alert("새 문제가 추가되었습니다!");
@@ -451,11 +501,11 @@ export default function Home() {
                 <button
                   key={prob.id}
                   onClick={() => handleSelectProblem(prob)}
-                  className={`w-full text-left p-3 rounded-xl flex items-center justify-between transition-all duration-150 ${
+                  className={"w-full text-left p-3 rounded-xl flex items-center justify-between transition-all duration-150 " + (
                     active 
                       ? "bg-[#25283c] border border-[#89b4fa]/20 text-[#89b4fa]" 
                       : "hover:bg-[#1e1f2f] text-[#cdd6f4]"
-                  }`}
+                  )}
                 >
                   <div className="flex-1 min-w-0 pr-2">
                     <h3 className="text-sm font-semibold truncate">{prob.title}</h3>
@@ -483,7 +533,10 @@ export default function Home() {
         <div className="flex-1 flex flex-col xl:flex-row overflow-hidden min-w-0">
           
           {/* Left panel: Problem details */}
-          <div className="flex-1 border-r border-[#25283c] bg-[#11121d] overflow-y-auto flex flex-col p-6 min-w-0">
+          <div 
+            className="border-b xl:border-b-0 xl:border-r border-[#25283c] bg-[#11121d] overflow-y-auto flex flex-col p-6 min-w-0 shrink-0"
+            style={{ width: isMounted ? leftWidth + "%" : '45%' }}
+          >
             <h2 className="text-xl font-bold text-[#89b4fa] border-b border-[#25283c] pb-3 mb-4">
               {currentProblem.title}
             </h2>
@@ -530,10 +583,10 @@ export default function Home() {
                             <div className="flex items-center justify-between mb-1">
                               <span className="text-xs text-[#a6adc8] font-bold">입력</span>
                               <button 
-                                onClick={() => copyToClipboard(ex.input, `${exId}-in`)}
+                                onClick={() => copyToClipboard(ex.input, exId + "-in")}
                                 className="text-[#a6adc8] hover:text-[#89b4fa] transition-colors"
                               >
-                                {copiedId === `${exId}-in` ? <Check size={14} /> : <Copy size={14} />}
+                                {copiedId === exId + "-in" ? <Check size={14} /> : <Copy size={14} />}
                               </button>
                             </div>
                             <pre className="text-xs font-mono bg-[#11121d] p-3 rounded-lg text-[#a6e3a1] overflow-x-auto whitespace-pre-wrap">
@@ -545,10 +598,10 @@ export default function Home() {
                             <div className="flex items-center justify-between mb-1">
                               <span className="text-xs text-[#a6adc8] font-bold">출력</span>
                               <button 
-                                onClick={() => copyToClipboard(ex.output, `${exId}-out`)}
+                                onClick={() => copyToClipboard(ex.output, exId + "-out")}
                                 className="text-[#a6adc8] hover:text-[#89b4fa] transition-colors"
                               >
-                                {copiedId === `${exId}-out` ? <Check size={14} /> : <Copy size={14} />}
+                                {copiedId === exId + "-out" ? <Check size={14} /> : <Copy size={14} />}
                               </button>
                             </div>
                             <pre className="text-xs font-mono bg-[#11121d] p-3 rounded-lg text-[#f5c2e7] overflow-x-auto whitespace-pre-wrap">
@@ -562,6 +615,14 @@ export default function Home() {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Horizontal Split Handler (Visible on xl screens only) */}
+          <div 
+            onMouseDown={startResizingWidth}
+            className="hidden xl:flex w-1.5 hover:w-2 bg-[#25283c] hover:bg-[#89b4fa] cursor-col-resize justify-center items-center select-none transition-all duration-150 group shrink-0"
+          >
+            <div className="w-0.5 h-8 bg-[#6c7086] group-hover:bg-[#11121d] rounded-full"></div>
           </div>
 
           {/* Right panel: Code Editor & Console Output */}
@@ -581,7 +642,7 @@ export default function Home() {
             </div>
 
             {/* Monaco Editor Container */}
-            <div className="flex-1 min-h-[300px] border-b border-[#25283c]">
+            <div className="flex-1 min-h-[200px] border-b border-[#25283c]">
               <Editor
                 height="100%"
                 language="python"
@@ -603,8 +664,16 @@ export default function Home() {
               />
             </div>
 
+            {/* Vertical Split Handler */}
+            <div 
+              onMouseDown={startResizingConsole}
+              className="h-1.5 hover:h-2 bg-[#25283c] hover:bg-[#89b4fa] cursor-row-resize flex justify-center items-center select-none transition-all duration-150 group shrink-0"
+            >
+              <div className="w-12 h-0.5 bg-[#6c7086] group-hover:bg-[#11121d] rounded-full"></div>
+            </div>
+
             {/* Console and Grading Section */}
-            <div className="h-64 flex flex-col bg-[#11121d]">
+            <div className="flex flex-col bg-[#11121d] shrink-0" style={{ height: consoleHeight + "px" }}>
               <div className="border-b border-[#25283c] bg-[#161725] px-4 py-3 flex items-center justify-between">
                 <span className="text-sm font-bold text-[#a6adc8] flex items-center gap-1.5">
                   <Terminal size={16} /> 실행 결과 및 콘솔
@@ -644,7 +713,7 @@ export default function Home() {
                     if (log.type === "muted") color = "text-[#6c7086]";
 
                     return (
-                      <div key={idx} className={`${color} whitespace-pre-wrap`}>
+                      <div key={idx} className={color + " whitespace-pre-wrap"}>
                         {log.text}
                       </div>
                     );
