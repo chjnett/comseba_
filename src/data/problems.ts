@@ -874,7 +874,7 @@ print(s.replace(char, ""))
     starter_code: `# 여기에 코드를 작성하세요.
 `,
     test_cases: [
-      { input: "11\n0 5 7 2 2 1 9 2 1 6 5", output: "1\n2\n3\n0\n0\n1\n1\n1\n0\n1" }
+      { input: "11\n0 5 7 2 2 1 9 2 1 6 5", output: "1\n2\n3\n0\n0\n2\n1\n1\n0\n1" }
     ],
     solution_code: `# [정답 및 해설]
 # 1. n과 배열 arr을 정수형 리스트로 입력받습니다.
@@ -1572,9 +1572,9 @@ number = int(input())
 solution(number)
 `,
     test_cases: [
-      { input: "40", output: "22" },
-      { input: "10", output: "3" },
-      { input: "15", output: "5" }
+      { input: "40", output: "1 2 pair 4 5 pair 7 8 pair 10 11 12 pair 14 15 pair 17 18 pair 20 21 22 pair 24 25 pair 27 28 pair pair pair pair pairpair pair pair pairpair pair pair pairpair 40" },
+      { input: "10", output: "1 2 pair 4 5 pair 7 8 pair 10" },
+      { input: "15", output: "1 2 pair 4 5 pair 7 8 pair 10 11 12 pair 14 15" }
     ]
   },
   {
@@ -2708,7 +2708,7 @@ print(solution(inputs[0], inputs[1], inputs[2]))
     test_cases: [
       { input: "5 1 2", output: "1" },
       { input: "10 5 4", output: "2" },
-      { input: "3 1 1", output: "1" }
+      { input: "3 1 1", output: "0" }
     ]
   },
   {
