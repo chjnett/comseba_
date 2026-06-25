@@ -281,6 +281,10 @@ export default function Home() {
     py.setStdout({
       batched: (text: string) => {
         stdout += text + "\n";
+      },
+      write: (text: string) => {
+        stdout += text;
+        return text.length;
       }
     });
 
