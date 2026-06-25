@@ -37,25 +37,34 @@ import { problems as initialProblems, Problem, Example } from "@/data/problems";
 // Helper to sanitize python inputs for builtin.input mock
 function preparePythonRunner(code: string, inputLines: string[]): string {
   const jsonInputs = JSON.stringify(inputLines);
+  const escapedCode = JSON.stringify(code);
   return `
 import builtins
 import json
+import sys
+import io
 
-inputs = json.loads('''${jsonInputs}''')
-input_idx = 0
+_inputs = json.loads('''${jsonInputs}''')
+_input_idx = 0
 
-def mock_input(prompt=''):
-    global input_idx
-    if input_idx < len(inputs):
-        val = inputs[input_idx]
-        input_idx += 1
-        return val
+def _mock_input(prompt=''):
+    global _input_idx
+    if _input_idx < len(_inputs):
+        _val = _inputs[_input_idx]
+        _input_idx += 1
+        return _val
     raise EOFError("EOF when reading a line")
 
-builtins.input = mock_input
+builtins.input = _mock_input
 
-# User code follows
-${code}
+_orig_stdout = sys.stdout
+sys.stdout = io.StringIO()
+
+try:
+    exec(${escapedCode}, globals())
+finally:
+    _captured_stdout = sys.stdout.getvalue()
+    sys.stdout = _orig_stdout
 `;
 }
 
@@ -276,22 +285,12 @@ export default function Home() {
     const inputLines = inputStr.split("\n");
     const prepCode = preparePythonRunner(pythonCode, inputLines);
 
-    // Setup stdout capture in Pyodide
-    let stdout = "";
-    py.setStdout({
-      batched: (text: string) => {
-        stdout += text + "\n";
-      },
-      write: (text: string) => {
-        stdout += text;
-        return text.length;
-      }
-    });
-
     try {
       await py.runPythonAsync(prepCode);
+      const stdout = String(py.globals.get("_captured_stdout") || "");
       return { stdout, stderr: "" };
     } catch (err: any) {
+      const stdout = String(py.globals.get("_captured_stdout") || "");
       return { stdout, stderr: err.message };
     }
   };

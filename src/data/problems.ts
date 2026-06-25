@@ -2852,8 +2852,325 @@ print(solution(arr))
       { input: "10 20 5", output: "2" },
       { input: "1 3 5", output: "0" }
     ]
+  },
+  {
+    id: 71,
+    classLevel: 2,
+    title: "[4차] [문제 1] 상담실 방문 학생 중 미상담자 구하기 (빈칸 채우기)",
+    type: "blank",
+    description: "학생 10명이 상담을 받기 위해 매일 한 명씩, 순서대로 상담실을 찾아갑니다. 상담은 상담 선생님이 계실 때에만 받을 수 있습니다. 또한 한번 상담실을 방문한 학생은 다시 상담실에 찾아가지 않습니다. 선생님의 일정표가 주어질 때, 누가 상담을 받지 못했는지 알아내는 프로그램을 작성하려 합니다. 일정표에는 선생님이 있는 날엔 \"O\"가, 없는 날엔 \"X\"가 표시됩니다. 선생님의 일정을 담은 배열 schedule이 매개변수로 주어질 때, 상담을 받지 못한 학생의 번호(1부터 시작)를 오름차순으로 정렬하여 return 하도록 빈칸을 채워 solution 함수를 완성해주세요.",
+    input_desc: "선생님의 일정 10개가 공백으로 구분되어 주어집니다. (예: O X X O O O X O X X)",
+    output_desc: "상담을 받지 못한 학생들의 번호를 오름차순 정렬한 리스트를 출력하거나 반환합니다.",
+    examples: [
+      { input: "O X X O O O X O X X", output: "[2, 3, 7, 9, 10]" }
+    ],
+    starter_code: `def solution(schedule):
+    answer = []
+    for idx, i in enumerate(schedule):
+        if i == @@@:
+            answer.append(@@@)
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+schedule = input().split()
+print(solution(schedule))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. schedule의 각 날짜(i)를 순회하며 선생님이 계시지 않은 날("X")을 찾습니다: if i == "X":
+# 2. 학생의 번호는 1번부터 시작하므로, 인덱스 idx에 1을 더해 추가합니다: answer.append(idx + 1)
+
+def solution(schedule):
+    answer = []
+    for idx, i in enumerate(schedule):
+        if i == "X":
+            answer.append(idx + 1)
+    return answer
+
+schedule = input().split()
+print(solution(schedule))
+`,
+    test_cases: [
+      { input: "O X X O O O X O X X", output: "[2, 3, 7, 9, 10]" },
+      { input: "O O O O O O O O O O", output: "[]" },
+      { input: "X X X X X X X X X X", output: "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" }
+    ]
+  },
+  {
+    id: 72,
+    classLevel: 2,
+    title: "[4차] [문제 2] 체력시험 합격 인원 구하기 (빈칸 채우기)",
+    type: "blank",
+    description: "체력시험 합격 인원을 알아보려고 합니다. 체력시험 종목으로는 윗몸일으키기, 팔굽혀펴기, 달리기가 있으며 종목별 합격 기준은 다음과 같습니다.\n- 윗몸일으키기: 80점 이상\n- 팔굽혀펴기: 88점 이상\n- 달리기: 70점 이상\n단, 통과한 종목이 1개 이하이거나, 단 한 종목이라도 통과 기준 점수의 반(50%)을 넘기지 못한 종목(과락)이 있다면 불합격입니다. 그 외에는 모두 합격입니다. 이를 위해 다음과 같이 프로그램 구조를 작성했습니다.\n\n1. 통과한 종목이 몇 개인지 셉니다. (func_c)\n2. 통과 점수의 반을 넘기지 못한 종목이 몇 개인지 셉니다. (func_b)\n3. 통과한 종목이 1개보다 많고(2개 이상) 통과 점수의 반을 넘기지 못한 종목이 없으면(0개) 합격 인원으로 셉니다. (func_a)\n\n각 응시자의 종목 기록을 담고 있는 2차원 배열 scores가 매개변수로 주어질 때, 빈칸에 알맞은 함수와 매개변수를 채워 solution 함수를 완성해주세요.",
+    input_desc: "첫 번째 줄에 응시자 수가 주어지고, 두 번째 줄부터 각 줄마다 한 응시자의 [윗몸일으키기, 팔굽혀펴기, 달리기] 점수가 공백으로 구분되어 주어집니다.",
+    output_desc: "시험에 합격한 총 인원수를 출력하거나 반환합니다.",
+    examples: [
+      { input: "2\n30 40 100\n97 88 95", output: "1" },
+      { input: "6\n90 88 70\n85 90 90\n100 100 70\n30 90 80\n40 10 20\n83 88 80", output: "4" }
+    ],
+    starter_code: `def func_a(passed, non_passed):
+    return ( passed > 1 and non_passed == 0 )
+
+def func_b(scores):
+    answer = 0
+    if scores[0] < 40:
+        answer += 1
+    if scores[1] < 44:
+        answer += 1
+    if scores[2] < 35:
+        answer += 1
+    return answer
+
+def func_c(scores):
+    answer = 0
+    if scores[0] >= 80:
+        answer += 1
+    if scores[1] >= 88:
+        answer += 1
+    if scores[2] >= 70:
+        answer += 1
+    return answer
+
+def solution(scores):
+    answer = 0
+    for my_score in scores:
+        passed = func_@@@(@@@)
+        non_passed = func_@@@(@@@)
+        answer += func_@@@(@@@, @@@)
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+n = int(input())
+scores = []
+for _ in range(n):
+    scores.append(list(map(int, input().split())))
+print(solution(scores))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 통과한 과목 개수를 구하기 위해 func_c(my_score)를 호출합니다.
+# 2. 과락 기준(통과 기준 점수의 50% 미만) 과목 개수를 구하기 위해 func_b(my_score)를 호출합니다.
+# 3. 최종 합격 여부를 판별하기 위해 func_a(passed, non_passed)를 호출하여 참(True)이면 answer를 1 증가시킵니다.
+
+def func_a(passed, non_passed):
+    return ( passed > 1 and non_passed == 0 )
+
+def func_b(scores):
+    answer = 0
+    if scores[0] < 40:
+        answer += 1
+    if scores[1] < 44:
+        answer += 1
+    if scores[2] < 35:
+        answer += 1
+    return answer
+
+def func_c(scores):
+    answer = 0
+    if scores[0] >= 80:
+        answer += 1
+    if scores[1] >= 88:
+        answer += 1
+    if scores[2] >= 70:
+        answer += 1
+    return answer
+
+def solution(scores):
+    answer = 0
+    for my_score in scores:
+        passed = func_c(my_score)
+        non_passed = func_b(my_score)
+        if func_a(passed, non_passed):
+            answer += 1
+    return answer
+
+n = int(input())
+scores = []
+for _ in range(n):
+    scores.append(list(map(int, input().split())))
+print(solution(scores))
+`,
+    test_cases: [
+      { input: "2\n30 40 100\n97 88 95", output: "1" },
+      { input: "6\n90 88 70\n85 90 90\n100 100 70\n30 90 80\n40 10 20\n83 88 80", output: "4" }
+    ]
+  },
+  {
+    id: 73,
+    classLevel: 2,
+    title: "[4차] [문제 3] 카드 게임 점수 계산 (빈칸 채우기)",
+    type: "blank",
+    description: "A와 B가 카드 게임을 할 때, 누가 더 많은 점수를 획득했는지, 또 승리자의 점수는 몇 점인지 알아보려 합니다. 게임 규칙은 다음과 같습니다.\n- 알파벳 'a', 'b', 'c', 'd', 'e'가 적힌 카드뭉치(bundle)가 있습니다.\n- A와 B가 서로 번갈아 가면서 n장씩 카드를 순서대로 뽑습니다. (A가 항상 먼저 뽑습니다.)\n- 알파벳 카드 한 장당 점수는 a = 1점, b = 2점, c = 3점, d = 4점, e = 5점으로 계산하여 합산합니다.\n- 점수가 높은 사람이 승리합니다.\n\n이를 위해 다음과 같이 프로그램 구조를 작성했습니다.\n1. A와 B가 번갈아가며 가져간 카드를 각각 문자열 배열로 분리합니다. (func_a)\n2. A와 B가 각각 획득한 총점수를 구합니다. (func_c)\n3. 승리한 사람의 번호(A는 1, B는 2, 무승부는 0)와 획득한 점수를 순서대로 배열에 담아 return 합니다. (func_b)\n\n뽑아야 하는 카드 개수 n과 카드 뭉치 문자열 bundle이 매개변수로 주어질 때, 빈칸을 알맞게 채워 solution 함수를 완성해주세요.",
+    input_desc: "첫 번째 줄에 뽑아야 하는 카드 개수 n이 주어집니다. 두 번째 줄에 카드 뭉치 문자열 bundle이 주어집니다.",
+    output_desc: "[이긴 사람의 번호, 승리자의 점수]를 출력하거나 반환합니다.",
+    examples: [
+      { input: "4\ncacdbdedccbb", output: "[0, 13]" }
+    ],
+    starter_code: `def func_a(bundle, start):
+    return bundle[start::2]
+
+def func_b(score1, score2):
+    if score1 > score2:
+        return [1, score1]
+    elif score2 > score1:
+        return [2, score2]
+    else:
+        return [0, score1]
+
+def func_c(bundle):
+    answer = 0
+    score_per_cards = {
+        'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5
+    }
+    for card in bundle:
+        answer += score_per_cards[card]
+    return answer
+
+def solution(n, bundle):
+    a_cards = func_a(@@@, @@@)[:n]
+    b_cards = func_a(@@@, @@@)[:n]
+    a_score = func_c(@@@)
+    b_score = func_c(@@@)
+    return func_b(@@@, @@@)
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+n = int(input())
+bundle = input()
+print(solution(n, bundle))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. A는 첫 번째(인덱스 0)부터 시작해서 번갈아 카드를 가져가므로 func_a(bundle, 0)을 통해 카드 슬라이싱을 진행합니다.
+# 2. B는 두 번째(인덱스 1)부터 시작하므로 func_a(bundle, 1)을 호출합니다.
+# 3. A와 B 각각의 점수를 합산하기 위해 func_c(a_cards), func_c(b_cards)를 호출합니다.
+# 4. 최종적으로 두 선수의 점수를 대조하기 위해 func_b(a_score, b_score)의 판정 값을 반환합니다.
+
+def func_a(bundle, start):
+    return bundle[start::2]
+
+def func_b(score1, score2):
+    if score1 > score2:
+        return [1, score1]
+    elif score2 > score1:
+        return [2, score2]
+    else:
+        return [0, score1]
+
+def func_c(bundle):
+    answer = 0
+    score_per_cards = {
+        'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5
+    }
+    for card in bundle:
+        answer += score_per_cards[card]
+    return answer
+
+def solution(n, bundle):
+    a_cards = func_a(bundle, 0)[:n]
+    b_cards = func_a(bundle, 1)[:n]
+    a_score = func_c(a_cards)
+    b_score = func_c(b_cards)
+    return func_b(a_score, b_score)
+
+n = int(input())
+bundle = input()
+print(solution(n, bundle))
+`,
+    test_cases: [
+      { input: "4\ncacdbdedccbb", output: "[0, 13]" },
+      { input: "3\nabcde", output: "[1, 4]" }
+    ]
+  },
+  {
+    id: 74,
+    classLevel: 2,
+    title: "[4차] [문제 4] 필요한 총 조교 수 구하기 (빈칸 채우기)",
+    type: "blank",
+    description: "프로그래밍 수업 n개를 동시에 진행할 때, 필요한 총 조교 수를 알아보려고 합니다. 조교 1명이 최대 m명의 학생을 담당할 수 있으며, 각 교실별로 필요한 조교 수를 구한 뒤 모두 더해야 합니다. (예를 들어 한 반에 학생이 33명이고 m=30이면 조교는 2명이 필요합니다.) 교실별 학생 수가 담긴 배열 classes와 조교 1명이 담당하는 학생 수 m이 주어질 때, 빈칸 연산자를 알맞게 채워 총 조교 수를 return 하는 solution 함수를 완성해주세요.",
+    input_desc: "첫 번째 줄에 교실별 학생 수가 공백으로 구분되어 주어집니다. 두 번째 줄에 조교 1명이 담당할 수 있는 학생 수 m이 주어집니다.",
+    output_desc: "필요한 총 조교 수를 출력하거나 반환합니다.",
+    examples: [
+      { input: "80 45 33 20\n30", output: "8" }
+    ],
+    starter_code: `def solution(classes, m):
+    answer = 0
+    for students in classes:
+        answer += students @@@ m
+        if students @@@ m != 0:
+            answer += 1
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+classes = list(map(int, input().split()))
+m = int(input())
+print(solution(classes, m))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 학생 수(students)를 m으로 나눈 몫(//)만큼의 조교 수가 기본적으로 필요하므로: answer += students // m
+# 2. m명으로 똑떨어지지 않는 나머지 학생이 존재할 경우(나머지 % 연산자 결과가 0이 아닐 때) 조교 1명을 더 배치합니다: if students % m != 0:
+
+def solution(classes, m):
+    answer = 0
+    for students in classes:
+        answer += students // m
+        if students % m != 0:
+            answer += 1
+    return answer
+
+classes = list(map(int, input().split()))
+m = int(input())
+print(solution(classes, m))
+`,
+    test_cases: [
+      { input: "80 45 33 20\n30", output: "8" },
+      { input: "30 60 90\n30", output: "6" }
+    ]
+  },
+  {
+    id: 75,
+    classLevel: 2,
+    title: "[4차] [문제 5] 다이어트 소모 열량 계산 (한 줄 수정)",
+    type: "code",
+    description: "다이어트를 하는 A 씨는 오늘 먹은 식단의 열량이 그동안(오늘 전까지) 먹은 식단의 열량 중 최솟값보다 큰 경우, 운동을 하여 그 차이만큼의 열량을 소모합니다. 식단의 열량이 날짜순으로 담긴 배열 calorie가 매개변수로 주어질 때, 운동으로 소모하는 총열량을 구하도록 작성된 소스코드입니다. 코드에서 한 줄만 변경해서 모든 입력에 대해 올바르게 동작하도록 수정하세요.",
+    input_desc: "식단의 일자별 열량이 공백으로 구분되어 한 줄로 주어집니다.",
+    output_desc: "운동으로 소모하는 총 열량을 출력하거나 반환합니다.",
+    examples: [
+      { input: "713 665 873 500 751", output: "459" }
+    ],
+    starter_code: `def solution(calorie):
+    min_cal = 0
+    answer = 0
+    for cal in calorie:
+        if cal > min_cal:
+            answer += cal - min_cal
+        min_cal = min(min_cal, cal)
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+calorie = list(map(int, input().split()))
+print(solution(calorie))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 최솟값을 0으로 설정하면, 입력 식단 열량이 항상 0보다 크므로 첫 번째 날부터 잘못된 운동 칼로리 누적이 일어납니다.
+# 2. 따라서, 이전 최솟값의 기준을 무한대(float('inf')) 혹은 매우 큰 값, 또는 첫날 열량 값 등으로 초기화해주어야 올바르게 소모량을 연산할 수 있습니다.
+# 3. min_cal = float('inf') 로 초기 설정 한 줄을 수정해 줍니다.
+
+def solution(calorie):
+    min_cal = float('inf')
+    answer = 0
+    for cal in calorie:
+        if cal > min_cal:
+            answer += cal - min_cal
+        min_cal = min(min_cal, cal)
+    return answer
+
+calorie = list(map(int, input().split()))
+print(solution(calorie))
+`,
+    test_cases: [
+      { input: "713 665 873 500 751", output: "459" },
+      { input: "100 200 300", output: "300" }
+    ]
   }
 ];
+
 
 
 
