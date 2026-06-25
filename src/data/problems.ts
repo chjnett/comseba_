@@ -1516,6 +1516,251 @@ print(solution(arr))
       { input: "10 20 30", output: "[30, 20, 10]" },
       { input: "5", output: "[5]" }
     ]
+  },
+  {
+    id: 46,
+    classLevel: 2,
+    title: "[문제 6] 369 게임 박수 횟수 구하기 (빈칸 채우기)",
+    type: "blank",
+    description: "369 게임은 여러 명이 같이하는 게임입니다. 게임의 규칙은 아래와 같습니다.\n- 1부터 시작합니다.\n- 한 사람씩 차례대로 숫자를 1씩 더해가며 말합니다.\n- 말해야 하는 숫자에 3, 6, 9중 하나라도 포함되어있다면 숫자를 말하는 대신 숫자에 포함된 3, 6, 9의 개수만큼 손뼉을 칩니다.\n어떤 수 number가 매개변수로 주어질 때, 1부터 number까지 369게임을 올바르게 진행했을 경우 박수를 총 몇 번 쳤는지를 return 하도록 solution 함수를 완성해주세요.",
+    input_desc: "정수 number가 주어집니다. (10 이상 1,000 이하)",
+    output_desc: "1부터 number까지 친 총 박수 횟수를 반환하거나 출력합니다.",
+    examples: [
+      { input: "40", output: "22" }
+    ],
+    starter_code: `def solution(number):
+    count = 0
+    for i in range(1, number + 1):
+        current = i
+        temp = count
+        while current != 0:
+            if @@@:
+                count += 1
+                print("pair", end = '')
+            current = current // 10
+        if temp == count:
+            print(i, end = '')
+        print(" ", end = '')
+    print("")
+    return count
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+number = int(input())
+solution(number)
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 숫자의 각 자릿수를 확인하여 3, 6, 9인 경우 박수 카운트를 1 증가시킵니다.
+# 2. current % 10이 3, 6, 9 중 하나인지 판별해야 하므로, current % 10 in [3, 6, 9] 또는 current % 10 == 3 or current % 10 == 6 or current % 10 == 9 등을 사용합니다.
+
+def solution(number):
+    count = 0
+    for i in range(1, number + 1):
+        current = i
+        temp = count
+        while current != 0:
+            if current % 10 in [3, 6, 9]:
+                count += 1
+                print("pair", end = '')
+            current = current // 10
+        if temp == count:
+            print(i, end = '')
+        print(" ", end = '')
+    print("")
+    return count
+
+number = int(input())
+solution(number)
+`,
+    test_cases: [
+      { input: "40", output: "22" },
+      { input: "10", output: "3" },
+      { input: "15", output: "5" }
+    ]
+  },
+  {
+    id: 47,
+    classLevel: 2,
+    title: "[문제 7] 초급 영어 수강 대상 인원수 구하기 (한 줄 수정)",
+    type: "code",
+    description: "A 대학에서는 수준별 영어 강의를 제공하고 있습니다. 초급 영어 강의는 토익시험에서 650점 이상 800점 미만의 성적을 취득한 학생만을 수강대상으로 하고 있습니다. 초급 영어 강의에 수강신청한 사람이 10명일 때, 이 중에서 몇 명이 수강 대상에 해당하는지 확인하려 합니다. 수강신청자들의 토익 성적이 들어있는 배열 scores가 매개변수로 주어질 때, 수강 대상자들의 인원수를 return 하도록 solution 함수를 작성했습니다. 코드에서 한 줄만 변경해서 모든 입력에 대해 올바르게 동작하도록 수정해주세요.",
+    input_desc: "공백으로 구분된 10개의 토익 성적이 주어집니다.",
+    output_desc: "조건을 충족하는 초급 영어 수강 대상자 인원수를 반환하거나 출력합니다.",
+    examples: [
+      { input: "650 722 914 558 714 803 650 679 669 800", output: "6" }
+    ],
+    starter_code: `def solution(scores):
+    count = 0
+    for s in scores:
+        if 650 <= s or s < 800:
+            count += 1
+    return count
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+scores = list(map(int, input().split()))
+print(solution(scores))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 기존의 조건인 650 <= s or s < 800는 or 조건이어서 모든 점수가 참이 됩니다.
+# 2. '650점 이상 800점 미만'은 두 조건을 모두 충족해야 하므로 and 연산자로 연결해야 합니다. (650 <= s and s < 800)
+
+def solution(scores):
+    count = 0
+    for s in scores:
+        if 650 <= s and s < 800:
+            count += 1
+    return count
+
+scores = list(map(int, input().split()))
+print(solution(scores))
+`,
+    test_cases: [
+      { input: "650 722 914 558 714 803 650 679 669 800", output: "6" },
+      { input: "500 550 600 649 800 810 820 900 950 990", output: "0" },
+      { input: "650 660 670 680 690 700 710 720 730 740", output: "10" }
+    ]
+  },
+  {
+    id: 48,
+    classLevel: 2,
+    title: "[문제 8] 팰린드롬 판단하기 (한 줄 수정)",
+    type: "code",
+    description: "앞에서부터 읽을 때와 뒤에서부터 읽을 때 똑같은 단어 또는 문장을 팰린드롬(palindrome)이라고 합니다. 예를 들어서 racecar, noon은 팰린드롬 단어입니다. 소문자 알파벳, 공백(\" \"), 그리고 마침표(\".\")로 이루어진 문장이 팰린드롬 문장인지 점검하려 합니다. 문장 내에서 알파벳만 추출하였을 때 팰린드롬 단어이면 팰린드롬 문장입니다. 주어진 문장 sentence가 주어질 때 팰린드롬이면 True, 아니면 False를 return 하도록 작성된 코드에서 한 줄만 변경하여 올바르게 동작하도록 수정해주세요.",
+    input_desc: "팰린드롬 여부를 점검할 문장 sentence가 한 줄로 주어집니다.",
+    output_desc: "팰린드롬 문장인지 아닌지 여부(True 또는 False)를 반환하거나 출력합니다.",
+    examples: [
+      { input: "never odd or even.", output: "True" },
+      { input: "palindrome", output: "False" }
+    ],
+    starter_code: `def solution(sentence):
+    str = ''
+    for c in sentence:
+        if c != '.' or c != ' ':
+            str += c
+    size = len(str)
+    for i in range(size // 2):
+        if str[i] != str[size - 1 - i]:
+            return False
+    return True
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+sentence = input()
+print(solution(sentence))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 마침표와 공백을 제외한 문자들만 str에 담아야 합니다.
+# 2. '마침표가 아니고 공백도 아니다'를 의미하려면 c != '.' and c != ' '를 사용해야 합니다.
+
+def solution(sentence):
+    str = ''
+    for c in sentence:
+        if c != '.' and c != ' ':
+            str += c
+    size = len(str)
+    for i in range(size // 2):
+        if str[i] != str[size - 1 - i]:
+            return False
+    return True
+
+sentence = input()
+print(solution(sentence))
+`,
+    test_cases: [
+      { input: "never odd or even.", output: "True" },
+      { input: "palindrome", output: "False" },
+      { input: "a.", output: "True" }
+    ]
+  },
+  {
+    id: 49,
+    classLevel: 2,
+    title: "[문제 9] 연속하는 중복 문자 제거 (한 줄 수정)",
+    type: "code",
+    description: "알파벳 문자열이 주어질 때, 연속하는 중복 문자를 삭제하려고 합니다. 예를 들어, \"senteeeencccccceeee\"라는 문자열이 주어진다면, 연속된 중복 문자들이 1개로 압축되어 \"sentence\"라는 결과물이 나옵니다. 영어 소문자 알파벳으로 이루어진 임의의 문자열 characters가 매개변수로 주어질 때, 연속하는 중복 문자들을 삭제한 결과를 return 하도록 작성된 코드에서 한 줄만 변경하여 모든 입력에 대해 올바르게 동작하도록 수정하세요.",
+    input_desc: "알파벳 소문자로 구성된 문자열 characters가 한 줄로 주어집니다.",
+    output_desc: "연속하는 중복 문자가 삭제된 문자열을 반환하거나 출력합니다.",
+    examples: [
+      { input: "senteeeencccccceeee", output: "sentence" }
+    ],
+    starter_code: `def solution(characters):
+    result = ""
+    result += characters[0]
+    for i in range(len(characters)):
+        if characters[i - 1] != characters[i]:
+            result += characters[i]
+    return result
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+characters = input()
+print(solution(characters))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 루프의 인덱스가 0일 때, characters[i - 1]은 파이썬에서 characters[-1](마지막 문자)이 됩니다.
+# 2. 따라서 루프는 0번째가 아닌 1번째 인덱스부터 검사해야 연속 중복 문자가 정상적으로 삭제됩니다. range(1, len(characters))로 변경합니다.
+
+def solution(characters):
+    result = ""
+    result += characters[0]
+    for i in range(1, len(characters)):
+        if characters[i - 1] != characters[i]:
+            result += characters[i]
+    return result
+
+characters = input()
+print(solution(characters))
+`,
+    test_cases: [
+      { input: "senteeeencccccceeee", output: "sentence" },
+      { input: "aabccba", output: "abcba" },
+      { input: "wwwwwwwwww", output: "w" }
+    ]
+  },
+  {
+    id: 50,
+    classLevel: 2,
+    title: "[문제 10] 평균 이하인 원소 개수 구하기 (한 줄 수정)",
+    type: "code",
+    description: "자연수가 들어있는 배열의 평균을 구하고, 평균 이하인 숫자는 몇 개 있는지 구하려 합니다. 예를 들어 주어진 배열이 [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]이라면, 평균은 5.5이므로 배열에서 평균 이하인 값(1, 2, 3, 4, 5)은 5개입니다. 자연수가 들어있는 배열 data가 매개변수로 주어질 때, 배열에 평균 이하인 값은 몇 개인지 return 하도록 작성된 코드에서 한 줄만 변경하여 모든 입력에 대해 올바르게 동작하도록 수정하세요.",
+    input_desc: "공백으로 구분된 자연수 데이터 리스트가 주어집니다.",
+    output_desc: "평균보다 작거나 같은 원소의 개수를 반환하거나 출력합니다.",
+    examples: [
+      { input: "1 2 3 4 5 6 7 8 9 10", output: "5" },
+      { input: "1 1 1 1 1 1 1 1 1 10", output: "9" }
+    ],
+    starter_code: `def solution(data):
+    total = sum(data)
+    average = len(data) / total
+    cnt = 0
+    for d in data:
+        if d <= average:
+            cnt += 1
+    return cnt
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+data = list(map(int, input().split()))
+print(solution(data))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 평균(average)은 합계(total) 나누기 개수(len(data))여야 합니다.
+# 2. 기존 코드는 average = len(data) / total 로 나눗셈 연산의 피연산자 순서가 뒤집혀 있습니다. average = total / len(data) 로 수정해야 합니다.
+
+def solution(data):
+    total = sum(data)
+    average = total / len(data)
+    cnt = 0
+    for d in data:
+        if d <= average:
+            cnt += 1
+    return cnt
+
+data = list(map(int, input().split()))
+print(solution(data))
+`,
+    test_cases: [
+      { input: "1 2 3 4 5 6 7 8 9 10", output: "5" },
+      { input: "1 1 1 1 1 1 1 1 1 10", output: "9" },
+      { input: "5 5 5 5 5", output: "5" }
+    ]
   }
 ];
+
 
