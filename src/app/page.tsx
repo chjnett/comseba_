@@ -494,7 +494,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-[#11121d] text-[#cdd6f4] font-sans flex flex-col">
+    <main className="h-screen w-screen bg-[#11121d] text-[#cdd6f4] font-sans flex flex-col overflow-hidden">
       <Script 
         src="https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js" 
         strategy="afterInteractive"
@@ -502,7 +502,7 @@ export default function Home() {
       />
 
       {/* Header Bar */}
-      <header className="border-b border-[#25283c] bg-[#161725] px-6 py-4 flex items-center justify-between">
+      <header className="border-b border-[#25283c] bg-[#161725] px-6 py-4 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
           <div className="bg-[#89b4fa] p-2 rounded-xl text-[#11121d]">
             <FileCode2 size={24} />
@@ -574,7 +574,7 @@ export default function Home() {
       </header>
 
       {/* Main Panel split */}
-      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden h-[calc(100vh-73px)]">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
         {/* Left Side: Sidebar Problems List */}
         <aside className="w-full lg:w-80 border-r border-[#25283c] bg-[#161725] flex flex-col shrink-0 overflow-hidden">
           <div className="p-4 border-b border-[#25283c] flex items-center justify-between">
@@ -628,10 +628,10 @@ export default function Home() {
           
           {/* Left panel: Problem details */}
           <div 
-            className="border-b xl:border-b-0 xl:border-r border-[#25283c] bg-[#11121d] overflow-y-auto flex flex-col p-6 min-w-0 shrink-0"
+            className="border-b xl:border-b-0 xl:border-r border-[#25283c] bg-[#11121d] overflow-y-auto flex flex-col p-6 min-w-0 shrink-0 h-full"
             style={{ width: isMounted ? leftWidth + "%" : '45%' }}
           >
-            <h2 className="text-xl font-bold text-[#89b4fa] border-b border-[#25283c] pb-3 mb-4">
+            <h2 className="text-xl font-bold text-[#89b4fa] border-b border-[#25283c] pb-3 mb-4 shrink-0">
               {currentProblem.title}
             </h2>
 
