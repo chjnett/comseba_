@@ -638,5 +638,309 @@ print(s.count('1'))
       { input: "48273", output: "0" },
       { input: "1111", output: "4" }
     ]
+  },
+  {
+    id: 21,
+    title: "문제 21 - 약수의 개수 (소스코드 작성)",
+    type: "code",
+    description: "자연수 n을 입력 받아 약수의 개수를 출력하는 프로그램을 작성하세요.",
+    input_desc: "첫 줄에 정수 N이 주어집니다.",
+    output_desc: "n의 약수의 개수를 출력하세요.",
+    examples: [
+      { input: "12", output: "6" }
+    ],
+    starter_code: `# 자연수 n을 입력 받아 약수의 개수를 출력하는 코드를 작성하세요.
+`,
+    test_cases: [
+      { input: "12", output: "6" },
+      { input: "1", output: "1" },
+      { input: "7", output: "2" }
+    ],
+    solution_code: `# [정답 및 해설]
+# 1. 자연수 n을 입력받습니다.
+# 2. 1부터 n까지 순회하며 n을 나누어 떨어지게 하는 수(약수)의 개수를 누적합니다.
+
+n = int(input())
+cnt = 0
+for i in range(1, n + 1):
+    if n % i == 0:
+        cnt += 1
+print(cnt)
+`
+  },
+  {
+    id: 22,
+    title: "문제 22 - 숫자 쌍 출력 (빈칸 채우기)",
+    type: "blank",
+    description: "\`while\`문을 이용하여 출력의 예처럼 숫자를 두 개씩 쌍으로 출력하세요.",
+    input_desc: "표준 입력으로 정수 n이 주어집니다. (n은 항상 짝수입니다.)",
+    output_desc: "1부터 n까지의 숫자를 한 줄에 두 개씩 공백으로 구분하여 출력하세요.",
+    examples: [
+      { input: "12", output: "1 2\n3 4\n5 6\n7 8\n9 10\n11 12" }
+    ],
+    starter_code: `i = 1
+
+n = input("")
+n = int(n)
+
+while @@@:
+    print(i, i+1)
+    @@@
+`,
+    test_cases: [
+      { input: "12", output: "1 2\n3 4\n5 6\n7 8\n9 10\n11 12" },
+      { input: "4", output: "1 2\n3 4" }
+    ],
+    solution_code: `# [정답 및 해설]
+# 1. i가 n보다 작을 때까지 반복을 진행합니다. (while i < n)
+# 2. i와 i+1을 쌍으로 출력하므로, 한 번 반복할 때마다 i를 2씩 증가시킵니다. (i += 2)
+
+i = 1
+
+n = input("")
+n = int(n)
+
+while i < n:
+    print(i, i+1)
+    i += 2
+`
+  },
+  {
+    id: 23,
+    title: "문제 23 - 과목 통과 판별 (빈칸 채우기)",
+    type: "blank",
+    description: "세 과목 점수를 입력 받아 세 과목 모두 60점 이상이면 \"YES\", 아니면 \"NO\"를 출력하는 프로그램을 작성하세요.",
+    input_desc: "표준 입력으로 정수 3개가 줄바꿈으로 구분되어 주어집니다. 각 점수는 1 이상 100 이하입니다.",
+    output_desc: "세 과목 모두 60점 이상이면 \"YES\", 아니면 \"NO\"를 출력하시오.",
+    examples: [
+      { input: "75\n95\n85", output: "YES" },
+      { input: "75\n95\n55", output: "NO" }
+    ],
+    starter_code: `a = input("")
+b = input("")
+c = input("")
+
+a = int(a)
+b = int(b)
+c = int(c)
+
+if @@@:
+    print("YES")
+else:
+    print("NO")
+`,
+    test_cases: [
+      { input: "75\n95\n85", output: "YES" },
+      { input: "75\n95\n55", output: "NO" },
+      { input: "60\n60\n60", output: "YES" }
+    ],
+    solution_code: `# [정답 및 해설]
+# 1. 세 점수 a, b, c가 모두 60 이상인지 확인하는 조건식을 빈칸에 작성합니다. (a >= 60 and b >= 60 and c >= 60)
+
+a = input("")
+b = input("")
+c = input("")
+
+a = int(a)
+b = int(b)
+c = int(c)
+
+if a >= 60 and b >= 60 and c >= 60:
+    print("YES")
+else:
+    print("NO")
+`
+  },
+  {
+    id: 24,
+    title: "문제 24 - 배수 출력 (빈칸 채우기)",
+    type: "blank",
+    description: "1 ~ 100 사이의 숫자 중 3의 배수이거나 7의 배수인 수를 공백으로 구분하여 가로로 출력하는 프로그램을 완성하세요.",
+    input_desc: "입력 데이터는 없습니다.",
+    output_desc: "3의 배수이거나 7의 배수인 숫자를 한 줄에 출력하세요.",
+    examples: [
+      { input: "", output: "3 6 7 9 12 14 15 18 21 24 27 28 30 33 35 36 39 42 45 48 49 51 54 56 57 60 63 66 69 70 72 75 77 78 81 84 87 90 91 93 96 98 99" }
+    ],
+    starter_code: `a = 1
+
+while a < 100:
+    if @@@:
+        print(a, end=' ')
+    a += 1
+`,
+    test_cases: [
+      { input: "", output: "3 6 7 9 12 14 15 18 21 24 27 28 30 33 35 36 39 42 45 48 49 51 54 56 57 60 63 66 69 70 72 75 77 78 81 84 87 90 91 93 96 98 99" }
+    ],
+    solution_code: `# [정답 및 해설]
+# 1. 3의 배수이거나 7의 배수인 조건을 작성합니다. (a % 3 == 0 or a % 7 == 0)
+
+a = 1
+
+while a < 100:
+    if a % 3 == 0 or a % 7 == 0:
+        print(a, end=' ')
+    a += 1
+`
+  },
+  {
+    id: 25,
+    title: "문제 25 - 합 출력 형식 (소스코드 작성)",
+    type: "code",
+    description: "1부터 입력받은 수까지의 합을 구하여 형식에 맞춰 출력하는 프로그램을 작성하세요.",
+    input_desc: "표준 입력으로 숫자 한 개가 주어집니다. 입력되는 수는 1 이상 1,000 이하인 정수입니다.",
+    output_desc: "\`1 ----- [입력값] = [총합]\` 형태로 출력하세요.",
+    examples: [
+      { input: "5", output: "1 ----- 5 = 15" },
+      { input: "10", output: "1 ----- 10 = 55" }
+    ],
+    starter_code: `n = int(input())
+# 여기에 코드를 작성하세요.
+`,
+    test_cases: [
+      { input: "5", output: "1 ----- 5 = 15" },
+      { input: "10", output: "1 ----- 10 = 55" }
+    ],
+    solution_code: `# [정답 및 해설]
+# 1. 1부터 n까지의 합을 구합니다.
+# 2. 지정된 형식 '1 ----- [입력값] = [총합]'으로 포맷팅하여 출력합니다.
+
+n = int(input())
+hap = sum(range(1, n + 1))
+print(f"1 ----- {n} = {hap}")
+`
+  },
+  {
+    id: 26,
+    title: "문제 26 - 문자열 N번 반복 (소스코드 작성)",
+    type: "code",
+    description: "문자열과 정수 n을 입력받아 입력받은 문자열을 n번 연속해서 출력하세요.",
+    input_desc: "표준 입력으로 첫 번째 줄에 문자열, 두 번째 줄에 정수 n이 주어집니다.",
+    output_desc: "문자열을 n번 이어 붙여 출력하세요.",
+    examples: [
+      { input: "Hello\n3", output: "HelloHelloHello" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    test_cases: [
+      { input: "Hello\n3", output: "HelloHelloHello" },
+      { input: "ABC\n1", output: "ABC" }
+    ],
+    solution_code: `# [정답 및 해설]
+# 1. 첫 번째 줄에서 문자열을 입력받고, 두 번째 줄에서 반복 횟수 n을 정수로 입력받습니다.
+# 2. 파이썬에서는 문자열 곱하기 정수를 통해 문자열을 반복해서 이어 붙일 수 있습니다. (s * n)
+
+s = input()
+n = int(input())
+print(s * n)
+`
+  },
+  {
+    id: 27,
+    title: "문제 27 - 특정 문자 제거하기 (소스코드 작성)",
+    type: "code",
+    description: "문자열과 문자 1개를 입력받아 문자열에서 입력받은 문자를 모두 제거하고 출력하세요.",
+    input_desc: "표준 입력으로 첫 번째 줄에 대상 문자열, 두 번째 줄에 제거할 문자 1개가 주어집니다.",
+    output_desc: "지정된 문자가 제거된 문자열을 출력하세요.",
+    examples: [
+      { input: "ABCdefabcABC\nA", output: "BCdefabcBC" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    test_cases: [
+      { input: "ABCdefabcABC\nA", output: "BCdefabcBC" },
+      { input: "apple\np", output: "ale" }
+    ],
+    solution_code: `# [정답 및 해설]
+# 1. 대상 문자열 s와 제거할 문자 char을 각각 입력받습니다.
+# 2. replace 내장 함수를 사용해 특정 문자를 빈 문자열("")로 치환하여 제거합니다.
+
+s = input()
+char = input()
+print(s.replace(char, ""))
+`
+  },
+  {
+    id: 28,
+    title: "문제 28 - 숫자 빈도수 구하기 (소스코드 작성)",
+    type: "code",
+    description: "정수 n과 배열 arr을 입력받아 배열 내에 존재하는 0의 개수, 1의 개수 ... 9의 개수를 각각 줄바꿈하여 순서대로 출력하는 프로그램을 작성하세요.",
+    input_desc: "표준 입력으로 첫 번째 줄에 자연수 n이 주어지고, 두 번째 줄에 공백으로 구분된 n개의 원소를 가진 배열 arr이 주어집니다. n은 2 이상 50 이하이며, arr의 원소는 0부터 9까지의 정수로 구성됩니다.",
+    output_desc: "0부터 9까지 각 숫자의 빈도수를 한 줄에 하나씩 총 10줄로 출력하세요.",
+    examples: [
+      { input: "11\n0 5 7 2 2 1 9 2 1 6 5", output: "1\n2\n3\n0\n0\n1\n1\n1\n0\n1" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    test_cases: [
+      { input: "11\n0 5 7 2 2 1 9 2 1 6 5", output: "1\n2\n3\n0\n0\n1\n1\n1\n0\n1" }
+    ],
+    solution_code: `# [정답 및 해설]
+# 1. n과 배열 arr을 정수형 리스트로 입력받습니다.
+# 2. 0부터 9까지 순회하면서 list.count() 함수를 이용해 개수를 구하고 출력합니다.
+
+n = int(input())
+arr = list(map(int, input().split()))
+
+for i in range(10):
+    print(arr.count(i))
+`
+  },
+  {
+    id: 29,
+    title: "문제 29 - 5의 배수 통계 (소스코드 작성)",
+    type: "code",
+    description: "10개의 정수를 입력받아 그중 5의 배수만 첫째 줄에 공백으로 구분하여 출력하고, 둘째 줄에는 5의 배수의 개수, 총합, 평균을 공백으로 구분하여 출력하세요. (평균은 소수 셋째자리에서 반올림하여 둘째자리까지 출력합니다.)",
+    input_desc: "표준 입력으로 공백으로 구분된 10개의 정수가 주어집니다.",
+    output_desc: "첫째 줄에 5의 배수들만 출력하고, 둘째 줄에 5의 배수의 개수, 합계, 평균을 순서대로 출력하세요.",
+    examples: [
+      { input: "12 5 10 57 30 6 11 90 47 2", output: "5 10 30 90\n4 135 33.75" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    test_cases: [
+      { input: "12 5 10 57 30 6 11 90 47 2", output: "5 10 30 90\n4 135 33.75" }
+    ],
+    solution_code: `# [정답 및 해설]
+# 1. 10개의 정수를 입력받아 정수 리스트로 만듭니다.
+# 2. 리스트에서 5의 배수만 필터링합니다.
+# 3. 5의 배수들을 출력하고, 개수, 총합, 평균을 계산하여 포맷팅해 출력합니다.
+
+arr = list(map(int, input().split()))
+multiples_5 = [x for x in arr if x % 5 == 0]
+
+# 첫 번째 줄 출력
+print(*(multiples_5))
+
+# 두 번째 줄 출력
+cnt = len(multiples_5)
+hap = sum(multiples_5)
+avg = hap / cnt
+print(f"{cnt} {hap} {avg:.2f}")
+`
+  },
+  {
+    id: 30,
+    title: "문제 30 - 나머지 연산 (소스코드 작성)",
+    type: "code",
+    description: "두 정수 n과 m이 주어질 때, n을 m으로 나눈 나머지 값을 구하는 프로그램을 작성하세요.",
+    input_desc: "표준 입력으로 정수 n과 m이 공백으로 구분되어 주어집니다.",
+    output_desc: "n을 m으로 나눈 나머지 값을 출력하세요.",
+    examples: [
+      { input: "3 2", output: "1" },
+      { input: "10 5", output: "0" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    test_cases: [
+      { input: "3 2", output: "1" },
+      { input: "10 5", output: "0" }
+    ],
+    solution_code: `# [정답 및 해설]
+# 1. 공백으로 구분된 두 수 n과 m을 정수로 입력받습니다.
+# 2. 나머지 연산자 %를 활용해 n % m 값을 구해 출력합니다.
+
+n, m = map(int, input().split())
+print(n % m)
+`
   }
 ];
