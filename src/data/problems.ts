@@ -2041,6 +2041,257 @@ print(solution(inputs[0], inputs[1], inputs[2]))
       { input: "100 10 250", output: "3" },
       { input: "50 49 50", output: "1" }
     ]
+  },
+  {
+    id: 56,
+    classLevel: 2,
+    title: "[2차] [문제 6] 엘리베이터 총 이동거리 구하기 (빈칸 채우기)",
+    type: "blank",
+    description: "하루 동안 엘리베이터가 멈춘 층이 순서대로 들어있는 배열이 있습니다. 이때, 엘리베이터의 총 이동거리를 구하려 합니다. 단, 층과 층 사이의 거리는 1입니다. 예를 들어 배열에 [1, 2, 5, 4, 2]가 들어있다면, 엘리베이터가 이동한 거리는 7입니다. 하루 동안 엘리베이터가 멈춰 선 층이 순서대로 들어있는 배열 floors가 매개변수로 주어질 때, 빈칸을 채워 엘리베이터의 총 이동 거리를 return 하는 solution 함수를 완성해주세요.",
+    input_desc: "공백으로 구분된 하루 동안 엘리베이터가 멈춘 층들의 리스트가 주어집니다.",
+    output_desc: "엘리베이터의 총 이동 거리를 반환하거나 출력합니다.",
+    examples: [
+      { input: "1 2 5 4 2", output: "7" }
+    ],
+    starter_code: `def solution(floors):
+    dist = 0
+    length = len(floors)
+    for i in range(@@@):
+        if @@@:
+            dist += floors[i] - floors[i-1]
+        else:
+            dist += floors[i-1] - floors[i]
+    return dist
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+floors = list(map(int, input().split()))
+print(solution(floors))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 인덱스 1번 원소부터 순회하며 직전 층(floors[i-1])과의 높이 차이를 누적 합산해야 하므로 루프는 range(1, length)로 설정합니다.
+# 2. 이동거리는 항상 양수여야 하므로 현재 층이 이전 층보다 높으면(floors[i] > floors[i-1]) floors[i] - floors[i-1]을 더하고, 그렇지 않으면 반대로 더합니다.
+
+def solution(floors):
+    dist = 0
+    length = len(floors)
+    for i in range(1, length):
+        if floors[i] > floors[i-1]:
+            dist += floors[i] - floors[i-1]
+        else:
+            dist += floors[i-1] - floors[i]
+    return dist
+
+floors = list(map(int, input().split()))
+print(solution(floors))
+`,
+    test_cases: [
+      { input: "1 2 5 4 2", output: "7" },
+      { input: "10 20", output: "10" },
+      { input: "3 2 1 2 3", output: "4" }
+    ]
+  },
+  {
+    id: 57,
+    classLevel: 2,
+    title: "[2차] [문제 7] 온도의 정수 부분 환산하기 (한 줄 수정)",
+    type: "code",
+    description: "화씨온도(°F)를 섭씨온도(°C)로, 섭씨온도(°C)를 화씨온도(°F)로 바꾸려고 합니다. 두 온도 사이의 환산 공식은 다음과 같습니다.\n- 화씨온도(°F)에서 섭씨온도(°C)로 환산: (화씨온도 - 32) / 1.8 = 섭씨온도\n- 섭씨온도(°C)에서 화씨온도(°F)로 환산: (섭씨온도 * 1.8) + 32 = 화씨온도\n현재 온도 value와 현재 단위 unit이 매개변수로 주어질 때, 환산한 온도의 정수 부분을 return 하도록 작성된 코드입니다. 코드에서 한 줄만 변경해서 모든 입력에 대해 올바르게 동작하도록 수정하세요.",
+    input_desc: "공백으로 구분된 온도 정수 value와 단위 unit(C 또는 F)이 주어집니다.",
+    output_desc: "환산한 온도의 정수 부분을 반환하거나 출력합니다.",
+    examples: [
+      { input: "527 C", output: "980" }
+    ],
+    starter_code: `def solution(value, unit):
+    converted = 0
+    if unit == "C":
+        value = value * 1.8 + 32
+    if unit == "F":
+        value = value - 32 / 1.8
+    converted = int(value)
+    return converted
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+inputs = input().split()
+value = int(inputs[0])
+unit = inputs[1]
+print(solution(value, unit))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 섭씨에서 화씨는 정상적으로 구현되었으나, 화씨에서 섭씨 환산식 'value = value - 32 / 1.8'은 연산자 우선순위로 인해 32 / 1.8을 먼저 연산하게 됩니다.
+# 2. 괄호를 씌워 (value - 32) / 1.8 형식으로 동작하도록 수정해야 합니다: value = (value - 32) / 1.8
+
+def solution(value, unit):
+    converted = 0
+    if unit == "C":
+        value = value * 1.8 + 32
+    if unit == "F":
+        value = (value - 32) / 1.8
+    converted = int(value)
+    return converted
+
+inputs = input().split()
+value = int(inputs[0])
+unit = inputs[1]
+print(solution(value, unit))
+`,
+    test_cases: [
+      { input: "527 C", output: "980" },
+      { input: "980 F", output: "526" },
+      { input: "32 F", output: "0" }
+    ]
+  },
+  {
+    id: 58,
+    classLevel: 2,
+    title: "[2차] [문제 8] 자릿수 소수(2,3,5,7) 개수 세기 (한 줄 수정)",
+    type: "code",
+    description: "자연수의 각 자릿수 중에서 소수(Prime Number)는 몇 개인지 구하려 합니다. 즉, 자연수를 각 자릿수별로 나누었을 때, 2, 3, 5, 7이 몇 개 있는지 구하려 합니다. 예를 들어, 자연수가 29022531일 때, 소수인 자릿수는 2, 2, 2, 5, 3으로 총 5개입니다. 자연수 number가 매개변수로 주어질 때, 자릿수 중 소수의 개수를 return 하도록 작성된 코드에서 한 줄만 변경해서 올바르게 동작하도록 수정하세요.",
+    input_desc: "자연수 number가 한 줄로 주어집니다.",
+    output_desc: "각 자릿수 중 2, 3, 5, 7에 해당하는 자릿수들의 개수를 출력합니다.",
+    examples: [
+      { input: "29022531", output: "5" }
+    ],
+    starter_code: `def solution(number):
+    count = 0
+    while number >= 0:
+        n = number % 10
+        if n == 2 or n == 3 or n == 5 or n == 7:
+            count += 1
+        number //= 10
+    return count
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+number = int(input())
+print(solution(number))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 0보다 크거나 같을 때(number >= 0) 루프를 돌게 되면, 몫이 0이 된 이후에도 무한 루프가 발생하여 에러가 나거나 끝나지 않습니다.
+# 2. 따라서 number > 0 일 때로 탈출 조건을 변경하여, 자연수를 모두 나눈 시점에 안전하게 탈출하도록 해야 합니다.
+
+def solution(number):
+    count = 0
+    while number > 0:
+        n = number % 10
+        if n == 2 or n == 3 or n == 5 or n == 7:
+            count += 1
+        number //= 10
+    return count
+
+number = int(input())
+print(solution(number))
+`,
+    test_cases: [
+      { input: "29022531", output: "5" },
+      { input: "1234567890", output: "4" },
+      { input: "4", output: "0" }
+    ]
+  },
+  {
+    id: 59,
+    classLevel: 2,
+    title: "[2차] [문제 9] 정확히 K 표를 받은 후보 세기 (한 줄 수정)",
+    type: "code",
+    description: "N명의 후보에 대해 투표한 결과가 들어있는 배열이 있습니다. 이때, 정확히 K 표를 받은 후보는 총 몇 명인지 구하려 합니다. 투표 결과가 들어있는 배열 votes, 후보의 수 N, 표의 개수 K가 매개변수로 주어질 때, K 표를 받은 후보가 몇 명인지 return 하도록 작성된 코드입니다. 코드에서 한 줄만 변경해서 모든 입력에 대해 올바르게 동작하도록 수정하세요.",
+    input_desc: "첫 번째 줄에 공백으로 구분된 후보 투표 리스트가 주어집니다. 두 번째 줄에 후보 수 N과 득표수 K가 공백으로 구분되어 주어집니다.",
+    output_desc: "정확히 K 표를 얻은 후보의 인원수를 출력합니다.",
+    examples: [
+      { input: "2 5 3 4 1 5 1 5 5 3\n5 2", output: "2" }
+    ],
+    starter_code: `def solution(votes, N, K):
+    counter = [0 for _ in range(N + 1)]
+    for x in votes:
+        counter[x] += 1
+    answer = -1
+    for c in counter:
+        if c == K:
+            answer += 1
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+votes = list(map(int, input().split()))
+inputs = list(map(int, input().split()))
+N, K = inputs[0], inputs[1]
+print(solution(votes, N, K))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 득표수의 카운트를 세는 answer 변수의 초깃값이 -1 로 잘못 설정되어 있습니다.
+# 2. 맞게 카운트하기 위해 answer의 초깃값을 0으로 변경해 주어야 합니다.
+
+def solution(votes, N, K):
+    counter = [0 for _ in range(N + 1)]
+    for x in votes:
+        counter[x] += 1
+    answer = 0
+    for c in counter:
+        if c == K:
+            answer += 1
+    return answer
+
+votes = list(map(int, input().split()))
+inputs = list(map(int, input().split()))
+N, K = inputs[0], inputs[1]
+print(solution(votes, N, K))
+`,
+    test_cases: [
+      { input: "2 5 3 4 1 5 1 5 5 3\n5 2", output: "2" },
+      { input: "1 1 1 2 2 3\n3 3", output: "1" },
+      { input: "1 1 1\n1 0", output: "1" }
+    ]
+  },
+  {
+    id: 60,
+    classLevel: 2,
+    title: "[2차] [문제 10] 고객 상품권 총 지급액 구하기 (한 줄 수정)",
+    type: "code",
+    description: "A 백화점에서는 고객의 구매금액에 따라 다음과 같이 상품권을 지급합니다. 상품권은 지급 가능한 가장 큰 금액으로 한 장만 지급합니다.\n- 100만 원 이상 구매: 5만 원 상품권\n- 60만 원 이상 구매: 3만 원 상품권\n- 40만 원 이상 구매: 2만 원 상품권\n- 20만 원 이상 구매: 1만 원 상품권\n고객들의 구매 금액이 들어있는 배열 purchase가 주어질 때, 고객들에게 지급해야 하는 상품권 총액을 return 하도록 작성된 코드입니다. 코드에서 한 줄만 변경해서 모든 입력에 대해 올바르게 동작하도록 수정해주세요.",
+    input_desc: "공백으로 구분된 고객들의 구매 금액 리스트가 한 줄로 주어집니다.",
+    output_desc: "백화점에서 지급해야 할 총 상품권 지급액을 출력합니다.",
+    examples: [
+      { input: "150000 210000 399990 990000 1000000", output: "100000" }
+    ],
+    starter_code: `def solution(purchase):
+    total = 0
+    for p in purchase:
+        if p >= 1000000:
+            total += 50000
+        elif p >= 600000:
+            total += 30000
+        elif p >= 400000:
+            total += 20000
+        else:
+            total += 10000
+        return total
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+purchase = list(map(int, input().split()))
+print(solution(purchase))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 20만 원 이상 40만 원 미만일 때의 엘리프 분기(p >= 200000) 및 상품권 지급 처리 조건이 누락되었습니다.
+# 2. 누락된 분기를 보완하여 20만 원 이상일 때 1만 원 상품권을 지급하고(elif p >= 200000: total += 10000), 20만 원 미만일 때(else) 지급하지 않도록(아무것도 가산하지 않음) 수정해야 합니다.
+# 3. 추가로 return total은 모든 구매 목록의 순회가 종료된 후 한 번만 이루어져야 하므로 들여쓰기 위치를 for문 밖으로 내어줍니다.
+
+def solution(purchase):
+    total = 0
+    for p in purchase:
+        if p >= 1000000:
+            total += 50000
+        elif p >= 600000:
+            total += 30000
+        elif p >= 400000:
+            total += 20000
+        elif p >= 200000:
+            total += 10000
+    return total
+
+purchase = list(map(int, input().split()))
+print(solution(purchase))
+`,
+    test_cases: [
+      { input: "150000 210000 399990 990000 1000000", output: "100000" },
+      { input: "100000 190000 50000", output: "0" },
+      { input: "200000 400000 600000 1000000", output: "110000" }
+    ]
   }
 ];
 
