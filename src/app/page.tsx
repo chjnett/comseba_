@@ -574,16 +574,16 @@ export default function Home() {
       </header>
 
       {/* Main Panel split */}
-      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden h-[calc(100vh-73px)]">
         {/* Left Side: Sidebar Problems List */}
-        <aside className="w-full lg:w-80 border-r border-[#25283c] bg-[#161725] flex flex-col shrink-0">
+        <aside className="w-full lg:w-80 border-r border-[#25283c] bg-[#161725] flex flex-col shrink-0 overflow-hidden">
           <div className="p-4 border-b border-[#25283c] flex items-center justify-between">
             <span className="text-sm font-bold text-[#89b4fa] flex items-center gap-1.5">
               <BookOpen size={16} /> {selectedClass}급 문제 목록 ({problems.filter(p => (p.classLevel || 3) === selectedClass).length})
             </span>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-2 space-y-1 max-h-[250px] lg:max-h-none">
+          <div className="flex-1 overflow-y-auto p-2 space-y-1">
             {problems
               .filter((p) => (p.classLevel || 3) === selectedClass)
               .map((prob) => {
@@ -624,7 +624,7 @@ export default function Home() {
         </aside>
 
         {/* Right Side: Main Workstation Split */}
-        <div className="flex-1 flex flex-col xl:flex-row overflow-hidden min-w-0">
+        <div className="flex-1 flex flex-col xl:flex-row overflow-hidden min-w-0 h-full">
           
           {/* Left panel: Problem details */}
           <div 
