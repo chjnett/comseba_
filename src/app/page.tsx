@@ -18,7 +18,10 @@ import {
   ChevronRight,
   BookOpen,
   X,
-  FileCode2
+  FileCode2,
+  Search,
+  PanelLeftClose,
+  PanelLeftOpen
 } from "lucide-react";
 import { problems as initialProblems, Problem, Example } from "@/data/problems";
 
@@ -82,6 +85,9 @@ export default function Home() {
   const [newStarter, setNewStarter] = useState("");
   const [newTestCases, setNewTestCases] = useState("[\n  {\n    \"input\": \"입력값\",\n    \"output\": \"출력값\"\n  }\n]");
   
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
   // Resizable panel states
   const [consoleHeight, setConsoleHeight] = useState<number>(256); // default 256px
   const [leftWidth, setLeftWidth] = useState<number>(45); // default 45% of width
@@ -574,18 +580,69 @@ export default function Home() {
       </header>
 
       {/* Main Panel split */}
-      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0 relative">
+        {/* Sidebar Toggle Button (When Collapsed) */}
+        {isSidebarCollapsed && (
+          <button
+            onClick={() => setIsSidebarCollapsed(false)}
+            className="absolute left-4 top-4 z-40 bg-[#161725] border border-[#25283c] text-[#89b4fa] hover:text-white p-2 rounded-xl shadow-lg transition-all duration-200"
+            title="문제 목록 열기"
+          >
+            <PanelLeftOpen size={20} />
+          </button>
+        )}
+
         {/* Left Side: Sidebar Problems List */}
-        <aside className="w-full lg:w-80 border-r border-[#25283c] bg-[#161725] flex flex-col shrink-0 overflow-hidden h-full">
+        <aside className={"border-r border-[#25283c] bg-[#161725] flex flex-col shrink-0 overflow-hidden h-full transition-all duration-300 " + (
+          isSidebarCollapsed ? "w-0 border-r-0" : "w-full lg:w-80"
+        )}>
           <div className="p-4 border-b border-[#25283c] flex items-center justify-between shrink-0">
             <span className="text-sm font-bold text-[#89b4fa] flex items-center gap-1.5">
-              <BookOpen size={16} /> {selectedClass}급 문제 목록 ({problems.filter(p => (p.classLevel || 3) === selectedClass).length})
+              <BookOpen size={16} /> {selectedClass}급 문제 목록
             </span>
+            <button
+              onClick={() => setIsSidebarCollapsed(true)}
+              className="text-[#a6adc8] hover:text-white transition-colors"
+              title="문제 목록 접기"
+            >
+              <PanelLeftClose size={18} />
+            </button>
+          </div>
+
+          {/* Search Box */}
+          <div className="p-3 border-b border-[#25283c] shrink-0">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#585b70]" size={16} />
+              <input
+                type="text"
+                placeholder="문제 번호 또는 키워드 검색..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-[#11121d] border border-[#25283c] rounded-xl pl-9 pr-4 py-2 text-xs text-[#cdd6f4] placeholder-[#585b70] focus:outline-none focus:border-[#89b4fa]"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#585b70] hover:text-white text-xs"
+                >
+                  초기화
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="flex-1 overflow-y-auto p-2 space-y-1 min-h-0">
             {problems
               .filter((p) => (p.classLevel || 3) === selectedClass)
+              .filter((p) => {
+                if (!searchQuery.trim()) return true;
+                const query = searchQuery.toLowerCase();
+                return (
+                  p.id.toString().includes(query) ||
+                  p.title.toLowerCase().includes(query) ||
+                  p.description.toLowerCase().includes(query)
+                );
+              })
               .map((prob) => {
                 const pid = prob.id.toString();
                 const active = currentProblem.id === prob.id;
