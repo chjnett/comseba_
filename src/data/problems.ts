@@ -2292,6 +2292,306 @@ print(solution(purchase))
       { input: "100000 190000 50000", output: "0" },
       { input: "200000 400000 600000 1000000", output: "110000" }
     ]
+  },
+  {
+    id: 61,
+    classLevel: 2,
+    title: "[3차] [문제 1] 학생 시험 석차 구하기 (빈칸 채우기)",
+    type: "blank",
+    description: "학생들의 시험 점수가 주어졌을 때, n번 학생이 몇 등인지 구하려 합니다. 학번은 0번부터 시작하며, 시험 점수는 학번순으로 주어집니다. 동점자는 없다고 가정합니다. 이를 위해 다음과 같이 프로그램 구조를 작성했습니다.\n1. n번 학생의 점수를 변수에 저장합니다. (func_c)\n2. 점수를 내림차순으로 정렬합니다. (func_b)\n3. 배열의 첫 번째 원소부터 마지막 원소까지 순회하며 n번 학생의 점수를 찾아 등수를 return 합니다. (func_a)\n학생들의 시험 점수가 번호순으로 들은 배열 scores와 학번 n이 주어질 때, 빈칸을 채워 전체 코드를 완성해주세요.",
+    input_desc: "첫 번째 줄에 공백으로 구분된 시험 점수 리스트 scores가 주어집니다. 두 번째 줄에 등수를 구하고 싶은 학번 n이 주어집니다.",
+    output_desc: "학번 n인 학생의 석차(등수)를 출력합니다.",
+    examples: [
+      { input: "20 60 98 59\n3", output: "3" }
+    ],
+    starter_code: `def func_a(scores, score):
+    rank = 1
+    for s in scores:
+        if s == score:
+            return rank
+        rank += 1
+    return 0
+
+def func_b(arr):
+    arr.sort(reverse=True)
+
+def func_c(arr, n):
+    return arr[n]
+
+def solution(scores, n):
+    score = func_@@@(@@@)
+    func_@@@(@@@)
+    answer = func_@@@(@@@)
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+scores = list(map(int, input().split()))
+n = int(input())
+print(solution(scores, n))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. n번 학생의 원본 점수를 구하기 위해 func_c(scores, n)을 호출해 score 변수에 저장합니다.
+# 2. 등수 확인을 위해 점수를 내림차순으로 정렬하는 func_b(scores)를 수행합니다.
+# 3. 내림차순 정렬된 점수 리스트(scores)와 n번 학생의 점수(score)를 func_a(scores, score)에 전달하여 등수를 구합니다.
+
+def func_a(scores, score):
+    rank = 1
+    for s in scores:
+        if s == score:
+            return rank
+        rank += 1
+    return 0
+
+def func_b(arr):
+    arr.sort(reverse=True)
+
+def func_c(arr, n):
+    return arr[n]
+
+def solution(scores, n):
+    score = func_c(scores, n)
+    func_b(scores)
+    answer = func_a(scores, score)
+    return answer
+
+scores = list(map(int, input().split()))
+n = int(input())
+print(solution(scores, n))
+`,
+    test_cases: [
+      { input: "20 60 98 59\n3", output: "3" },
+      { input: "90 80 70 60\n0", output: "1" },
+      { input: "50 70 60 80 90\n2", output: "4" }
+    ]
+  },
+  {
+    id: 62,
+    classLevel: 2,
+    title: "[3차] [문제 2] 장학생 선발 인원 세기 (빈칸 채우기)",
+    type: "blank",
+    description: "장학생 선발 기준에 부합하는 학생 수를 구하려고 합니다. 장학금을 주는 조건은 다음과 같으며, 중복 수혜는 불가합니다.\n1. 이번 학기 성적이 80점 이상이면서 석차가 상위 10% 이내인 학생\n2. 이번 학기 성적이 80점 이상이면서 1등인 학생\n3. 직전 학기 대비 성적이 가장 많이 오른 학생 (여러 명인 경우 전부 포함, 성적이 오른 경우만 해당)\n이를 위해 다음과 같이 프로그램 구조를 작성했습니다.\n- 1단계: 이번 학기 성적을 기준으로 학생별 석차를 구합니다. (func_b)\n- 2단계: 각 학생의 (이번 학기 성적 - 직전 학기 성적) 중 최댓값을 구합니다. (func_c)\n- 3단계: 조건을 만족하는 학생들을 선발하여 인원을 셉니다. (func_a)\n학생들의 이번 학기 성적 배열 current_grade와 직전 학기 성적 배열 last_grade가 주어질 때, 알맞은 함수와 매개변수를 빈칸에 채워 solution 함수를 완성해주세요.",
+    input_desc: "첫 번째 줄에는 이번 학기 성적들이 공백으로 구분되어 주어집니다. 두 번째 줄에는 직전 학기 성적들이 공백으로 구분되어 주어집니다.",
+    output_desc: "선발된 총 장학생 수를 출력합니다.",
+    examples: [
+      { input: "70 100 70 80 50 95\n35 65 80 50 20 60", output: "3" }
+    ],
+    starter_code: `def func_a(current_grade, last_grade, rank, max_diff_grade):
+    arr_length = len(current_grade)
+    count = 0
+    for i in range(arr_length):
+        if current_grade[i] >= 80 and rank[i] <= arr_length // 10:
+            count += 1
+        elif current_grade[i] >= 80 and rank[i] == 1:
+            count += 1
+        elif max_diff_grade > 0 and max_diff_grade == current_grade[i] - last_grade[i]:
+            count += 1
+    return count
+
+def func_b(current_grade):
+    arr_length = len(current_grade)
+    rank = [1] * arr_length
+    for i in range(arr_length):
+        for j in range(arr_length):
+            if current_grade[i] < current_grade[j]:
+                rank[i] += 1
+    return rank
+
+def func_c(current_grade, last_grade):
+    max_diff_grade = 1
+    for i in range(len(current_grade)):
+        max_diff_grade = max(max_diff_grade, current_grade[i] - last_grade[i])
+    return max_diff_grade
+
+def solution(current_grade, last_grade):
+    rank = func_@@@(@@@)
+    max_diff_grade = func_@@@(@@@)
+    answer = func_@@@(@@@)
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+current_grade = list(map(int, input().split()))
+last_grade = list(map(int, input().split()))
+print(solution(current_grade, last_grade))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 1단계 석차 계산을 위해 rank = func_b(current_grade)를 호출합니다.
+# 2. 2단계 최대 성적 격차 계산을 위해 max_diff_grade = func_c(current_grade, last_grade)를 호출합니다.
+# 3. 3단계 최종 선발 인원을 세기 위해 answer = func_a(current_grade, last_grade, rank, max_diff_grade)를 호출합니다.
+
+def func_a(current_grade, last_grade, rank, max_diff_grade):
+    arr_length = len(current_grade)
+    count = 0
+    for i in range(arr_length):
+        if current_grade[i] >= 80 and rank[i] <= arr_length // 10:
+            count += 1
+        elif current_grade[i] >= 80 and rank[i] == 1:
+            count += 1
+        elif max_diff_grade > 0 and max_diff_grade == current_grade[i] - last_grade[i]:
+            count += 1
+    return count
+
+def func_b(current_grade):
+    arr_length = len(current_grade)
+    rank = [1] * arr_length
+    for i in range(arr_length):
+        for j in range(arr_length):
+            if current_grade[i] < current_grade[j]:
+                rank[i] += 1
+    return rank
+
+def func_c(current_grade, last_grade):
+    max_diff_grade = 1
+    for i in range(len(current_grade)):
+        max_diff_grade = max(max_diff_grade, current_grade[i] - last_grade[i])
+    return max_diff_grade
+
+def solution(current_grade, last_grade):
+    rank = func_b(current_grade)
+    max_diff_grade = func_c(current_grade, last_grade)
+    answer = func_a(current_grade, last_grade, rank, max_diff_grade)
+    return answer
+
+current_grade = list(map(int, input().split()))
+last_grade = list(map(int, input().split()))
+print(solution(current_grade, last_grade))
+`,
+    test_cases: [
+      { input: "70 100 70 80 50 95\n35 65 80 50 20 60", output: "3" },
+      { input: "90 90 90\n80 80 80", output: "3" },
+      { input: "50 60 70\n50 50 50", output: "1" }
+    ]
+  },
+  {
+    id: 63,
+    classLevel: 2,
+    title: "[3차] [문제 3] 체조 점수 계산 (소스코드 작성)",
+    type: "code",
+    description: "체조선수의 최종 점수를 계산하려 합니다. 최종 점수는 심사위원의 점수 중 가장 높은 점수 하나와 가장 낮은 점수 하나를 제외한 나머지 점수들의 평균으로 구합니다. 단, 평균 계산 시 소수점 이하의 수는 버립니다(정수 나눗셈 결과 요구). 각 심사위원의 점수가 담긴 배열 scores가 매개변수로 주어질 때, 선수가 받은 최종 점수를 return 하도록 solution 함수를 완성해주세요.",
+    input_desc: "공백으로 구분된 심사위원들의 점수 리스트가 주어집니다.",
+    output_desc: "최고점과 최저점을 제외한 점수 평균의 정수(몫)를 출력합니다.",
+    examples: [
+      { input: "35 28 98 34 20 50 85 74 71 7", output: "49" },
+      { input: "1 1 1 1 1", output: "1" }
+    ],
+    starter_code: `def solution(scores):
+    # 여기에 코드를 작성해주세요.
+    answer = 0
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+scores = list(map(int, input().split()))
+print(solution(scores))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. scores 리스트의 전체 합 sum(scores)에서 최댓값 max(scores)와 최솟값 min(scores)을 빼줍니다.
+# 2. 제외한 데이터 개수인 len(scores) - 2 로 나눈 몫(//)을 계산하여 소수점 아래는 버린 정수 형태로 반환합니다.
+
+def solution(scores):
+    total = sum(scores) - max(scores) - min(scores)
+    answer = total // (len(scores) - 2)
+    return answer
+
+scores = list(map(int, input().split()))
+print(solution(scores))
+`,
+    test_cases: [
+      { input: "35 28 98 34 20 50 85 74 71 7", output: "49" },
+      { input: "1 1 1 1 1", output: "1" },
+      { input: "10 20 30", output: "20" }
+    ]
+  },
+  {
+    id: 64,
+    classLevel: 2,
+    title: "[3차] [문제 4] 영어 타이핑 오타 수 구하기 (소스코드 작성)",
+    type: "code",
+    description: "영어 타이핑 오타를 점검하려 합니다. 원래 치려고 했던 표준 단어 문자열 word와, 타이핑한 결과 단어들이 담긴 배열 words가 주어집니다. 각각의 단어들을 원래 단어와 자릿수별로 비교하여, 원래 단어와 일치하지 않는 문자의 총 개수(틀린 자릿수의 누적합)를 계산하여 return 하는 solution 함수를 완성해주세요.",
+    input_desc: "첫 번째 줄에는 공백으로 구분된 타이핑한 단어들의 배열 words가 주어집니다. 두 번째 줄에는 원래 치려했던 표준 단어 word가 주어집니다.",
+    output_desc: "원래 단어와 달라 고쳐야 하는 문자의 누적 총 개수를 출력합니다.",
+    examples: [
+      { input: "CODE COED CDEO\nCODE", output: "5" }
+    ],
+    starter_code: `def solution(words, word):
+    # 여기에 코드를 작성해주세요.
+    count = 0
+    return count
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+words = input().split()
+word = input()
+print(solution(words, word))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 입력된 words 리스트 내의 각 문자열(w)을 타겟 단어(word)와 인덱스별로 순회하며 대조합니다.
+# 2. w[i] != word[i]가 성립하는 경우 오타로 취급하여 count를 1씩 가산하고 최종 합을 반환합니다.
+
+def solution(words, word):
+    count = 0
+    for w in words:
+        for i in range(len(word)):
+            if w[i] != word[i]:
+                count += 1
+    return count
+
+words = input().split()
+word = input()
+print(solution(words, word))
+`,
+    test_cases: [
+      { input: "CODE COED CDEO\nCODE", output: "5" },
+      { input: "TEST TAST TERT\nTEST", output: "2" },
+      { input: "ABC\nABC", output: "0" }
+    ]
+  },
+  {
+    id: 65,
+    classLevel: 2,
+    title: "[3차] [문제 5] 몬스터 처치 최소 턴수 (빈칸 채우기)",
+    type: "blank",
+    description: "게임 캐릭터가 몬스터와 1:1 전투를 진행합니다. 캐릭터는 매 턴마다 일정한 데미지(attack)를 입히는 공격 마법만 사용하고, 몬스터는 매 턴마다 일정한 수치(recovery)로 체력을 회복하는 힐링 마법만 사용합니다. 항상 캐릭터가 먼저 공격을 시작하고 번갈아 가며 진행됩니다. 몬스터의 초기 체력 hp가 주어질 때, 몬스터의 체력을 0 이하로 만들기 위해 최소 몇 번 공격해야 하는지 구하려고 합니다. 빈칸을 채워 전체 코드를 완성해주세요.",
+    input_desc: "공백으로 구분된 공격력(attack), 회복력(recovery), 초기체력(hp)가 차례대로 주어집니다.",
+    output_desc: "몬스터를 처치하기 위해 요구되는 최소 공격 횟수를 반환하거나 출력합니다.",
+    examples: [
+      { input: "30 10 60", output: "3" }
+    ],
+    starter_code: `def solution(attack, recovery, hp):
+    count = 0
+    while(True):
+        count += @@@
+        hp -= @@@
+        if hp <= 0:
+            @@@
+        hp += @@@
+    return count
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+inputs = list(map(int, input().split()))
+print(solution(inputs[0], inputs[1], inputs[2]))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 턴이 한번 돌 때마다 공격 횟수 count를 1씩 가산합니다. (count += 1)
+# 2. 몬스터 체력을 공격력만큼 감소시킵니다. (hp -= attack)
+# 3. 몬스터 체력이 0 이하가 된 경우, 루프를 종료하고 즉시 빠져나갑니다. (break)
+# 4. 몬스터 체력이 남아있다면 회복량만큼 증가시킵니다. (hp += recovery)
+
+def solution(attack, recovery, hp):
+    count = 0
+    while(True):
+        count += 1
+        hp -= attack
+        if hp <= 0:
+            break
+        hp += recovery
+    return count
+
+inputs = list(map(int, input().split()))
+print(solution(inputs[0], inputs[1], inputs[2]))
+`,
+    test_cases: [
+      { input: "30 10 60", output: "3" },
+      { input: "100 10 250", output: "3" },
+      { input: "50 49 50", output: "1" }
+    ]
   }
 ];
 
