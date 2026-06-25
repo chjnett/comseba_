@@ -1760,7 +1760,289 @@ print(solution(data))
       { input: "1 1 1 1 1 1 1 1 1 10", output: "9" },
       { input: "5 5 5 5 5", output: "5" }
     ]
+  },
+  {
+    id: 51,
+    classLevel: 2,
+    title: "[2차] [문제 1] 장갑 매칭 최대 쌍 구하기 (빈칸 채우기)",
+    type: "blank",
+    description: "왼손 장갑의 제품 번호가 들어있는 배열과 오른손 장갑의 제품 번호가 들어있는 배열이 있습니다. 제품 번호는 1부터 10 사이의 자연수입니다. 제품 번호가 같은 왼손 장갑과 오른손 장갑을 합쳐 장갑 한 쌍을 만들 수 있습니다. 이때, 최대한 많은 쌍의 장갑을 만들면 최대 몇 쌍을 만들 수 있는지 구하려 합니다. 이를 위해 다음과 같이 프로그램 구조를 작성했습니다.\n1. 왼손 장갑이 제품 번호별로 몇 개씩 있는지 개수를 셉니다. (func_a)\n2. 오른손 장갑이 제품 번호별로 몇 개씩 있는지 개수를 셉니다. (func_a)\n3. 각 제품 번호별로 최대한 많은 장갑 쌍을 만들면서 개수를 셉니다.\n왼손 장갑의 제품 번호가 들어있는 배열 left_gloves와 오른손 장갑의 제품 번호가 들어있는 배열 right_gloves가 매개변수로 주어질 때, 빈칸을 채워 전체 코드를 완성해주세요.",
+    input_desc: "첫 번째 줄에는 왼손 장갑 제품 번호들이 공백으로 구분되어 주어집니다. 두 번째 줄에는 오른손 장갑 제품 번호들이 공백으로 구분되어 주어집니다.",
+    output_desc: "제품 번호가 같은 장갑끼리 만들 수 있는 최대 쌍의 개수를 반환하거나 출력합니다.",
+    examples: [
+      { input: "2 1 2 2 4\n1 2 2 4 4 7", output: "4" }
+    ],
+    starter_code: `max_product_number = 10
+
+def func_a(gloves):
+    counter = [0 for _ in range(max_product_number + 1)]
+    for x in gloves:
+        @@@
+    return counter
+
+def solution(left_gloves, right_gloves):
+    left_counter = func_a(left_gloves)
+    right_counter = func_a(right_gloves)
+
+    total = 0
+    for i in range(1, max_product_number + 1):
+        total += min(left_counter[i], right_counter[i])
+    return total
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+left_gloves = list(map(int, input().split()))
+right_gloves = list(map(int, input().split()))
+print(solution(left_gloves, right_gloves))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 왼손/오른손 장갑의 제품 번호별 개수를 세어야 합니다.
+# 2. 리스트(counter)의 해당 제품 번호 인덱스에 매칭되는 값을 1씩 가산해주면 되므로 counter[x] += 1 을 작성합니다.
+
+max_product_number = 10
+
+def func_a(gloves):
+    counter = [0 for _ in range(max_product_number + 1)]
+    for x in gloves:
+        counter[x] += 1
+    return counter
+
+def solution(left_gloves, right_gloves):
+    left_counter = func_a(left_gloves)
+    right_counter = func_a(right_gloves)
+
+    total = 0
+    for i in range(1, max_product_number + 1):
+        total += min(left_counter[i], right_counter[i])
+    return total
+
+left_gloves = list(map(int, input().split()))
+right_gloves = list(map(int, input().split()))
+print(solution(left_gloves, right_gloves))
+`,
+    test_cases: [
+      { input: "2 1 2 2 4\n1 2 2 4 4 7", output: "4" },
+      { input: "1 2 3\n4 5 6", output: "0" },
+      { input: "10 10 10\n10 10 10 10", output: "3" }
+    ]
+  },
+  {
+    id: 52,
+    classLevel: 2,
+    title: "[2차] [문제 2] 3의 배수와 5의 배수 개수 비교 (빈칸 채우기)",
+    type: "blank",
+    description: "자연수가 들어있는 배열에 3의 배수와 5의 배수 중 어떤 수가 더 많은지 알아보려 합니다. 이를 위해 다음과 같이 프로그램 구조를 작성했습니다.\n1. 3의 배수의 개수를 셉니다. (func_c)\n2. 5의 배수의 개수를 셉니다. (func_a)\n3. 3의 배수와 5의 배수의 개수를 비교 후 다음을 수행합니다. (func_b)\n   - 만약 3의 배수가 더 많다면 \"three\"를 return 합니다.\n   - 만약 5의 배수가 더 많다면 \"five\"를 return 합니다.\n   - 만약 두 배수의 개수가 같다면 \"same\"을 return 합니다.\n자연수가 들어있는 배열 arr가 매개변수로 주어질 때, 구조에 맞춰 알맞은 함수와 매개변수를 빈칸에 채워 solution 함수를 완성해주세요.",
+    input_desc: "공백으로 구분된 자연수 리스트가 주어집니다.",
+    output_desc: "조건에 따라 \"three\", \"five\", \"same\" 중 하나를 출력합니다.",
+    examples: [
+      { input: "2 3 6 9 12 15 10 20 22 25", output: "three" }
+    ],
+    starter_code: `def func_a(arr):
+    count = 0
+    for n in arr:
+        if n % 5 == 0:
+            count += 1
+    return count
+
+def func_b(three, five):
+    if three > five:
+        return "three"
+    elif three < five:
+        return "five"
+    else:
+        return "same"
+
+def func_c(arr):
+    count = 0
+    for n in arr:
+        if n % 3 == 0:
+            count += 1
+    return count
+
+def solution(arr):
+    count_three = func_@@@(@@@)
+    count_five = func_@@@(@@@)
+    answer = func_@@@(@@@)
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+arr = list(map(int, input().split()))
+print(solution(arr))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 3의 배수를 세어 저장할 count_three 변수에는 func_c(arr)를 호출합니다.
+# 2. 5의 배수를 세어 저장할 count_five 변수에는 func_a(arr)를 호출합니다.
+# 3. 두 배수들의 개수를 비교하기 위해 func_b(count_three, count_five)를 호출합니다.
+
+def func_a(arr):
+    count = 0
+    for n in arr:
+        if n % 5 == 0:
+            count += 1
+    return count
+
+def func_b(three, five):
+    if three > five:
+        return "three"
+    elif three < five:
+        return "five"
+    else:
+        return "same"
+
+def func_c(arr):
+    count = 0
+    for n in arr:
+        if n % 3 == 0:
+            count += 1
+    return count
+
+def solution(arr):
+    count_three = func_c(arr)
+    count_five = func_a(arr)
+    answer = func_b(count_three, count_five)
+    return answer
+
+arr = list(map(int, input().split()))
+print(solution(arr))
+`,
+    test_cases: [
+      { input: "2 3 6 9 12 15 10 20 22 25", output: "three" },
+      { input: "5 10 15 20", output: "five" },
+      { input: "15 30", output: "same" }
+    ]
+  },
+  {
+    id: 53,
+    classLevel: 2,
+    title: "[2차] [문제 3] 짝수들의 제곱의 합 (소스코드 작성)",
+    type: "code",
+    description: "서로 다른 두 자연수 N과 M이 매개변수로 주어질 때, N부터 M까지의 자연수 중에서 짝수들의 제곱의 합을 구하는 함수를 완성해주세요.",
+    input_desc: "공백으로 구분된 두 자연수 N과 M이 주어집니다. (N < M)",
+    output_desc: "N부터 M까지의 수 중 짝수들의 제곱 합을 반환하거나 출력합니다.",
+    examples: [
+      { input: "4 7", output: "52" }
+    ],
+    starter_code: `def solution(N, M):
+    # 여기에 코드를 작성해주세요.
+    answer = 0
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+inputs = list(map(int, input().split()))
+print(solution(inputs[0], inputs[1]))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. N부터 M까지 루프를 수행하면서 각 수(i)가 짝수(i % 2 == 0)인 경우에만 i의 제곱(i ** 2)을 합산(answer)에 더합니다.
+
+def solution(N, M):
+    answer = 0
+    for i in range(N, M + 1):
+        if i % 2 == 0:
+            answer += i ** 2
+    return answer
+
+inputs = list(map(int, input().split()))
+print(solution(inputs[0], inputs[1]))
+`,
+    test_cases: [
+      { input: "4 7", output: "52" },
+      { input: "1 5", output: "20" },
+      { input: "2 2", output: "4" }
+    ]
+  },
+  {
+    id: 54,
+    classLevel: 2,
+    title: "[2차] [문제 4] 5글자 이상 단어 연결하기 (소스코드 작성)",
+    type: "code",
+    description: "단어들이 들어있는 배열에서 길이가 5 이상인 단어를 배열에 들어있는 순서대로 이어 붙인 문자열을 만들려고 합니다. 만약 이어 붙일 문자열이 아예 없다면(빈 문자열인 경우) \"empty\"를 return 하도록 solution 함수를 완성해주세요.",
+    input_desc: "공백으로 구분된 영어 소문자 단어 리스트가 주어집니다.",
+    output_desc: "길이가 5 이상인 단어를 이어 붙인 단일 문자열을 출력하며, 해당되는 단어가 전혀 없는 경우 \"empty\"를 출력합니다.",
+    examples: [
+      { input: "my favorite color is violet", output: "favoritecolorviolet" },
+      { input: "yes i am", output: "empty" }
+    ],
+    starter_code: `def solution(words):
+    # 여기에 코드를 작성해주세요.
+    answer = ''
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+words = input().split()
+print(solution(words))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 단어 목록(words)을 순회하며 글자 수가 5글자 이상인 단어들(len(word) >= 5)만 answer에 이어 붙입니다.
+# 2. 순회가 끝나고 answer가 빈 문자열("")인 경우 "empty"를 반환하고, 그렇지 않으면 누적 문자열을 반환합니다.
+
+def solution(words):
+    answer = ''
+    for word in words:
+        if len(word) >= 5:
+            answer += word
+    if answer == '':
+        return "empty"
+    return answer
+
+words = input().split()
+print(solution(words))
+`,
+    test_cases: [
+      { input: "my favorite color is violet", output: "favoritecolorviolet" },
+      { input: "yes i am", output: "empty" },
+      { input: "hello world nice", output: "helloworld" }
+    ]
+  },
+  {
+    id: 55,
+    classLevel: 2,
+    title: "[2차] [문제 5] 몬스터 잡기 공격 횟수 구하기 (빈칸 채우기)",
+    type: "blank",
+    description: "게임 캐릭터가 몬스터와 1:1 전투를 합니다. 캐릭터는 매 턴마다 항상 일정한 데미지(attack)를 주는 공격 마법만 사용하고, 몬스터는 항상 일정한 수치(recovery)로 체력을 회복하는 힐링 마법만 사용합니다. 항상 캐릭터가 먼저 공격을 시작하며 번갈아 가며 턴이 진행됩니다. 캐릭터가 몬스터를 처치하기 위해(체력을 0 이하로 만들기 위해) 최소 몇 번 공격해야 하는지 구하려고 합니다. 빈칸을 채워 전체 코드를 완성해주세요.",
+    input_desc: "공백으로 구분된 공격력(attack), 회복력(recovery), 초기 체력(hp)가 차례대로 주어집니다.",
+    output_desc: "몬스터를 처치하기 위해 필요로 하는 최소 공격 횟수를 반환하거나 출력합니다.",
+    examples: [
+      { input: "30 10 60", output: "3" }
+    ],
+    starter_code: `def solution(attack, recovery, hp):
+    count = 0
+    while(True):
+        count += @@@
+        hp -= @@@
+        if hp <= 0:
+            @@@
+        hp += @@@
+    return count
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+inputs = list(map(int, input().split()))
+print(solution(inputs[0], inputs[1], inputs[2]))
+`,
+    solution_code: `# [정답 및 해설]
+# 1. 한 번 공격할 때마다 count를 1씩 누적합니다. (count += 1)
+# 2. 몬스터 체력에서 공격력만큼 데미지를 뺍니다. (hp -= attack)
+# 3. 몬스터 체력이 0 이하가 된 경우, 루프를 탈출하여 종료합니다. (break)
+# 4. 몬스터가 살아있는 경우 몬스터가 회복합니다. (hp += recovery)
+
+def solution(attack, recovery, hp):
+    count = 0
+    while(True):
+        count += 1
+        hp -= attack
+        if hp <= 0:
+            break
+        hp += recovery
+    return count
+
+inputs = list(map(int, input().split()))
+print(solution(inputs[0], inputs[1], inputs[2]))
+`,
+    test_cases: [
+      { input: "30 10 60", output: "3" },
+      { input: "100 10 250", output: "3" },
+      { input: "50 49 50", output: "1" }
+    ]
   }
 ];
+
 
 
