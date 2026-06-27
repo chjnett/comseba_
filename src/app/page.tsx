@@ -419,6 +419,16 @@ export default function Home() {
         setConsoleLogs(prev => [...prev, { text: "테스트 케이스 " + (i + 1) + ": 성공", type: "success" }]);
       } else {
         setConsoleLogs(prev => [...prev, { text: "테스트 케이스 " + (i + 1) + ": 실패", type: "error" }]);
+        if (stderr) {
+          setConsoleLogs(prev => [...prev, { text: "    * 에러 메시지:\n" + stderr, type: "error" }]);
+        } else {
+          setConsoleLogs(prev => [
+            ...prev,
+            { text: "    * 입력값: " + (tc.input ? tc.input.replace(/\n/g, " | ") : "없음"), type: "muted" },
+            { text: "    * 기대 출력:\n" + tc.output, type: "muted" },
+            { text: "    * 실제 출력:\n" + (stdout ? stdout.trim() : "(출력 없음)"), type: "muted" }
+          ]);
+        }
       }
     }
 
@@ -759,7 +769,7 @@ export default function Home() {
                                 {copiedId === exId + "-in" ? <Check size={14} /> : <Copy size={14} />}
                               </button>
                             </div>
-                            <pre className="text-xs font-mono bg-[#11121d] p-3 rounded-lg text-[#a6e3a1] overflow-x-auto whitespace-pre-wrap">
+                            <pre className="text-xs font-mono bg-[#11121d] p-3 rounded-lg text-[#a6e3a1] overflow-x-auto whitespace-pre">
                               {ex.input}
                             </pre>
                           </div>
@@ -774,7 +784,7 @@ export default function Home() {
                                 {copiedId === exId + "-out" ? <Check size={14} /> : <Copy size={14} />}
                               </button>
                             </div>
-                            <pre className="text-xs font-mono bg-[#11121d] p-3 rounded-lg text-[#f5c2e7] overflow-x-auto whitespace-pre-wrap">
+                            <pre className="text-xs font-mono bg-[#11121d] p-3 rounded-lg text-[#f5c2e7] overflow-x-auto whitespace-pre">
                               {ex.output}
                             </pre>
                           </div>
@@ -797,7 +807,7 @@ export default function Home() {
                       <span>정답 복사</span>
                     </button>
                   </div>
-                  <pre className="text-xs font-mono bg-[#161725] border border-[#25283c] p-4 rounded-xl text-[#a6e3a1] overflow-x-auto whitespace-pre-wrap leading-relaxed">
+                  <pre className="text-xs font-mono bg-[#161725] border border-[#25283c] p-4 rounded-xl text-[#a6e3a1] overflow-x-auto whitespace-pre leading-relaxed">
                     {currentProblem.solution_code}
                   </pre>
                 </div>
@@ -889,7 +899,7 @@ export default function Home() {
               </div>
 
               {/* Console Logs Output */}
-              <div className="flex-1 overflow-y-auto p-4 font-mono text-sm space-y-1">
+              <div className="flex-1 overflow-auto p-4 font-mono text-sm space-y-1">
                 {consoleLogs.length === 0 ? (
                   <span className="text-[#585b70]">코드를 실행하거나 제출하면 여기에 결과가 표시됩니다.</span>
                 ) : (
@@ -901,7 +911,7 @@ export default function Home() {
                     if (log.type === "muted") color = "text-[#6c7086]";
 
                     return (
-                      <div key={idx} className={color + " whitespace-pre-wrap"}>
+                      <div key={idx} className={color + " whitespace-pre"}>
                         {log.text}
                       </div>
                     );
