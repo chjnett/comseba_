@@ -285,13 +285,14 @@ for i in range(n):
 for x in @@@:
     hap += @@@
 
+avg = @@@
 print(hap)
 print( @@@ )
 `,
     solution_code: `# [정답 및 해설]
 # 1. arr배열을 반복하면서 총합(hap)에 누적합니다. (for x in arr)
 # 2. hap에 x를 누적합니다. (hap += x)
-# 3. 평균을 소수 첫째자리까지 출력하기 위해 f-string 포맷인 :.1f를 사용합니다. (f"{hap/n:.1f}")
+# 3. 평균을 구해 avg 변수에 저장한 뒤, 소수 첫째자리까지 포맷하여 출력합니다.
 
 n = int(input(""))
 arr= []
@@ -306,8 +307,9 @@ for i in range(n):
 for x in arr:
     hap += x
 
+avg = hap / n
 print(hap)
-print(f"{hap/n:.1f}")
+print(f"{avg:.1f}")
 `,
     test_cases: [
       { input: "6\n12 1 9 17 31 7", output: "77\n12.8" },
@@ -2260,7 +2262,7 @@ print(solution(votes, N, K))
             total += 20000
         else:
             total += 10000
-        return total
+    return total
 
 # 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
 purchase = list(map(int, input().split()))
