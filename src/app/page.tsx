@@ -30,9 +30,21 @@ import {
   FileCode2,
   Search,
   PanelLeftClose,
-  PanelLeftOpen
+  PanelLeftOpen,
+  ArrowLeft,
+  Database,
+  Sparkles,
+  Sun,
+  Moon
 } from "lucide-react";
 import { problems as initialProblems, Problem, Example } from "@/data/problems";
+import { 
+  mockDb, 
+  runMockSQL, 
+  pythonConcepts, 
+  sqlBasicLessons, 
+  sqlAdvancedLessons 
+} from "@/data/learning";
 
 // Helper to sanitize python inputs for builtin.input mock
 function preparePythonRunner(code: string, inputLines: string[]): string {
@@ -70,6 +82,7 @@ finally:
 
 export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [isAdmin, setIsAdmin] = useState(false);
   const [selectedClass, setSelectedClass] = useState<2 | 3>(3);
   const [problems, setProblems] = useState<Problem[]>(initialProblems);
@@ -102,6 +115,15 @@ export default function Home() {
   const [newOutDesc, setNewOutDesc] = useState("");
   const [newStarter, setNewStarter] = useState("");
   const [newTestCases, setNewTestCases] = useState("[\n  {\n    \"input\": \"입력값\",\n    \"output\": \"출력값\"\n  }\n]");
+  
+  // Category & Learning states
+  const [currentCategory, setCurrentCategory] = useState<'home' | 'oj' | 'concept' | 'sql_basic' | 'sql_advanced'>('home');
+  const [activeConceptIndex, setActiveConceptIndex] = useState<number>(0);
+  const [activeSqlLessonIndex, setActiveSqlLessonIndex] = useState<number>(0);
+  const [sqlQuery, setSqlQuery] = useState<string>("");
+  const [sqlResult, setSqlResult] = useState<any>(null);
+  const [sqlSuccess, setSqlSuccess] = useState<boolean | null>(null);
+  const [showSqlHint, setShowSqlHint] = useState<boolean>(false);
   
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -157,6 +179,19 @@ export default function Home() {
 
   // Load progress and custom problems on mount
   useEffect(() => {
+    // Load theme
+    const savedTheme = localStorage.getItem("oj_theme") as 'light' | 'dark';
+    if (savedTheme) {
+      setTheme(savedTheme);
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+
     // Load custom problems if any
     const savedProblems = localStorage.getItem("oj_problems");
     let loadedProblems = initialProblems;
@@ -528,412 +563,739 @@ export default function Home() {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
+  const toggleTheme = () => {
+    const nextTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(nextTheme);
+    localStorage.setItem("oj_theme", nextTheme);
+    if (nextTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+
+    // Notify iframe documents of the theme update
+    const iframes = document.querySelectorAll('iframe');
+    iframes.forEach(iframe => {
+      iframe.contentWindow?.postMessage({ type: 'theme-change', theme: nextTheme }, '*');
+    });
+  };
+
+  const handleRunSQL = (correctQuery: string) => {
+    if (!sqlQuery.trim()) return;
+    const result = runMockSQL(sqlQuery);
+    setSqlResult(result);
+    
+    if (result.error) {
+      setSqlSuccess(false);
+      return;
+    }
+
+    const expectedResult = runMockSQL(correctQuery);
+    const colsMatch = JSON.stringify(result.columns.map(c => c.toLowerCase())) === JSON.stringify(expectedResult.columns.map(c => c.toLowerCase()));
+    const rowsMatch = JSON.stringify(result.rows) === JSON.stringify(expectedResult.rows);
+    
+    if (colsMatch && rowsMatch) {
+      setSqlSuccess(true);
+    } else {
+      setSqlSuccess(false);
+    }
+  };
+
   return (
-    <main className="h-screen w-screen bg-[#11121d] text-[#cdd6f4] font-sans flex flex-col overflow-hidden">
+    <main className="h-screen w-screen bg-[var(--bg)] text-[var(--text)] font-sans flex flex-col overflow-hidden">
       <Script 
         src="https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js" 
         strategy="afterInteractive"
         onLoad={initPyodide}
       />
 
-      {/* Header Bar */}
-      <header className="border-b border-[#25283c] bg-[#161725] px-6 py-4 flex items-center justify-between shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="bg-[#89b4fa] p-2 rounded-xl text-[#11121d]">
-            <FileCode2 size={24} />
-          </div>
-          <div>
-            <h1 className="text-lg font-bold tracking-wide text-[#89b4fa]">
-              COS Pro {selectedClass}급 Python Online Judge
-            </h1>
-            <p className="text-xs text-[#a6adc8]">Pure Web Online Judge - No DB Connection Required</p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          {/* Class Level Selector */}
-          <div className="flex bg-[#25283c] p-1 rounded-xl border border-[#313552]">
-            <button
-              onClick={() => {
-                setSelectedClass(3);
-                const class3 = problems.filter(p => (p.classLevel || 3) === 3);
-                if (class3.length > 0) {
-                  handleSelectProblem(class3[0]);
-                }
-              }}
-              className={"px-4 py-1.5 rounded-lg text-sm font-bold transition-all duration-200 " + (
-                selectedClass === 3
-                  ? "bg-[#89b4fa] text-[#11121d]"
-                  : "text-[#a6adc8] hover:text-[#cdd6f4]"
-              )}
-            >
-              COS Pro 3급
-            </button>
-            <button
-              onClick={() => {
-                setSelectedClass(2);
-                const class2 = problems.filter(p => (p.classLevel || 3) === 2);
-                if (class2.length > 0) {
-                  handleSelectProblem(class2[0]);
-                }
-              }}
-              className={"px-4 py-1.5 rounded-lg text-sm font-bold transition-all duration-200 " + (
-                selectedClass === 2
-                  ? "bg-[#89b4fa] text-[#11121d]"
-                  : "text-[#a6adc8] hover:text-[#cdd6f4]"
-              )}
-            >
-              COS Pro 2급
-            </button>
-          </div>
-
-          <button 
-            onClick={handleAdminToggle}
-            className={"flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold border transition-all duration-200 " + (
-              isAdmin 
-                ? "bg-[#f5c2e7] text-[#11121d] border-[#f5c2e7] hover:bg-[#f2cdcd] hover:border-[#f2cdcd]" 
-                : "bg-[#25283c] text-[#a6adc8] border-[#313552] hover:bg-[#313552] hover:text-white"
-            )}
-          >
-            <span>{isAdmin ? "관리자 로그아웃" : "관리자 로그인"}</span>
-          </button>
-
-          <button 
-            onClick={() => setIsAddModalOpen(true)}
-            className="flex items-center gap-2 bg-[#25283c] border border-[#313552] hover:bg-[#313552] text-[#f5c2e7] px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200"
-          >
-            <Plus size={16} />
-            새 문제 추가
-          </button>
-        </div>
-      </header>
-
-      {/* Main Panel split */}
-      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0 relative">
-        {/* Sidebar Toggle Button (When Collapsed) */}
-        {isSidebarCollapsed && (
+      {/* ========================================================================= */}
+      {/* 1. HOME SCREEN CATEGORY SELECTION */}
+      {/* ========================================================================= */}
+      {currentCategory === 'home' && (
+        <div className="flex-1 flex flex-col overflow-y-auto bg-gradient-to-br from-[var(--panel-2)] to-[var(--bg)] p-8 md:p-12 justify-center items-center relative">
+          {/* Theme Toggle Button */}
           <button
-            onClick={() => setIsSidebarCollapsed(false)}
-            className="absolute left-4 top-4 z-40 bg-[#161725] border border-[#25283c] text-[#89b4fa] hover:text-white p-2 rounded-xl shadow-lg transition-all duration-200"
-            title="문제 목록 열기"
+            onClick={toggleTheme}
+            className="absolute top-6 right-6 p-3 rounded-full bg-[var(--panel)] border border-[var(--line)] text-[var(--text)] hover:bg-[var(--panel-2)] transition-colors shadow-md cursor-pointer flex items-center justify-center"
+            title="테마 변경"
           >
-            <PanelLeftOpen size={20} />
+            {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
           </button>
-        )}
 
-        {/* Left Side: Sidebar Problems List */}
-        <aside className={"border-r border-[#25283c] bg-[#161725] flex flex-col shrink-0 overflow-hidden h-full transition-all duration-300 " + (
-          isSidebarCollapsed ? "w-0 border-r-0" : "w-full lg:w-80"
-        )}>
-          <div className="p-4 border-b border-[#25283c] flex items-center justify-between shrink-0">
-            <span className="text-sm font-bold text-[#89b4fa] flex items-center gap-1.5">
-              <BookOpen size={16} /> {selectedClass}급 문제 목록
-            </span>
-            <button
-              onClick={() => setIsSidebarCollapsed(true)}
-              className="text-[#a6adc8] hover:text-white transition-colors"
-              title="문제 목록 접기"
+          <div className="max-w-5xl w-full text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent-3)] via-[#b4befe] to-[var(--accent-2)] tracking-tight mb-4">
+              COS Pro & SQL 학습 플랫폼
+            </h1>
+            <p className="text-lg text-[var(--muted)] max-w-2xl mx-auto">
+              자격증 취득부터 실무 데이터 분석까지, 파이썬 알고리즘과 SQL 쿼리를 웹 브라우저에서 실시간으로 학습하고 채점해보세요.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl w-full">
+            {/* Card 1: COS Pro OJ */}
+            <div 
+              onClick={() => setCurrentCategory('oj')}
+              className="bg-[var(--panel)] border border-[var(--line)] hover:border-[var(--accent-3)]/50 p-6 rounded-2xl cursor-pointer transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl flex flex-col justify-between group"
             >
-              <PanelLeftClose size={18} />
-            </button>
-          </div>
-
-          {/* Search Box */}
-          <div className="p-3 border-b border-[#25283c] shrink-0">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#585b70]" size={16} />
-              <input
-                type="text"
-                placeholder="문제 번호 또는 키워드 검색..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[#11121d] border border-[#25283c] rounded-xl pl-9 pr-4 py-2 text-xs text-[#cdd6f4] placeholder-[#585b70] focus:outline-none focus:border-[#89b4fa]"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#585b70] hover:text-white text-xs"
-                >
-                  초기화
-                </button>
-              )}
-            </div>
-          </div>
-
-          <div className="flex-1 overflow-y-auto p-2 space-y-1 min-h-0">
-            {problems
-              .filter((p) => (p.classLevel || 3) === selectedClass)
-              .filter((p) => {
-                if (!searchQuery.trim()) return true;
-                const query = searchQuery.toLowerCase();
-                return (
-                  p.id.toString().includes(query) ||
-                  p.title.toLowerCase().includes(query) ||
-                  p.description.toLowerCase().includes(query)
-                );
-              })
-              .map((prob) => {
-                const pid = prob.id.toString();
-                const active = currentProblem.id === prob.id;
-                const probStatus = status[pid] || "Unsolved";
-                
-                return (
-                  <button
-                    key={prob.id}
-                    onClick={() => handleSelectProblem(prob)}
-                    className={"w-full text-left p-3 rounded-xl flex items-center justify-between transition-all duration-150 " + (
-                      active 
-                        ? "bg-[#25283c] border border-[#89b4fa]/20 text-[#89b4fa]" 
-                        : "hover:bg-[#1e1f2f] text-[#cdd6f4]"
-                    )}
-                  >
-                    <div className="flex-1 min-w-0 pr-2">
-                      <h3 className="text-sm font-semibold truncate">{prob.title}</h3>
-                      <span className="text-[10px] uppercase font-bold text-[#a6adc8] bg-[#25283c] px-2 py-0.5 rounded-full mt-1 inline-block">
-                        {prob.type === "blank" ? "빈칸 채우기" : "소스코드 작성"}
-                      </span>
-                    </div>
-
-                    <div>
-                      {probStatus === "Solved" ? (
-                        <CheckCircle2 size={18} className="text-[#a6e3a1]" />
-                      ) : probStatus === "Attempted" ? (
-                        <AlertTriangle size={18} className="text-[#f9e2af]" />
-                      ) : (
-                        <HelpCircle size={18} className="text-[#6c7086]" />
-                      )}
-                    </div>
-                  </button>
-                );
-              })}
-          </div>
-        </aside>
-
-        {/* Right Side: Main Workstation Split */}
-        <div className="flex-1 flex flex-col xl:flex-row overflow-hidden min-w-0 h-full">
-          
-          {/* Left panel: Problem details */}
-          <div 
-            className="border-b xl:border-b-0 xl:border-r border-[#25283c] bg-[#11121d] overflow-y-auto flex flex-col p-6 min-w-0 shrink-0 h-full"
-            style={{ width: isMounted ? leftWidth + "%" : '45%' }}
-          >
-            <h2 className="text-xl font-bold text-[#89b4fa] border-b border-[#25283c] pb-3 mb-4 shrink-0">
-              {currentProblem.title}
-            </h2>
-
-            <div className="space-y-6 text-[#cdd6f4]">
-              {/* Problem Statement */}
               <div>
-                <h4 className="text-sm font-bold text-[#89b4fa] mb-2 uppercase tracking-wide">■ 문제 설명</h4>
-                <p className="text-sm leading-relaxed whitespace-pre-line text-[#a6adc8]">
-                  {currentProblem.description}
+                <div className="bg-[var(--accent-3)]/10 text-[var(--accent-3)] p-4 rounded-xl w-14 h-14 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                  <FileCode2 size={28} />
+                </div>
+                <h3 className="text-xl font-bold text-[var(--accent-3)] mb-2">코스프로 문제 풀기</h3>
+                <p className="text-sm text-[var(--muted)] leading-relaxed mb-4">
+                  COS Pro 2급 & 3급 Python 모의고사를 직접 풀어보고 실시간으로 자동 채점을 받아보세요.
                 </p>
               </div>
-
-              {/* Input Description */}
-              {currentProblem.input_desc && (
-                <div>
-                  <h4 className="text-sm font-bold text-[#89b4fa] mb-2 uppercase tracking-wide">■ 입력 설명</h4>
-                  <p className="text-sm text-[#a6adc8]">{currentProblem.input_desc}</p>
-                </div>
-              )}
-
-              {/* Output Description */}
-              {currentProblem.output_desc && (
-                <div>
-                  <h4 className="text-sm font-bold text-[#89b4fa] mb-2 uppercase tracking-wide">■ 출력 설명</h4>
-                  <p className="text-sm text-[#a6adc8]">{currentProblem.output_desc}</p>
-                </div>
-              )}
-
-              {/* Examples IO */}
-              <div>
-                <h4 className="text-sm font-bold text-[#89b4fa] mb-3 uppercase tracking-wide">■ 입출력 예</h4>
-                <div className="space-y-4">
-                  {currentProblem.examples.map((ex, index) => {
-                    const exId = `ex-${currentProblem.id}-${index}`;
-                    return (
-                      <div key={index} className="bg-[#161725] border border-[#25283c] rounded-xl overflow-hidden">
-                        <div className="bg-[#1e1f2f] px-4 py-2 text-xs font-semibold text-[#a6adc8] flex items-center justify-between border-b border-[#25283c]">
-                          <span>예제 {index + 1}</span>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[#25283c]">
-                          <div className="p-4">
-                            <div className="flex items-center justify-between mb-1">
-                              <span className="text-xs text-[#a6adc8] font-bold">입력</span>
-                              <button 
-                                onClick={() => copyToClipboard(ex.input, exId + "-in")}
-                                className="text-[#a6adc8] hover:text-[#89b4fa] transition-colors"
-                              >
-                                {copiedId === exId + "-in" ? <Check size={14} /> : <Copy size={14} />}
-                              </button>
-                            </div>
-                            <pre className="text-xs font-mono bg-[#11121d] p-3 rounded-lg text-[#a6e3a1] overflow-x-auto whitespace-pre">
-                              {ex.input}
-                            </pre>
-                          </div>
-
-                          <div className="p-4">
-                            <div className="flex items-center justify-between mb-1">
-                              <span className="text-xs text-[#a6adc8] font-bold">출력</span>
-                              <button 
-                                onClick={() => copyToClipboard(ex.output, exId + "-out")}
-                                className="text-[#a6adc8] hover:text-[#89b4fa] transition-colors"
-                              >
-                                {copiedId === exId + "-out" ? <Check size={14} /> : <Copy size={14} />}
-                              </button>
-                            </div>
-                            <pre className="text-xs font-mono bg-[#11121d] p-3 rounded-lg text-[#f5c2e7] overflow-x-auto whitespace-pre">
-                              {ex.output}
-                            </pre>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+              <div className="flex items-center justify-between mt-4">
+                <span className="text-xs font-bold text-[var(--accent-3)] bg-[var(--accent-3)]/10 px-3 py-1 rounded-full">실시간 채점 샌드박스</span>
+                <ChevronRight size={18} className="text-[var(--accent-3)] group-hover:translate-x-1 transition-transform" />
               </div>
+            </div>
 
-              {isAdmin && currentProblem.solution_code && (
-                <div className="mt-6 border-t border-[#f5c2e7]/30 pt-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="text-sm font-bold text-[#f5c2e7] uppercase tracking-wide">■ 관리자용 정답 및 해설</h4>
-                    <button 
-                      onClick={() => copyToClipboard(currentProblem.solution_code!, "admin-sol")}
-                      className="flex items-center gap-1 text-xs text-[#a6adc8] hover:text-[#f5c2e7] transition-colors bg-[#1e1f2f] px-2.5 py-1.5 rounded-lg border border-[#25283c]"
-                    >
-                      {copiedId === "admin-sol" ? <Check size={12} /> : <Copy size={12} />}
-                      <span>정답 복사</span>
-                    </button>
-                  </div>
-                  <pre className="text-xs font-mono bg-[#161725] border border-[#25283c] p-4 rounded-xl text-[#a6e3a1] overflow-x-auto whitespace-pre leading-relaxed">
-                    {currentProblem.solution_code}
-                  </pre>
+            {/* Card 2: Concept Learning */}
+            <div 
+              onClick={() => {
+                setCurrentCategory('concept');
+                setActiveConceptIndex(0);
+              }}
+              className="bg-[var(--panel)] border border-[var(--line)] hover:border-[var(--accent-2)]/50 p-6 rounded-2xl cursor-pointer transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl flex flex-col justify-between group"
+            >
+              <div>
+                <div className="bg-[var(--accent-2)]/10 text-[var(--accent-2)] p-4 rounded-xl w-14 h-14 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                  <BookOpen size={28} />
                 </div>
-              )}
+                <h3 className="text-xl font-bold text-[var(--accent-2)] mb-2">코스프로 개념 학습</h3>
+                <p className="text-sm text-[var(--muted)] leading-relaxed mb-4">
+                  변수, 입출력, 반복문, 리스트, 내장 함수 등 COS Pro 파이썬 시험에 꼭 출제되는 핵심 이론과 예제 코드를 배웁니다.
+                </p>
+              </div>
+              <div className="flex items-center justify-between mt-4">
+                <span className="text-xs font-bold text-[var(--accent-2)] bg-[var(--accent-2)]/10 px-3 py-1 rounded-full">파이썬 핵심 문법 수록</span>
+                <ChevronRight size={18} className="text-[var(--accent-2)] group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
+
+            {/* Card 3: SQL Basic */}
+            <div 
+              onClick={() => {
+                setCurrentCategory('sql_basic');
+                setActiveSqlLessonIndex(0);
+                setSqlQuery(sqlBasicLessons[0].starterQuery);
+                setSqlResult(null);
+                setSqlSuccess(null);
+                setShowSqlHint(false);
+              }}
+              className="bg-[var(--panel)] border border-[var(--line)] hover:border-[var(--accent)]/50 p-6 rounded-2xl cursor-pointer transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl flex flex-col justify-between group"
+            >
+              <div>
+                <div className="bg-[var(--accent)]/10 text-[var(--accent)] p-4 rounded-xl w-14 h-14 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                  <Database size={28} />
+                </div>
+                <h3 className="text-xl font-bold text-[var(--accent)] mb-2">SQL 기초</h3>
+                <p className="text-sm text-[var(--muted)] leading-relaxed mb-4">
+                  데이터베이스의 근간인 SELECT, WHERE, ORDER BY, LIMIT 문을 배우고 실제 학생 데이터를 조회하고 가공해보세요.
+                </p>
+              </div>
+              <div className="flex items-center justify-between mt-4">
+                <span className="text-xs font-bold text-[var(--accent)] bg-[var(--accent)]/10 px-3 py-1 rounded-full">인터랙티브 SQL 실습</span>
+                <ChevronRight size={18} className="text-[var(--accent)] group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
+
+            {/* Card 4: SQL Advanced */}
+            <div 
+              onClick={() => {
+                setCurrentCategory('sql_advanced');
+                setActiveSqlLessonIndex(0);
+                setSqlQuery(sqlAdvancedLessons[0].starterQuery);
+                setSqlResult(null);
+                setSqlSuccess(null);
+                setShowSqlHint(false);
+              }}
+              className="bg-[var(--panel)] border border-[var(--line)] hover:border-[#b4befe]/50 p-6 rounded-2xl cursor-pointer transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl flex flex-col justify-between group"
+            >
+              <div>
+                <div className="bg-[#b4befe]/10 text-[#b4befe] p-4 rounded-xl w-14 h-14 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                  <Sparkles size={28} />
+                </div>
+                <h3 className="text-xl font-bold text-[#b4befe] mb-2">SQL 심화</h3>
+                <p className="text-sm text-[var(--muted)] leading-relaxed mb-4">
+                  그룹화(GROUP BY), 조인(JOIN), 서브쿼리 등 복잡한 데이터 분석 및 집계 처리를 위한 고급 SQL 문법을 학습합니다.
+                </p>
+              </div>
+              <div className="flex items-center justify-between mt-4">
+                <span className="text-xs font-bold text-[#b4befe] bg-[#b4befe]/10 px-3 py-1 rounded-full">집계 및 JOIN 마스터</span>
+                <ChevronRight size={18} className="text-[#b4befe] group-hover:translate-x-1 transition-transform" />
+              </div>
             </div>
           </div>
+        </div>
+      )}
 
-          {/* Horizontal Split Handler (Visible on xl screens only) */}
-          <div 
-            onMouseDown={startResizingWidth}
-            className="hidden xl:flex w-1.5 hover:w-2 bg-[#25283c] hover:bg-[#89b4fa] cursor-col-resize justify-center items-center select-none transition-all duration-150 group shrink-0"
-          >
-            <div className="w-0.5 h-8 bg-[#6c7086] group-hover:bg-[#11121d] rounded-full"></div>
-          </div>
-
-          {/* Right panel: Code Editor & Console Output */}
-          <div className="flex-1 flex flex-col bg-[#161725] min-w-0">
-            {/* Editor Header */}
-            <div className="border-b border-[#25283c] px-4 py-3 flex items-center justify-between">
-              <span className="text-sm font-bold text-[#89b4fa] flex items-center gap-1.5">
-                <Code size={16} /> Python 코드 편집기
-              </span>
-              <button
-                onClick={handleReset}
-                className="flex items-center gap-1 bg-[#25283c] hover:bg-[#313552] border border-[#313552] text-xs text-[#cdd6f4] px-3 py-1.5 rounded-lg transition-colors"
+      {/* ========================================================================= */}
+      {/* 2. COS PRO OJ VIEW */}
+      {/* ========================================================================= */}
+      {currentCategory === 'oj' && (
+        <>
+          {/* Header Bar */}
+          <header className="border-b border-[var(--line)] bg-[var(--panel-2)] px-6 py-4 flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => setCurrentCategory('home')}
+                className="flex items-center gap-1.5 bg-[var(--line)] border border-[var(--line-hover)] hover:bg-[var(--line-hover)] text-[var(--text)] px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200"
               >
-                <RotateCcw size={12} />
-                초기화
+                <ArrowLeft size={14} />
+                홈으로
+              </button>
+              <div className="bg-[var(--accent-3)]/20 p-2 rounded-xl text-[var(--accent-3)]">
+                <FileCode2 size={20} />
+              </div>
+              <div>
+                <h1 className="text-base font-bold tracking-wide text-[var(--accent-3)] flex items-center gap-2">
+                  COS Pro {selectedClass}급 Python Online Judge
+                </h1>
+                <p className="text-[10px] text-[var(--muted)]">실시간 자동 채점 및 코드 연습 시스템</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="flex bg-[var(--line)] p-1 rounded-xl border border-[var(--line-hover)]">
+                <button
+                  onClick={() => {
+                    setSelectedClass(3);
+                    const class3 = problems.filter(p => (p.classLevel || 3) === 3);
+                    if (class3.length > 0) {
+                      handleSelectProblem(class3[0]);
+                    }
+                  }}
+                  className={"px-3 py-1 rounded-lg text-xs font-bold transition-all duration-200 " + (
+                    selectedClass === 3
+                      ? "bg-[var(--accent-3)] text-[var(--bg)]"
+                      : "text-[var(--muted)] hover:text-[var(--text)]"
+                  )}
+                >
+                  3급 문제
+                </button>
+                <button
+                  onClick={() => {
+                    setSelectedClass(2);
+                    const class2 = problems.filter(p => (p.classLevel || 3) === 2);
+                    if (class2.length > 0) {
+                      handleSelectProblem(class2[0]);
+                    }
+                  }}
+                  className={"px-3 py-1 rounded-lg text-xs font-bold transition-all duration-200 " + (
+                    selectedClass === 2
+                      ? "bg-[var(--accent-3)] text-[var(--bg)]"
+                      : "text-[var(--muted)] hover:text-[var(--text)]"
+                  )}
+                >
+                  2급 문제
+                </button>
+              </div>
+
+              <button 
+                onClick={handleAdminToggle}
+                className={"flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all duration-200 " + (
+                  isAdmin 
+                    ? "bg-[var(--accent-2)] text-[var(--bg)] border-[var(--accent-2)]" 
+                    : "bg-[var(--line)] text-[var(--muted)] border-[var(--line-hover)] hover:bg-[var(--line-hover)]"
+                )}
+              >
+                <span>{isAdmin ? "관리자 종료" : "관리자 모드"}</span>
+              </button>
+
+              <button 
+                onClick={toggleTheme}
+                className="flex items-center justify-center bg-[var(--line)] border border-[var(--line-hover)] hover:bg-[var(--line-hover)] text-[var(--text)] p-2.5 rounded-xl transition-all duration-200"
+                title="테마 변경"
+              >
+                {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
+              </button>
+
+              <button 
+                onClick={() => setIsAddModalOpen(true)}
+                className="flex items-center gap-1.5 bg-[var(--line)] border border-[var(--line-hover)] hover:bg-[var(--line-hover)] text-[var(--accent-2)] px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200"
+              >
+                <Plus size={14} />
+                새 문제 추가
               </button>
             </div>
+          </header>
 
-            {/* Monaco Editor Container */}
-            <div className="flex-1 min-h-[200px] border-b border-[#25283c]">
-              <Editor
-                height="100%"
-                language="python"
-                theme="vs-dark"
-                value={code}
-                onChange={handleCodeChange}
-                options={{
-                  fontFamily: "Menlo, Monaco, Consolas, 'Courier New', monospace",
-                  fontSize: 14,
-                  minimap: { enabled: false },
-                  scrollbar: {
-                    vertical: "auto",
-                    horizontal: "auto",
-                  },
-                  lineHeight: 22,
-                  tabSize: 4,
-                  automaticLayout: true
-                }}
-              />
-            </div>
+          {/* Main Panel split */}
+          <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0 relative">
+            {/* Sidebar Toggle Button (When Collapsed) */}
+            {isSidebarCollapsed && (
+              <button
+                onClick={() => setIsSidebarCollapsed(false)}
+                className="absolute left-4 top-4 z-40 bg-[var(--panel-2)] border border-[var(--line)] text-[var(--accent-3)] hover:text-white p-2 rounded-xl shadow-lg transition-all duration-200"
+                title="문제 목록 열기"
+              >
+                <PanelLeftOpen size={20} />
+              </button>
+            )}
 
-            {/* Vertical Split Handler */}
-            <div 
-              onMouseDown={startResizingConsole}
-              className="h-1.5 hover:h-2 bg-[#25283c] hover:bg-[#89b4fa] cursor-row-resize flex justify-center items-center select-none transition-all duration-150 group shrink-0"
-            >
-              <div className="w-12 h-0.5 bg-[#6c7086] group-hover:bg-[#11121d] rounded-full"></div>
-            </div>
-
-            {/* Console and Grading Section */}
-            <div className="flex flex-col bg-[#11121d] shrink-0" style={{ height: consoleHeight + "px" }}>
-              <div className="border-b border-[#25283c] bg-[#161725] px-4 py-3 flex items-center justify-between">
-                <span className="text-sm font-bold text-[#a6adc8] flex items-center gap-1.5">
-                  <Terminal size={16} /> 실행 결과 및 콘솔
+            {/* Left Side: Sidebar Problems List */}
+            <aside className={"border-r border-[var(--line)] bg-[var(--panel-2)] flex flex-col shrink-0 overflow-hidden h-full transition-all duration-300 " + (
+              isSidebarCollapsed ? "w-0 border-r-0" : "w-full lg:w-80"
+            )}>
+              <div className="p-4 border-b border-[var(--line)] flex items-center justify-between shrink-0">
+                <span className="text-sm font-bold text-[var(--accent-3)] flex items-center gap-1.5">
+                  <BookOpen size={16} /> {selectedClass}급 문제 목록
                 </span>
-                
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={handleRunTests}
-                    disabled={running}
-                    className="flex items-center gap-1.5 bg-[#25283c] hover:bg-[#313552] border border-[#313552] disabled:opacity-50 text-sm text-[#a6e3a1] px-4 py-2 rounded-xl font-bold transition-colors"
-                  >
-                    <Play size={14} />
-                    테스트 실행
-                  </button>
+                <button
+                  onClick={() => setIsSidebarCollapsed(true)}
+                  className="text-[var(--muted)] hover:text-white transition-colors"
+                  title="문제 목록 접기"
+                >
+                  <PanelLeftClose size={18} />
+                </button>
+              </div>
 
-                  <button
-                    onClick={handleSubmit}
-                    disabled={running}
-                    className="flex items-center gap-1.5 bg-[#a6e3a1] hover:bg-[#89d587] disabled:opacity-50 text-sm text-[#11121d] px-5 py-2 rounded-xl font-bold transition-colors"
-                  >
-                    <Send size={14} />
-                    제출 및 채점
-                  </button>
+              {/* Search Box */}
+              <div className="p-3 border-b border-[var(--line)] shrink-0">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted-dark)]" size={16} />
+                  <input
+                    type="text"
+                    placeholder="문제 번호 또는 키워드 검색..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full bg-[var(--bg)] border border-[var(--line)] rounded-xl pl-9 pr-4 py-2 text-xs text-[var(--text)] placeholder-[var(--muted-dark)] focus:outline-none focus:border-[var(--accent-3)]"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery("")}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted-dark)] hover:text-white text-xs"
+                    >
+                      초기화
+                    </button>
+                  )}
                 </div>
               </div>
 
-              {/* Console Logs Output */}
-              <div className="flex-1 overflow-auto p-4 font-mono text-sm space-y-1">
-                {consoleLogs.length === 0 ? (
-                  <span className="text-[#585b70]">코드를 실행하거나 제출하면 여기에 결과가 표시됩니다.</span>
-                ) : (
-                  consoleLogs.map((log, idx) => {
-                    let color = "text-[#cdd6f4]";
-                    if (log.type === "success") color = "text-[#a6e3a1] font-bold";
-                    if (log.type === "error") color = "text-[#f38ba8]";
-                    if (log.type === "info") color = "text-[#89b4fa]";
-                    if (log.type === "muted") color = "text-[#6c7086]";
-
+              <div className="flex-1 overflow-y-auto p-2 space-y-1 min-h-0">
+                {problems
+                  .filter((p) => (p.classLevel || 3) === selectedClass)
+                  .filter((p) => {
+                    if (!searchQuery.trim()) return true;
+                    const query = searchQuery.toLowerCase();
                     return (
-                      <div key={idx} className={color + " whitespace-pre"}>
-                        {log.text}
-                      </div>
+                      p.id.toString().includes(query) ||
+                      p.title.toLowerCase().includes(query) ||
+                      p.description.toLowerCase().includes(query)
                     );
                   })
-                )}
+                  .map((prob) => {
+                    const pid = prob.id.toString();
+                    const active = currentProblem.id === prob.id;
+                    const probStatus = status[pid] || "Unsolved";
+                    
+                    return (
+                      <button
+                        key={prob.id}
+                        onClick={() => handleSelectProblem(prob)}
+                        className={"w-full text-left p-3 rounded-xl flex items-center justify-between transition-all duration-150 " + (
+                          active 
+                            ? "bg-[var(--line)] border border-[var(--accent-3)]/20 text-[var(--accent-3)]" 
+                            : "hover:bg-[var(--panel)] text-[var(--text)]"
+                        )}
+                      >
+                        <div className="flex-1 min-w-0 pr-2">
+                          <h3 className="text-sm font-semibold truncate">{prob.title}</h3>
+                          <span className="text-[10px] uppercase font-bold text-[var(--muted)] bg-[var(--line)] px-2 py-0.5 rounded-full mt-1 inline-block">
+                            {prob.type === "blank" ? "빈칸 채우기" : "소스코드 작성"}
+                          </span>
+                        </div>
+
+                        <div>
+                          {probStatus === "Solved" ? (
+                            <CheckCircle2 size={18} className="text-[var(--accent)]" />
+                          ) : probStatus === "Attempted" ? (
+                            <AlertTriangle size={18} className="text-[#f9e2af]" />
+                          ) : (
+                            <HelpCircle size={18} className="text-[var(--muted-extra)]" />
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
+              </div>
+            </aside>
+
+            {/* Right Side: Main Workstation Split */}
+            <div className="flex-1 flex flex-col xl:flex-row overflow-hidden min-w-0 h-full">
+              
+              {/* Left panel: Problem details */}
+              <div 
+                className="border-b xl:border-b-0 xl:border-r border-[var(--line)] bg-[var(--bg)] overflow-y-auto flex flex-col p-6 min-w-0 shrink-0 h-full"
+                style={{ width: isMounted ? leftWidth + "%" : '45%' }}
+              >
+                <h2 className="text-xl font-bold text-[var(--accent-3)] border-b border-[var(--line)] pb-3 mb-4 shrink-0">
+                  {currentProblem.title}
+                </h2>
+
+                <div className="space-y-6 text-[var(--text)]">
+                  {/* Problem Statement */}
+                  <div>
+                    <h4 className="text-sm font-bold text-[var(--accent-3)] mb-2 uppercase tracking-wide">■ 문제 설명</h4>
+                    <p className="text-sm leading-relaxed whitespace-pre-line text-[var(--muted)]">
+                      {currentProblem.description}
+                    </p>
+                  </div>
+
+                  {/* Input Description */}
+                  {currentProblem.input_desc && (
+                    <div>
+                      <h4 className="text-sm font-bold text-[var(--accent-3)] mb-2 uppercase tracking-wide">■ 입력 설명</h4>
+                      <p className="text-sm text-[var(--muted)]">{currentProblem.input_desc}</p>
+                    </div>
+                  )}
+
+                  {/* Output Description */}
+                  {currentProblem.output_desc && (
+                    <div>
+                      <h4 className="text-sm font-bold text-[var(--accent-3)] mb-2 uppercase tracking-wide">■ 출력 설명</h4>
+                      <p className="text-sm text-[var(--muted)]">{currentProblem.output_desc}</p>
+                    </div>
+                  )}
+
+                  {/* Examples IO */}
+                  <div>
+                    <h4 className="text-sm font-bold text-[var(--accent-3)] mb-3 uppercase tracking-wide">■ 입출력 예</h4>
+                    <div className="space-y-4">
+                      {currentProblem.examples.map((ex, index) => {
+                        const exId = `ex-${currentProblem.id}-${index}`;
+                        return (
+                          <div key={index} className="border border-[var(--line)] rounded-xl overflow-hidden bg-[var(--panel-2)]">
+                            <div className="bg-[var(--panel)] px-4 py-2 border-b border-[var(--line)] text-xs font-bold text-[var(--accent-3)]">
+                              입출력 예 #{index + 1}
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[var(--line)]">
+                              <div className="p-4">
+                                <div className="flex items-center justify-between mb-1">
+                                  <span className="text-xs text-[var(--muted)] font-bold">입력</span>
+                                  <button 
+                                    onClick={() => copyToClipboard(ex.input, exId + "-in")}
+                                    className="text-[var(--muted)] hover:text-[var(--accent-3)] transition-colors"
+                                  >
+                                    {copiedId === exId + "-in" ? <Check size={14} /> : <Copy size={14} />}
+                                  </button>
+                                </div>
+                                <pre className="text-xs font-mono bg-[var(--bg)] p-3 rounded-lg text-[var(--accent)] overflow-x-auto whitespace-pre">
+                                  {ex.input}
+                                </pre>
+                              </div>
+
+                              <div className="p-4">
+                                <div className="flex items-center justify-between mb-1">
+                                  <span className="text-xs text-[var(--muted)] font-bold">출력</span>
+                                  <button 
+                                    onClick={() => copyToClipboard(ex.output, exId + "-out")}
+                                    className="text-[var(--muted)] hover:text-[var(--accent-3)] transition-colors"
+                                  >
+                                    {copiedId === exId + "-out" ? <Check size={14} /> : <Copy size={14} />}
+                                  </button>
+                                </div>
+                                <pre className="text-xs font-mono bg-[var(--bg)] p-3 rounded-lg text-[var(--accent-2)] overflow-x-auto whitespace-pre">
+                                  {ex.output}
+                                </pre>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {isAdmin && currentProblem.solution_code && (
+                    <div className="mt-6 border-t border-[var(--accent-2)]/30 pt-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="text-sm font-bold text-[var(--accent-2)] uppercase tracking-wide">■ 관리자용 정답 및 해설</h4>
+                        <button 
+                          onClick={() => copyToClipboard(currentProblem.solution_code!, "admin-sol")}
+                          className="flex items-center gap-1 text-xs text-[var(--muted)] hover:text-[var(--accent-2)] transition-colors bg-[var(--panel)] px-2.5 py-1.5 rounded-lg border border-[var(--line)]"
+                        >
+                          {copiedId === "admin-sol" ? <Check size={12} /> : <Copy size={12} />}
+                          <span>정답 복사</span>
+                        </button>
+                      </div>
+                      <pre className="text-xs font-mono bg-[var(--panel-2)] border border-[var(--line)] p-4 rounded-xl text-[var(--accent)] overflow-x-auto whitespace-pre leading-relaxed">
+                        {currentProblem.solution_code}
+                      </pre>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Horizontal Split Handler (Visible on xl screens only) */}
+              <div 
+                onMouseDown={startResizingWidth}
+                className="hidden xl:flex w-1.5 hover:w-2 bg-[var(--line)] hover:bg-[var(--accent-3)] cursor-col-resize justify-center items-center select-none transition-all duration-150 group shrink-0 h-full"
+              >
+                <div className="h-12 w-0.5 bg-[var(--muted-extra)] group-hover:bg-[var(--bg)] rounded-full"></div>
+              </div>
+
+              {/* Right panel: Code Editor & Console Output */}
+              <div className="flex-1 flex flex-col overflow-hidden h-full">
+                
+                {/* Editor Container */}
+                <div className="flex-1 min-h-[200px] border-b border-[var(--line)] relative flex flex-col">
+                  <div className="bg-[var(--panel-2)] border-b border-[var(--line)] px-4 py-2.5 flex items-center justify-between text-xs text-[var(--muted)] font-bold shrink-0">
+                    <span className="flex items-center gap-1">
+                      <Code size={14} /> main.py
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <button 
+                        onClick={() => {
+                          if (window.confirm("코드를 초기화하시겠습니까?")) {
+                            setCode(currentProblem.starter_code);
+                            setConsoleLogs([]);
+                          }
+                        }}
+                        className="flex items-center gap-1 bg-[var(--line)] hover:bg-[var(--line-hover)] border border-[var(--line-hover)] text-[var(--text)] px-2.5 py-1 rounded-lg transition-colors"
+                      >
+                        <RotateCcw size={12} />
+                        초기화
+                      </button>
+                    </div>
+                  </div>
+                  
+                  {/* Monaco Editor Container */}
+                  <div className="flex-1 min-h-0">
+                    <Editor
+                      height="100%"
+                      defaultLanguage="python"
+                      language="python"
+                      theme="light"
+                      value={code}
+                      onChange={handleCodeChange}
+                      options={{
+                        fontSize: 14,
+                        fontFamily: "var(--font-geist-mono), monospace",
+                        minimap: { enabled: false },
+                        lineNumbers: "on",
+                        scrollbar: {
+                          vertical: "auto",
+                          horizontal: "auto",
+                        },
+                        lineHeight: 22,
+                        tabSize: 4,
+                        automaticLayout: true
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Vertical Split Handler */}
+                <div 
+                  onMouseDown={startResizingConsole}
+                  className="h-1.5 hover:h-2 bg-[var(--line)] hover:bg-[var(--accent-3)] cursor-row-resize flex justify-center items-center select-none transition-all duration-150 group shrink-0"
+                >
+                  <div className="w-12 h-0.5 bg-[var(--muted-extra)] group-hover:bg-[var(--bg)] rounded-full"></div>
+                </div>
+
+                {/* Console and Grading Section */}
+                <div className="flex flex-col bg-[var(--bg)] shrink-0" style={{ height: consoleHeight + "px" }}>
+                  <div className="border-b border-[var(--line)] bg-[var(--panel-2)] px-4 py-3 flex items-center justify-between">
+                    <span className="text-sm font-bold text-[var(--muted)] flex items-center gap-1.5">
+                      <Terminal size={16} /> 실행 결과 및 콘솔
+                    </span>
+                    
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={handleRunTests}
+                        disabled={running}
+                        className="flex items-center gap-1.5 bg-[var(--line)] hover:bg-[var(--line-hover)] border border-[var(--line-hover)] disabled:opacity-50 text-sm text-[var(--accent)] px-4 py-2 rounded-xl font-bold transition-colors"
+                      >
+                        <Play size={14} />
+                        테스트 실행
+                      </button>
+
+                      <button
+                        onClick={handleSubmit}
+                        disabled={running}
+                        className="flex items-center gap-1.5 bg-[var(--accent)] hover:bg-[#89d587] disabled:opacity-50 text-sm text-[var(--bg)] px-5 py-2 rounded-xl font-bold transition-colors"
+                      >
+                        <Send size={14} />
+                        제출 및 채점
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Console Logs Output */}
+                  <div className="flex-1 overflow-auto p-4 font-mono text-sm space-y-1">
+                    {consoleLogs.length === 0 ? (
+                      <span className="text-[var(--muted-dark)]">코드를 실행하거나 제출하면 여기에 결과가 표시됩니다.</span>
+                    ) : (
+                      consoleLogs.map((log, idx) => {
+                        let color = "text-[var(--text)]";
+                        if (log.type === "success") color = "text-[var(--accent)] font-bold";
+                        if (log.type === "error") color = "text-[var(--accent-2)]";
+                        if (log.type === "info") color = "text-[var(--accent-3)]";
+                        if (log.type === "muted") color = "text-[var(--muted-extra)]";
+
+                        return (
+                          <div key={idx} className={color + " whitespace-pre"}>
+                            {log.text}
+                          </div>
+                        );
+                      })
+                    )}
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* ========================================================================= */}
+      {/* 3. COS PRO CONCEPT LEARNING VIEW */}
+      {/* ========================================================================= */}
+      {currentCategory === 'concept' && (
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Header */}
+          <header className="border-b border-[var(--line)] bg-[var(--panel-2)] px-6 py-4 flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => setCurrentCategory('home')}
+                className="flex items-center gap-1 bg-[var(--line)] border border-[var(--line-hover)] hover:bg-[var(--line-hover)] text-[var(--text)] px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200"
+              >
+                <ArrowLeft size={14} />
+                홈으로
+              </button>
+              <div className="bg-[var(--accent-2)]/25 p-2 rounded-xl text-[var(--accent-2)]">
+                <BookOpen size={20} />
+              </div>
+              <div>
+                <h1 className="text-base font-bold tracking-wide text-[var(--accent-2)]">
+                  코스프로 개념 학습
+                </h1>
+                <p className="text-[10px] text-[var(--muted)]">COS Pro 합격을 위해 꼭 알아야 하는 파이썬 필수 문법 및 이론 총정리</p>
               </div>
             </div>
 
-          </div>
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={toggleTheme}
+                className="flex items-center justify-center bg-[var(--line)] border border-[var(--line-hover)] hover:bg-[var(--line-hover)] text-[var(--text)] p-2 rounded-xl transition-all duration-200"
+                title="테마 변경"
+              >
+                {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
+              </button>
+            </div>
+          </header>
 
+          <iframe 
+            src={`/cospro_python_reference.html?theme=${theme}`} 
+            className="w-full flex-1 border-0 bg-[var(--bg)]" 
+          />
         </div>
-      </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* 4. SQL BASIC VIEW */}
+      {/* ========================================================================= */}
+      {currentCategory === 'sql_basic' && (
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Header */}
+          <header className="border-b border-[var(--line)] bg-[var(--panel-2)] px-6 py-4 flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => setCurrentCategory('home')}
+                className="flex items-center gap-1 bg-[var(--line)] border border-[var(--line-hover)] hover:bg-[var(--line-hover)] text-[var(--text)] px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200"
+              >
+                <ArrowLeft size={14} />
+                홈으로
+              </button>
+              <div className="bg-[var(--accent)]/25 p-2 rounded-xl text-[var(--accent)]">
+                <Database size={20} />
+              </div>
+              <div>
+                <h1 className="text-base font-bold tracking-wide text-[var(--accent)]">
+                  SQL 기초
+                </h1>
+                <p className="text-[10px] text-[var(--muted)]">SQL의 기초 구조 및 웹 해킹 입문을 위한 SQL Injection 가이드</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={toggleTheme}
+                className="flex items-center justify-center bg-[var(--line)] border border-[var(--line-hover)] hover:bg-[var(--line-hover)] text-[var(--text)] p-2 rounded-xl transition-all duration-200"
+                title="테마 변경"
+              >
+                {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
+              </button>
+            </div>
+          </header>
+
+          <iframe 
+            src={`/sql_injection_easy.html?theme=${theme}`} 
+            className="w-full flex-1 border-0 bg-[var(--bg)]" 
+          />
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* 5. SQL ADVANCED VIEW */}
+      {/* ========================================================================= */}
+      {currentCategory === 'sql_advanced' && (
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Header */}
+          <header className="border-b border-[var(--line)] bg-[var(--panel-2)] px-6 py-4 flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => setCurrentCategory('home')}
+                className="flex items-center gap-1 bg-[var(--line)] border border-[var(--line-hover)] hover:bg-[var(--line-hover)] text-[var(--text)] px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200"
+              >
+                <ArrowLeft size={14} />
+                홈으로
+              </button>
+              <div className="bg-[#b4befe]/25 p-2 rounded-xl text-[#b4befe]">
+                <Sparkles size={20} />
+              </div>
+              <div>
+                <h1 className="text-base font-bold tracking-wide text-[#b4befe]">
+                  SQL 심화
+                </h1>
+                <p className="text-[10px] text-[var(--muted)]">Blind SQL Injection 및 고급 웹 DB 해킹 기법과 대응 방안 총정리</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={toggleTheme}
+                className="flex items-center justify-center bg-[var(--line)] border border-[var(--line-hover)] hover:bg-[var(--line-hover)] text-[var(--text)] p-2 rounded-xl transition-all duration-200"
+                title="테마 변경"
+              >
+                {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
+              </button>
+            </div>
+          </header>
+
+          <iframe 
+            src={`/sql_injection_reference.html?theme=${theme}`} 
+            className="w-full flex-1 border-0 bg-[var(--bg)]" 
+          />
+        </div>
+      )}
 
       {/* Add Problem Modal Dialog */}
       {isAddModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-2xl bg-[#161725] border border-[#25283c] rounded-2xl overflow-hidden flex flex-col max-h-[90vh]">
-            <div className="bg-[#1e1f2f] px-6 py-4 flex items-center justify-between border-b border-[#25283c]">
-              <h3 className="text-lg font-bold text-[#89b4fa]">새 문제 추가</h3>
+          <div className="w-full max-w-2xl bg-[var(--panel-2)] border border-[var(--line)] rounded-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="bg-[var(--panel)] px-6 py-4 flex items-center justify-between border-b border-[var(--line)]">
+              <h3 className="text-lg font-bold text-[var(--accent-3)]">새 문제 추가</h3>
               <button 
                 onClick={() => setIsAddModalOpen(false)}
-                className="text-[#a6adc8] hover:text-white transition-colors"
+                className="text-[var(--muted)] hover:text-white transition-colors"
               >
                 <X size={20} />
               </button>
@@ -941,35 +1303,35 @@ export default function Home() {
 
             <form onSubmit={handleAddProblem} className="flex-1 overflow-y-auto p-6 space-y-4">
               <div>
-                <label className="block text-xs font-bold uppercase text-[#a6adc8] mb-1">문제 제목</label>
+                <label className="block text-xs font-bold uppercase text-[var(--muted)] mb-1">문제 제목</label>
                 <input 
                   type="text" 
                   placeholder="예: 문제 11 - 제목"
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
-                  className="w-full bg-[#11121d] border border-[#25283c] rounded-xl px-4 py-2.5 text-sm text-[#cdd6f4] focus:outline-none focus:border-[#89b4fa]"
+                  className="w-full bg-[var(--bg)] border border-[var(--line)] rounded-xl px-4 py-2.5 text-sm text-[var(--text)] focus:outline-none focus:border-[var(--accent-3)]"
                   required
                 />
               </div>
 
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <label className="block text-xs font-bold uppercase text-[#a6adc8] mb-1">문제 유형</label>
+                  <label className="block text-xs font-bold uppercase text-[var(--muted)] mb-1">문제 유형</label>
                   <select 
                     value={newType}
                     onChange={(e) => setNewType(e.target.value as "code" | "blank")}
-                    className="w-full bg-[#11121d] border border-[#25283c] rounded-xl px-4 py-2.5 text-sm text-[#cdd6f4] focus:outline-none focus:border-[#89b4fa]"
+                    className="w-full bg-[var(--bg)] border border-[var(--line)] rounded-xl px-4 py-2.5 text-sm text-[var(--text)] focus:outline-none focus:border-[var(--accent-3)]"
                   >
                     <option value="code">소스코드 작성</option>
                     <option value="blank">빈칸 채우기</option>
                   </select>
                 </div>
                 <div className="flex-1">
-                  <label className="block text-xs font-bold uppercase text-[#a6adc8] mb-1">급수 선택</label>
+                  <label className="block text-xs font-bold uppercase text-[var(--muted)] mb-1">급수 선택</label>
                   <select 
                     value={newClassLevel}
                     onChange={(e) => setNewClassLevel(Number(e.target.value) as 2 | 3)}
-                    className="w-full bg-[#11121d] border border-[#25283c] rounded-xl px-4 py-2.5 text-sm text-[#cdd6f4] focus:outline-none focus:border-[#89b4fa]"
+                    className="w-full bg-[var(--bg)] border border-[var(--line)] rounded-xl px-4 py-2.5 text-sm text-[var(--text)] focus:outline-none focus:border-[var(--accent-3)]"
                   >
                     <option value={3}>COS Pro 3급</option>
                     <option value={2}>COS Pro 2급</option>
@@ -978,64 +1340,64 @@ export default function Home() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase text-[#a6adc8] mb-1">문제 설명</label>
+                <label className="block text-xs font-bold uppercase text-[var(--muted)] mb-1">문제 설명</label>
                 <textarea 
                   rows={4}
                   value={newDesc}
                   onChange={(e) => setNewDesc(e.target.value)}
-                  className="w-full bg-[#11121d] border border-[#25283c] rounded-xl px-4 py-2.5 text-sm text-[#cdd6f4] focus:outline-none focus:border-[#89b4fa] font-sans"
+                  className="w-full bg-[var(--bg)] border border-[var(--line)] rounded-xl px-4 py-2.5 text-sm text-[var(--text)] focus:outline-none focus:border-[var(--accent-3)] font-sans"
                   required
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold uppercase text-[#a6adc8] mb-1">입력 설명</label>
+                  <label className="block text-xs font-bold uppercase text-[var(--muted)] mb-1">입력 설명</label>
                   <textarea 
                     rows={2}
                     value={newInDesc}
                     onChange={(e) => setNewInDesc(e.target.value)}
-                    className="w-full bg-[#11121d] border border-[#25283c] rounded-xl px-4 py-2 text-sm text-[#cdd6f4] focus:outline-none focus:border-[#89b4fa]"
+                    className="w-full bg-[var(--bg)] border border-[var(--line)] rounded-xl px-4 py-2 text-sm text-[var(--text)] focus:outline-none focus:border-[var(--accent-3)]"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold uppercase text-[#a6adc8] mb-1">출력 설명</label>
+                  <label className="block text-xs font-bold uppercase text-[var(--muted)] mb-1">출력 설명</label>
                   <textarea 
                     rows={2}
                     value={newOutDesc}
                     onChange={(e) => setNewOutDesc(e.target.value)}
-                    className="w-full bg-[#11121d] border border-[#25283c] rounded-xl px-4 py-2 text-sm text-[#cdd6f4] focus:outline-none focus:border-[#89b4fa]"
+                    className="w-full bg-[var(--bg)] border border-[var(--line)] rounded-xl px-4 py-2 text-sm text-[var(--text)] focus:outline-none focus:border-[var(--accent-3)]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase text-[#a6adc8] mb-1">제공 코드 / 기본 템플릿</label>
+                <label className="block text-xs font-bold uppercase text-[var(--muted)] mb-1">제공 코드 / 기본 템플릿</label>
                 <textarea 
                   rows={4}
                   value={newStarter}
                   onChange={(e) => setNewStarter(e.target.value)}
-                  className="w-full bg-[#11121d] border border-[#25283c] rounded-xl p-3 text-xs text-[#a6e3a1] font-mono focus:outline-none focus:border-[#89b4fa]"
+                  className="w-full bg-[var(--bg)] border border-[var(--line)] rounded-xl p-3 text-xs text-[var(--accent)] font-mono focus:outline-none focus:border-[var(--accent-3)]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase text-[#a6adc8] mb-1">
+                <label className="block text-xs font-bold uppercase text-[var(--muted)] mb-1">
                   테스트 케이스 JSON 리스트
                 </label>
                 <textarea 
                   rows={4}
                   value={newTestCases}
                   onChange={(e) => setNewTestCases(e.target.value)}
-                  className="w-full bg-[#11121d] border border-[#25283c] rounded-xl p-3 text-xs text-[#f5c2e7] font-mono focus:outline-none focus:border-[#89b4fa]"
+                  className="w-full bg-[var(--bg)] border border-[var(--line)] rounded-xl p-3 text-xs text-[var(--accent-2)] font-mono focus:outline-none focus:border-[var(--accent-3)]"
                   required
                 />
               </div>
 
-              <div className="pt-4 border-t border-[#25283c] flex justify-end">
+              <div className="pt-4 border-t border-[var(--line)] flex justify-end">
                 <button 
                   type="submit"
-                  className="bg-[#89b4fa] hover:bg-[#b4befe] text-[#11121d] px-6 py-2.5 rounded-xl text-sm font-bold transition-colors"
+                  className="bg-[var(--accent-3)] hover:bg-[#b4befe] text-[var(--bg)] px-6 py-2.5 rounded-xl text-sm font-bold transition-colors"
                 >
                   문제 저장하기
                 </button>

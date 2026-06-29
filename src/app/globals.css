@@ -1,26 +1,52 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #fbf9f4;
+  --panel: #ffffff;
+  --panel-2: #f3efe4;
+  --line: #e6dfc9;
+  --line-hover: #d8d0b5;
+  --text: #2b2a25;
+  --muted: #766f5c;
+  
+  --accent: #1f8a5c;     /* Safe Green */
+  --accent-2: #c1432e;   /* Terracotta Red */
+  --accent-3: #2f5fa3;   /* Keyword Blue */
+  
+  --muted-dark: #9c9580;
+  --muted-extra: #8b8770;
+
+  --font-serif: "Noto Serif KR", "Georgia", serif;
+  --font-sans: "Pretendard", "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", Consolas, monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --bg: #11121d;
+  --panel: #1e1f2f;
+  --panel-2: #161725;
+  --line: #25283c;
+  --line-hover: #313552;
+  --text: #cdd6f4;
+  --muted: #a6adc8;
+  
+  --accent: #a6e3a1;     /* Safe Green Dark */
+  --accent-2: #f38ba8;   /* Terracotta Red Dark */
+  --accent-3: #89b4fa;   /* Keyword Blue Dark */
+  
+  --muted-dark: #585b70;
+  --muted-extra: #6c7086;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.65;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  color: var(--text);
 }

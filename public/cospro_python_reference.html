@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>코스프로 2급·3급 파이썬 총정리</title>
+<style>
+
+:root{
+  --bg:#fbf9f4;
+  --panel:#ffffff;
+  --panel-2:#f3efe4;
+  --line:#e6dfc9;
+  --text:#2b2a25;
+  --muted:#766f5c;
+  --accent:#b8860b;
+  --accent-2:#2f5fa3;
+  --accent-3:#1f8a5c;
+  --danger:#c1432e;
+}
+body.dark, html.dark {
+  --bg:#0d1117;
+  --panel:#141a23;
+  --panel-2:#1b232f;
+  --line:#263141;
+  --text:#dde4ee;
+  --muted:#7d8aa0;
+  --accent:#ffd866;
+  --accent-2:#4fc3f7;
+  --accent-3:#7ee787;
+  --danger:#ff8585;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.65;}
+body{padding-bottom:120px;}
+
+.shell{display:grid;grid-template-columns:260px 1fr;max-width:1280px;margin:0 auto;}
+@media (max-width:900px){.shell{grid-template-columns:1fr;}.sidebar{display:none;}}
+
+.sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--line);padding:28px 18px;}
+.sidebar h3{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin:22px 0 8px;}
+.sidebar a{display:block;color:var(--text);text-decoration:none;font-size:13.5px;padding:6px 10px;border-radius:6px;border-left:2px solid transparent;}
+.sidebar a:hover{background:var(--panel-2);border-left-color:var(--accent-2);}
+.brand{font-family:var(--mono);font-size:15px;color:var(--accent);display:flex;align-items:center;gap:8px;}
+.brand .dot{width:8px;height:8px;border-radius:50%;background:var(--accent-2);box-shadow:0 0 8px var(--accent-2);}
+
+main{padding:48px 56px 0;}
+@media (max-width:600px){main{padding:32px 20px 0;}}
+
+.hero{margin-bottom:56px;}
+.hero .eyebrow{font-family:var(--mono);font-size:12px;color:var(--accent-2);letter-spacing:.15em;text-transform:uppercase;}
+.hero h1{font-size:clamp(26px,4vw,40px);margin:10px 0 14px;font-weight:700;}
+.hero h1 span{color:var(--accent);}
+.hero p{color:var(--muted);max-width:680px;font-size:15px;}
+.hero-bar{display:flex;gap:8px;margin-top:22px;flex-wrap:wrap;}
+.chip{font-family:var(--mono);font-size:11.5px;color:var(--accent-2);border:1px solid var(--line);background:var(--panel);padding:5px 10px;border-radius:999px;}
+
+section{margin-bottom:60px;padding-top:8px;}
+section h2{font-size:21px;display:flex;align-items:baseline;gap:10px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:22px;}
+section h2 .num{font-family:var(--mono);color:var(--muted);font-size:14px;}
+section h3{font-size:15.5px;color:var(--accent-2);margin:26px 0 12px;}
+p{margin:0 0 12px;}
+.muted{color:var(--muted);font-size:14px;}
+
+pre{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.7;margin:0 0 16px;}
+pre.terminal::before{content:"py >";color:var(--muted);display:block;margin-bottom:8px;font-size:11px;}
+code{font-family:var(--mono);font-size:13px;background:var(--panel-2);padding:2px 6px;border-radius:4px;color:var(--accent-2);}
+pre code{background:none;padding:0;color:var(--text);}
+.kw{color:var(--accent-2);}
+.fn{color:var(--accent);}
+.str{color:var(--accent-3);}
+.cm{color:var(--muted);}
+.num-lit{color:#d2a8ff;}
+
+table{width:100%;border-collapse:collapse;margin:0 0 16px;font-size:13.5px;}
+th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top;}
+th{background:var(--panel-2);color:var(--accent-2);font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;}
+td code{font-size:12.5px;}
+tr:nth-child(even) td{background:rgba(255,255,255,0.015);}
+
+.callout{border-radius:10px;padding:16px 18px;margin:0 0 18px;border:1px solid var(--line);}
+.callout-tip{background:#10231a;border-color:#1f4a35;}
+.callout-warn{background:#2a1414;border-color:#5a2a2a;}
+.callout .label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:6px;}
+.callout-tip .label{color:var(--accent-3);}
+.callout-warn .label{color:var(--danger);}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+@media (max-width:760px){.grid2,.grid3{grid-template-columns:1fr;}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;}
+.card h4{margin:0 0 8px;font-size:14.5px;color:var(--text);display:flex;align-items:center;gap:8px;}
+.card h4 .tag{font-family:var(--mono);font-size:10px;background:var(--panel-2);color:var(--accent-2);padding:2px 7px;border-radius:5px;}
+.card p{font-size:13.5px;color:var(--muted);margin:0;}
+
+.flow{display:flex;flex-direction:column;gap:0;border-left:2px solid var(--line);margin-left:8px;}
+.flow .step{position:relative;padding:0 0 26px 26px;}
+.flow .step::before{content:"";position:absolute;left:-7px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--accent-2);}
+.flow .step:last-child{padding-bottom:0;}
+.flow .step h4{margin:0 0 6px;font-size:14.5px;}
+.flow .step p{margin:0 0 10px;font-size:13.5px;color:var(--muted);}
+
+.checklist{list-style:none;margin:0;padding:0;}
+.checklist li{display:flex;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px;}
+.checklist li:last-child{border-bottom:none;}
+.checklist li::before{content:"✓";color:var(--accent-3);font-weight:700;flex-shrink:0;}
+
+.badge-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.badge{font-family:var(--mono);font-size:10.5px;padding:3px 8px;border-radius:5px;border:1px solid var(--line);color:var(--muted);}
+.badge.danger{color:var(--danger);border-color:#5a2a2a;}
+.badge.safe{color:var(--accent-3);border-color:#1f4a35;}
+
+footer{text-align:center;color:var(--muted);font-family:var(--mono);font-size:12px;padding:40px 0;border-top:1px solid var(--line);margin-top:30px;}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<aside class="sidebar">
+  <div class="brand"><span class="dot"></span> COS Pro Python 노트</div>
+  <h3>기본 문법</h3>
+  <a href="#basic">01. 변수·입출력·자료형</a>
+  <a href="#control">02. 조건문 & 반복문</a>
+  <a href="#string">03. 문자열 다루기</a>
+  <a href="#list">04. 리스트 완전정복</a>
+  <a href="#dict">05. 딕셔너리 & 집합</a>
+  <a href="#func">06. 함수와 재귀</a>
+  <h3>유형별 풀이</h3>
+  <a href="#type-string">07. 문자열 유형</a>
+  <a href="#type-array">08. 배열/리스트 유형</a>
+  <a href="#type-sim">09. 시뮬레이션 유형</a>
+  <a href="#type-search">10. 탐색·정렬 유형</a>
+  <h3>기초 알고리즘</h3>
+  <a href="#algo">11. 알고리즘 정리</a>
+  <a href="#mistakes">12. 자주 하는 실수</a>
+  <a href="#cheatsheet">13. 한 장 요약</a>
+</aside>
+
+<main>
+
+  <div class="hero">
+    <div class="eyebrow">COS Pro · 2급 / 3급 Python Track</div>
+    <h1>코스프로 2·3급 <span>파이썬</span><br>문법부터 유형별 풀이까지</h1>
+    <p>코스프로 2급·3급에서 실제로 쓰이는 범위의 파이썬 문법, 문제 유형별 접근법, 그리고 이 레벨에서 나오는 기초 알고리즘(완전탐색·정렬·탐색·간단한 그리디/DP)을 한 페이지로 정리했습니다. 고급 알고리즘(고차 DP, 그래프 이론 등)은 다루지 않습니다.</p>
+    <div class="hero-bar">
+      <span class="chip">list / dict / set / string</span>
+      <span class="chip">슬라이싱 & 컴프리헨션</span>
+      <span class="chip">완전탐색</span>
+      <span class="chip">정렬 / 이분탐색</span>
+      <span class="chip">재귀 & 간단 DP</span>
+      <span class="chip">시뮬레이션</span>
+    </div>
+  </div>
+
+  <!-- 01 -->
+  <section id="basic">
+    <h2><span class="num">01</span> 변수·입출력·자료형</h2>
+
+    <h3>입출력 — 코스프로 채점 환경의 기본</h3>
+    <pre class="terminal"><code><span class="cm"># 한 줄에 정수 하나</span>
+n = <span class="fn">int</span>(<span class="fn">input</span>())
+
+<span class="cm"># 한 줄에 공백으로 구분된 정수 여러 개</span>
+a, b = <span class="fn">map</span>(<span class="fn">int</span>, <span class="fn">input</span>().split())
+
+<span class="cm"># 한 줄에 공백 구분 정수 N개 → 리스트로</span>
+arr = <span class="fn">list</span>(<span class="fn">map</span>(<span class="fn">int</span>, <span class="fn">input</span>().split()))
+
+<span class="cm"># 함수형 문제(채점 함수만 작성)는 input() 없이</span>
+<span class="cm"># solution(매개변수) 형태로 바로 주어지는 경우가 많음</span>
+<span class="kw">def</span> <span class="fn">solution</span>(arr):
+    <span class="kw">return</span> <span class="fn">sum</span>(arr)</code></pre>
+
+    <div class="callout callout-tip">
+      <span class="label">Tip</span>
+      코스프로는 보통 <strong>함수 안에 코드를 작성하는 함수형 문제</strong>가 많습니다. <code>input()</code>으로 직접 입력받는 형식인지, <code>def solution(...)</code> 안에 로직만 채우는 형식인지 문제 설명을 먼저 확인하세요.
+    </div>
+
+    <h3>자료형 한눈에</h3>
+    <table>
+      <tr><th>타입</th><th>예시</th><th>특징</th></tr>
+      <tr><td><code>int</code></td><td><code>10</code>, <code>-3</code></td><td>정수, 파이썬은 오버플로 걱정 없음</td></tr>
+      <tr><td><code>float</code></td><td><code>3.14</code></td><td>실수, 부동소수점 오차 주의</td></tr>
+      <tr><td><code>str</code></td><td><code>'abc'</code></td><td>문자열, 인덱싱/슬라이싱 가능</td></tr>
+      <tr><td><code>bool</code></td><td><code>True</code>, <code>False</code></td><td>조건식의 결과 타입</td></tr>
+      <tr><td><code>list</code></td><td><code>[1,2,3]</code></td><td>순서 있음, 변경 가능(mutable)</td></tr>
+      <tr><td><code>tuple</code></td><td><code>(1,2)</code></td><td>순서 있음, 변경 불가능(immutable)</td></tr>
+      <tr><td><code>dict</code></td><td><code>{'a':1}</code></td><td>키-값 쌍, 순서 보장(3.7+)</td></tr>
+      <tr><td><code>set</code></td><td><code>{1,2,3}</code></td><td>중복 제거, 순서 없음</td></tr>
+    </table>
+
+    <h3>형 변환 & 연산자</h3>
+    <pre class="terminal"><code><span class="fn">int</span>(<span class="str">'10'</span>)        <span class="cm"># 문자열 → 정수</span>
+<span class="fn">str</span>(10)          <span class="cm"># 정수 → 문자열</span>
+<span class="fn">list</span>(<span class="str">'abc'</span>)     <span class="cm"># ['a','b','c']  문자열 → 리스트</span>
+
+<span class="num-lit">7</span> // <span class="num-lit">2</span>          <span class="cm"># 3   몫 (정수 나눗셈)</span>
+<span class="num-lit">7</span> % <span class="num-lit">2</span>           <span class="cm"># 1   나머지</span>
+<span class="num-lit">2</span> ** <span class="num-lit">10</span>         <span class="cm"># 1024  거듭제곱</span></code></pre>
+  </section>
+
+  <!-- 02 -->
+  <section id="control">
+    <h2><span class="num">02</span> 조건문 & 반복문</h2>
+
+    <h3>if / elif / else</h3>
+    <pre class="terminal"><code><span class="kw">if</span> score >= <span class="num-lit">90</span>:
+    grade = <span class="str">'A'</span>
+<span class="kw">elif</span> score >= <span class="num-lit">80</span>:
+    grade = <span class="str">'B'</span>
+<span class="kw">else</span>:
+    grade = <span class="str">'F'</span></code></pre>
+
+    <h3>for — 코스프로에서 가장 많이 쓰는 반복</h3>
+    <pre class="terminal"><code><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num-lit">5</span>):          <span class="cm"># 0,1,2,3,4</span>
+    <span class="fn">print</span>(i)
+
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num-lit">1</span>, <span class="num-lit">10</span>, <span class="num-lit">2</span>):    <span class="cm"># 1,3,5,7,9 (시작,끝,간격)</span>
+    <span class="fn">print</span>(i)
+
+<span class="kw">for</span> idx, val <span class="kw">in</span> <span class="fn">enumerate</span>(arr):  <span class="cm"># 인덱스+값 동시에</span>
+    <span class="fn">print</span>(idx, val)
+
+<span class="kw">for</span> a, b <span class="kw">in</span> <span class="fn">zip</span>(list1, list2): <span class="cm"># 두 리스트를 짝지어 순회</span>
+    <span class="fn">print</span>(a, b)</code></pre>
+
+    <h3>while & 제어 키워드</h3>
+    <pre class="terminal"><code>i = <span class="num-lit">0</span>
+<span class="kw">while</span> i < <span class="num-lit">5</span>:
+    <span class="kw">if</span> i == <span class="num-lit">3</span>:
+        <span class="kw">break</span>        <span class="cm"># 반복 즉시 종료</span>
+    <span class="kw">if</span> i == <span class="num-lit">1</span>:
+        i += <span class="num-lit">1</span>
+        <span class="kw">continue</span>     <span class="cm"># 이번 회차만 건너뛰고 다음으로</span>
+    <span class="fn">print</span>(i)
+    i += <span class="num-lit">1</span></code></pre>
+
+    <div class="callout callout-tip">
+      <span class="label">Tip</span>
+      이중 for문에서 안쪽 루프만 빠져나가고 싶을 때 <code>break</code>는 <strong>가장 가까운 반복문 1개만</strong> 빠져나갑니다. 바깥까지 빠져나가야 한다면 <code>flag</code> 변수를 두거나 함수로 분리해 <code>return</code>으로 빠져나가는 게 코스프로 스타일에서 깔끔합니다.
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section id="string">
+    <h2><span class="num">03</span> 문자열 다루기</h2>
+
+    <h3>인덱싱 & 슬라이싱</h3>
+    <pre class="terminal"><code>s = <span class="str">'hello world'</span>
+s[<span class="num-lit">0</span>]        <span class="cm"># 'h'        첫 글자</span>
+s[-<span class="num-lit">1</span>]       <span class="cm"># 'd'        마지막 글자</span>
+s[<span class="num-lit">0</span>:<span class="num-lit">5</span>]      <span class="cm"># 'hello'    0~4번 인덱스</span>
+s[:<span class="num-lit">5</span>]       <span class="cm"># 'hello'    처음부터 5번 전까지</span>
+s[<span class="num-lit">6</span>:]       <span class="cm"># 'world'    6번부터 끝까지</span>
+s[::-<span class="num-lit">1</span>]     <span class="cm"># 'dlrow olleh'  뒤집기</span></code></pre>
+
+    <h3>자주 쓰는 문자열 메서드</h3>
+    <table>
+      <tr><th>메서드</th><th>역할</th><th>예시</th></tr>
+      <tr><td><code>.split()</code></td><td>공백/구분자로 나눠 리스트로</td><td><code>'a,b,c'.split(',')</code> → <code>['a','b','c']</code></td></tr>
+      <tr><td><code>.join(리스트)</code></td><td>리스트를 문자열로 합치기</td><td><code>','.join(['a','b'])</code> → <code>'a,b'</code></td></tr>
+      <tr><td><code>.replace(a,b)</code></td><td>문자열 치환</td><td><code>'abc'.replace('a','x')</code> → <code>'xbc'</code></td></tr>
+      <tr><td><code>.upper() / .lower()</code></td><td>대/소문자 변환</td><td><code>'Abc'.lower()</code> → <code>'abc'</code></td></tr>
+      <tr><td><code>.strip()</code></td><td>양끝 공백/문자 제거</td><td><code>'  ab  '.strip()</code> → <code>'ab'</code></td></tr>
+      <tr><td><code>.find(x)</code></td><td>위치 찾기, 없으면 -1</td><td><code>'abc'.find('b')</code> → <code>1</code></td></tr>
+      <tr><td><code>.count(x)</code></td><td>등장 횟수</td><td><code>'aabb'.count('a')</code> → <code>2</code></td></tr>
+      <tr><td><code>.isdigit() / .isalpha()</code></td><td>숫자/문자 여부 판별</td><td><code>'123'.isdigit()</code> → <code>True</code></td></tr>
+      <tr><td><code>ord(c) / chr(n)</code></td><td>문자↔아스키코드 변환</td><td><code>ord('a')</code> → <code>97</code></td></tr>
+    </table>
+
+    <div class="callout callout-warn">
+      <span class="label">Warning</span>
+      문자열은 <strong>불변(immutable)</strong>입니다. <code>s[0] = 'X'</code>처럼 인덱스로 직접 수정할 수 없습니다. 수정하려면 <code>list(s)</code>로 리스트로 바꿔 작업한 뒤 <code>''.join(...)</code>으로 다시 합쳐야 합니다.
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section id="list">
+    <h2><span class="num">04</span> 리스트 완전정복</h2>
+
+    <h3>생성과 변형</h3>
+    <pre class="terminal"><code>arr = [<span class="num-lit">1</span>,<span class="num-lit">2</span>,<span class="num-lit">3</span>]
+arr.append(<span class="num-lit">4</span>)         <span class="cm"># [1,2,3,4]  끝에 추가</span>
+arr.insert(<span class="num-lit">0</span>, <span class="num-lit">0</span>)      <span class="cm"># [0,1,2,3,4]  특정 위치 삽입</span>
+arr.pop()             <span class="cm"># 4 반환, 리스트 끝 제거</span>
+arr.remove(<span class="num-lit">2</span>)         <span class="cm"># 값 2를 찾아서 제거(첫 번째만)</span>
+arr.sort()            <span class="cm"># 원본 정렬 (반환값 없음)</span>
+arr.sort(reverse=<span class="kw">True</span>)  <span class="cm"># 내림차순</span>
+arr.reverse()         <span class="cm"># 순서 뒤집기</span>
+
+sorted(arr)           <span class="cm"># 새 리스트로 정렬 반환 (원본 유지)</span></code></pre>
+
+    <h3>리스트 컴프리헨션 — 코스프로 단골 문법</h3>
+    <pre class="terminal"><code><span class="cm"># 1~10의 제곱</span>
+squares = [x**<span class="num-lit">2</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="num-lit">1</span>,<span class="num-lit">11</span>)]
+
+<span class="cm"># 짝수만 골라내기</span>
+evens = [x <span class="kw">for</span> x <span class="kw">in</span> arr <span class="kw">if</span> x % <span class="num-lit">2</span> == <span class="num-lit">0</span>]
+
+<span class="cm"># 2차원 리스트(N x M) 초기화 — 주의해서 만들어야 하는 패턴</span>
+grid = [[<span class="num-lit">0</span>] * m <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(n)]</code></pre>
+
+    <div class="callout callout-warn">
+      <span class="label">자주 하는 실수</span>
+      2차원 리스트를 <code>[[0]*m] * n</code>으로 만들면 <strong>안의 리스트가 모두 같은 객체를 참조</strong>해서, 한 줄을 수정하면 모든 줄이 같이 바뀝니다. 반드시 <code>[[0]*m for _ in range(n)]</code> 형태로 만드세요.
+    </div>
+
+    <h3>자주 쓰는 내장 함수</h3>
+    <table>
+      <tr><th>함수</th><th>역할</th><th>예시</th></tr>
+      <tr><td><code>len(arr)</code></td><td>길이</td><td><code>len([1,2,3])</code> → 3</td></tr>
+      <tr><td><code>sum(arr)</code></td><td>합계</td><td><code>sum([1,2,3])</code> → 6</td></tr>
+      <tr><td><code>max(arr) / min(arr)</code></td><td>최댓값/최솟값</td><td><code>max([3,1,2])</code> → 3</td></tr>
+      <tr><td><code>sorted(arr, key=...)</code></td><td>기준을 정해 정렬</td><td><code>sorted(arr, key=lambda x: -x)</code></td></tr>
+      <tr><td><code>arr.index(x)</code></td><td>값 x의 첫 위치</td><td><code>[1,2,3].index(2)</code> → 1</td></tr>
+      <tr><td><code>arr.count(x)</code></td><td>값 x의 개수</td><td><code>[1,1,2].count(1)</code> → 2</td></tr>
+    </table>
+  </section>
+
+  <!-- 05 -->
+  <section id="dict">
+    <h2><span class="num">05</span> 딕셔너리 & 집합</h2>
+
+    <h3>딕셔너리 — "개수 세기" 문제의 핵심 도구</h3>
+    <pre class="terminal"><code>cnt = {}
+<span class="kw">for</span> ch <span class="kw">in</span> <span class="str">'banana'</span>:
+    cnt[ch] = cnt.get(ch, <span class="num-lit">0</span>) + <span class="num-lit">1</span>
+<span class="cm"># {'b':1, 'a':3, 'n':2}</span>
+
+<span class="kw">for</span> key, value <span class="kw">in</span> cnt.items():
+    <span class="fn">print</span>(key, value)
+
+<span class="kw">if</span> <span class="str">'a'</span> <span class="kw">in</span> cnt:        <span class="cm"># 키 존재 여부 확인 (O(1)로 빠름)</span>
+    <span class="fn">print</span>(<span class="str">'있음'</span>)</code></pre>
+
+    <div class="callout callout-tip">
+      <span class="label">Tip</span>
+      <code>collections.Counter</code>를 쓰면 위 카운팅을 한 줄로 줄일 수 있습니다: <code>from collections import Counter; cnt = Counter('banana')</code>. 코스프로 채점 환경에서 표준 라이브러리는 대부분 허용되니 적극 활용하세요.
+    </div>
+
+    <h3>집합(set) — 중복 제거 & 빠른 포함 여부 확인</h3>
+    <pre class="terminal"><code>s = <span class="fn">set</span>([<span class="num-lit">1</span>,<span class="num-lit">2</span>,<span class="num-lit">2</span>,<span class="num-lit">3</span>])   <span class="cm"># {1,2,3}  중복 자동 제거</span>
+<span class="num-lit">2</span> <span class="kw">in</span> s              <span class="cm"># True, 리스트보다 훨씬 빠른 포함 검사</span>
+s1 & s2            <span class="cm"># 교집합</span>
+s1 | s2            <span class="cm"># 합집합</span>
+s1 - s2            <span class="cm"># 차집합</span></code></pre>
+  </section>
+
+  <!-- 06 -->
+  <section id="func">
+    <h2><span class="num">06</span> 함수와 재귀</h2>
+
+    <pre class="terminal"><code><span class="kw">def</span> <span class="fn">add</span>(a, b=<span class="num-lit">0</span>):       <span class="cm"># b는 기본값(default argument)</span>
+    <span class="kw">return</span> a + b
+
+<span class="fn">add</span>(<span class="num-lit">3</span>)             <span class="cm"># 3  (b는 기본값 0 사용)</span>
+<span class="fn">add</span>(<span class="num-lit">3</span>, <span class="num-lit">5</span>)          <span class="cm"># 8</span></code></pre>
+
+    <h3>재귀 함수 — 코스프로 3급 단골 유형</h3>
+    <pre class="terminal"><code><span class="kw">def</span> <span class="fn">factorial</span>(n):
+    <span class="kw">if</span> n <= <span class="num-lit">1</span>:          <span class="cm"># 종료 조건(base case) — 반드시 필요</span>
+        <span class="kw">return</span> <span class="num-lit">1</span>
+    <span class="kw">return</span> n * <span class="fn">factorial</span>(n - <span class="num-lit">1</span>)
+
+<span class="fn">factorial</span>(<span class="num-lit">5</span>)   <span class="cm"># 120</span></code></pre>
+
+    <div class="callout callout-tip">
+      <span class="label">Tip</span>
+      재귀 함수를 짤 때는 ① <strong>종료 조건</strong>(언제 멈추는가), ② <strong>더 작은 문제로 줄이는 식</strong>(n → n-1), 이 두 가지만 정확히 정의하면 됩니다. 종료 조건을 빼먹으면 <code>RecursionError</code>가 발생합니다.
+    </div>
+  </section>
+
+  <!-- 07 -->
+  <section id="type-string">
+    <h2><span class="num">07</span> 문자열 유형 정리</h2>
+    <div class="grid2">
+      <div class="card">
+        <h4>회문(팰린드롬) 판별 <span class="tag">단골</span></h4>
+<pre><code><span class="kw">def</span> <span class="fn">is_palindrome</span>(s):
+    <span class="kw">return</span> s == s[::-<span class="num-lit">1</span>]</code></pre>
+        <p>슬라이싱으로 뒤집은 문자열과 원본을 그대로 비교하는 게 가장 빠른 방법입니다.</p>
+      </div>
+      <div class="card">
+        <h4>아나그램(애너그램) 판별</h4>
+<pre><code><span class="kw">def</span> <span class="fn">is_anagram</span>(a, b):
+    <span class="kw">return</span> <span class="fn">sorted</span>(a) == <span class="fn">sorted</span>(b)</code></pre>
+        <p>두 문자열을 정렬해서 같은지 비교하면 글자 구성이 같은지 바로 알 수 있습니다.</p>
+      </div>
+      <div class="card">
+        <h4>문자 빈도수 세기</h4>
+<pre><code>cnt = {}
+<span class="kw">for</span> ch <span class="kw">in</span> s:
+    cnt[ch] = cnt.get(ch,<span class="num-lit">0</span>)+<span class="num-lit">1</span></code></pre>
+        <p>딕셔너리로 카운팅 → "가장 많이 등장한 문자" 같은 후속 질문에 바로 활용 가능.</p>
+      </div>
+      <div class="card">
+        <h4>문자열 압축/패턴 찾기</h4>
+<pre><code><span class="cm"># 연속된 같은 문자 개수 세기</span>
+i = <span class="num-lit">0</span>
+<span class="kw">while</span> i < <span class="fn">len</span>(s):
+    j = i
+    <span class="kw">while</span> j < <span class="fn">len</span>(s) <span class="kw">and</span> s[j]==s[i]:
+        j += <span class="num-lit">1</span>
+    <span class="cm"># s[i]가 (j-i)번 연속됨</span>
+    i = j</code></pre>
+        <p>"두 개의 포인터(i, j)로 같은 구간의 끝을 찾는다"는 패턴은 문자열 압축 문제의 기본 틀입니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 -->
+  <section id="type-array">
+    <h2><span class="num">08</span> 배열/리스트 유형 정리</h2>
+    <div class="grid2">
+      <div class="card">
+        <h4>누적합(Prefix Sum) <span class="tag">단골</span></h4>
+<pre><code>prefix = [<span class="num-lit">0</span>] * (<span class="fn">len</span>(arr)+<span class="num-lit">1</span>)
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(arr)):
+    prefix[i+<span class="num-lit">1</span>] = prefix[i] + arr[i]
+<span class="cm"># 구간 [l,r) 합 = prefix[r] - prefix[l]</span></code></pre>
+        <p>"특정 구간의 합을 여러 번 물어보는" 문제에서 매번 더하면 느립니다. 미리 누적합을 만들어두면 구간 합을 O(1)에 구합니다.</p>
+      </div>
+      <div class="card">
+        <h4>투 포인터(Two Pointer)</h4>
+<pre><code>l, r = <span class="num-lit">0</span>, <span class="fn">len</span>(arr)-<span class="num-lit">1</span>
+<span class="kw">while</span> l < r:
+    <span class="kw">if</span> arr[l]+arr[r] == target:
+        <span class="kw">break</span>
+    <span class="kw">elif</span> arr[l]+arr[r] < target:
+        l += <span class="num-lit">1</span>
+    <span class="kw">else</span>:
+        r -= <span class="num-1">1</span></code></pre>
+        <p>정렬된 배열에서 "합이 특정 값이 되는 두 수 찾기" 같은 문제를 O(N)에 풉니다.</p>
+      </div>
+      <div class="card">
+        <h4>슬라이딩 윈도우</h4>
+<pre><code><span class="cm"># 길이 k인 구간의 최대 합</span>
+window = <span class="fn">sum</span>(arr[:k])
+best = window
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(k, <span class="fn">len</span>(arr)):
+    window += arr[i] - arr[i-k]
+    best = <span class="fn">max</span>(best, window)</code></pre>
+        <p>구간이 한 칸씩 이동할 때 "빠지는 값 빼고 들어오는 값 더하기"만 하면 매번 새로 합을 구할 필요가 없습니다.</p>
+      </div>
+      <div class="card">
+        <h4>2차원 리스트 순회</h4>
+<pre><code><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(n):
+    <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(m):
+        <span class="fn">print</span>(grid[i][j])</code></pre>
+        <p>행렬/격자 문제는 거의 항상 이중 for문이 기본 틀이며, 상/하/좌/우 이동은 <code>dx,dy</code> 방향 벡터 리스트로 처리하면 코드가 짧아집니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 -->
+  <section id="type-sim">
+    <h2><span class="num">09</span> 시뮬레이션 유형 정리</h2>
+    <p>"문제에서 설명한 규칙을 그대로, 단계별로 코드로 옮기면 풀리는" 유형입니다. 코스프로 2~3급에서 비중이 큽니다.</p>
+
+    <div class="flow">
+      <div class="step">
+        <h4>1. 상태(State) 정의하기</h4>
+        <p>위치, 방향, 점수, 남은 횟수 등 "지금 무엇이 바뀌고 있는지"를 변수로 먼저 정의합니다.</p>
+      </div>
+      <div class="step">
+        <h4>2. 한 단계(틱)의 동작을 함수/블록으로 분리</h4>
+        <p>"한 번 이동", "한 번 회전"처럼 반복되는 동작 하나를 명확한 단위로 쪼개면 버그가 줄어듭니다.</p>
+      </div>
+      <div class="step">
+        <h4>3. 반복 조건과 종료 조건을 분리해서 작성</h4>
+        <p>"몇 번 반복하는지"와 "언제 멈추는지"를 헷갈리지 않게 따로 적어두고 코드로 옮깁니다.</p>
+      </div>
+    </div>
+
+    <pre class="terminal"><code><span class="cm"># 방향 벡터를 미리 정의해두는 패턴 (상,하,좌,우)</span>
+dx = [-<span class="num-lit">1</span>, <span class="num-lit">1</span>, <span class="num-lit">0</span>, <span class="num-lit">0</span>]
+dy = [<span class="num-lit">0</span>, <span class="num-lit">0</span>, -<span class="num-lit">1</span>, <span class="num-lit">1</span>]
+
+<span class="kw">for</span> d <span class="kw">in</span> <span class="fn">range</span>(<span class="num-lit">4</span>):
+    nx, ny = x+dx[d], y+dy[d]
+    <span class="kw">if</span> <span class="num-lit">0</span> <= nx < n <span class="kw">and</span> <span class="num-lit">0</span> <= ny < m:   <span class="cm"># 범위(경계) 체크 필수</span>
+        <span class="fn">print</span>(nx, ny)</code></pre>
+
+    <div class="callout callout-warn">
+      <span class="label">자주 하는 실수</span>
+      격자/배열을 이동하는 시뮬레이션에서 <strong>경계값 체크를 빼먹는 것</strong>이 가장 흔한 실수입니다. 이동 후 인덱스가 배열 범위를 벗어나지 않는지 항상 먼저 확인하세요.
+    </div>
+  </section>
+
+  <!-- 10 -->
+  <section id="type-search">
+    <h2><span class="num">10</span> 탐색·정렬 유형 정리</h2>
+
+    <h3>완전탐색(Brute Force)</h3>
+    <pre class="terminal"><code><span class="cm"># 가능한 모든 두 수의 조합 확인</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(arr)):
+    <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(i+<span class="num-lit">1</span>, <span class="fn">len</span>(arr)):
+        <span class="kw">if</span> arr[i] + arr[j] == target:
+            <span class="fn">print</span>(i, j)
+
+<span class="cm"># 순열/조합이 필요할 때는 itertools 사용</span>
+<span class="kw">from</span> itertools <span class="kw">import</span> permutations, combinations
+<span class="fn">list</span>(permutations([<span class="num-lit">1</span>,<span class="num-lit">2</span>,<span class="num-lit">3</span>], <span class="num-lit">2</span>))   <span class="cm"># 순서 있는 2개 뽑기</span>
+<span class="fn">list</span>(combinations([<span class="num-lit">1</span>,<span class="num-lit">2</span>,<span class="num-lit">3</span>], <span class="num-lit">2</span>))   <span class="cm"># 순서 없는 2개 뽑기</span></code></pre>
+
+    <h3>정렬 — key를 활용한 기준 정렬</h3>
+    <pre class="terminal"><code>students = [(<span class="str">'kim'</span>,<span class="num-lit">90</span>), (<span class="str">'lee'</span>,<span class="num-lit">85</span>)]
+
+<span class="cm"># 점수 기준 내림차순</span>
+<span class="fn">sorted</span>(students, key=<span class="kw">lambda</span> x: x[<span class="num-lit">1</span>], reverse=<span class="kw">True</span>)
+
+<span class="cm"># 점수 내림차순, 같으면 이름 오름차순 (다중 기준)</span>
+<span class="fn">sorted</span>(students, key=<span class="kw">lambda</span> x: (-x[<span class="num-lit">1</span>], x[<span class="num-lit">0</span>]))</code></pre>
+
+    <h3>이분 탐색(Binary Search)</h3>
+    <pre class="terminal"><code><span class="kw">def</span> <span class="fn">binary_search</span>(arr, target):
+    lo, hi = <span class="num-lit">0</span>, <span class="fn">len</span>(arr)-<span class="num-lit">1</span>
+    <span class="kw">while</span> lo <= hi:
+        mid = (lo+hi)//<span class="num-lit">2</span>
+        <span class="kw">if</span> arr[mid] == target:
+            <span class="kw">return</span> mid
+        <span class="kw">elif</span> arr[mid] < target:
+            lo = mid+<span class="num-lit">1</span>
+        <span class="kw">else</span>:
+            hi = mid-<span class="num-lit">1</span>
+    <span class="kw">return</span> -<span class="num-lit">1</span>          <span class="cm"># 못 찾음</span>
+
+<span class="cm"># 표준 라이브러리로 간단히 — 정렬된 배열 전용</span>
+<span class="kw">import</span> bisect
+bisect.bisect_left(arr, target)</code></pre>
+
+    <div class="callout callout-tip">
+      <span class="label">Tip</span>
+      이분 탐색은 <strong>배열이 정렬되어 있을 때만</strong> 쓸 수 있습니다. "정렬 후 이분탐색"은 한 세트로 묶어 기억해두세요.
+    </div>
+  </section>
+
+  <!-- 11 -->
+  <section id="algo">
+    <h2><span class="num">11</span> 이 레벨에서 나오는 알고리즘 정리</h2>
+    <table>
+      <tr><th>알고리즘</th><th>한 줄 설명</th><th>시간복잡도</th></tr>
+      <tr><td>완전탐색</td><td>가능한 모든 경우를 다 확인</td><td>대개 O(N²)~O(N!) — 입력 크기 작을 때만</td></tr>
+      <tr><td>그리디(탐욕법)</td><td>매 순간 가장 좋아 보이는 선택을 함</td><td>O(N) ~ O(N log N)</td></tr>
+      <tr><td>정렬 후 처리</td><td>먼저 정렬하면 문제가 쉬워지는 패턴</td><td>O(N log N)</td></tr>
+      <tr><td>이분 탐색</td><td>정렬된 데이터에서 절반씩 줄여가며 탐색</td><td>O(log N)</td></tr>
+      <tr><td>두 포인터 / 슬라이딩 윈도우</td><td>구간을 양 끝/한쪽씩 옮기며 탐색</td><td>O(N)</td></tr>
+      <tr><td>재귀 / 간단한 DP(메모이제이션)</td><td>큰 문제를 같은 모양의 작은 문제로 나눠서 풀기</td><td>문제별로 다름</td></tr>
+      <tr><td>BFS/DFS 기초</td><td>그래프·격자를 너비/깊이 우선으로 탐색 (3급 후반~상위 단계에 등장)</td><td>O(N+E)</td></tr>
+    </table>
+
+    <h3>그리디 예시 — 동전 거스름돈</h3>
+    <pre class="terminal"><code>coins = [<span class="num-lit">500</span>, <span class="num-lit">100</span>, <span class="num-lit">50</span>, <span class="num-lit">10</span>]
+amount = <span class="num-lit">1260</span>
+count = <span class="num-lit">0</span>
+<span class="kw">for</span> c <span class="kw">in</span> coins:
+    count += amount // c
+    amount %= c
+<span class="fn">print</span>(count)   <span class="cm"># 가장 큰 동전부터 최대한 많이 사용</span></code></pre>
+
+    <h3>간단한 DP 예시 — 피보나치 (메모이제이션)</h3>
+    <pre class="terminal"><code>memo = {}
+<span class="kw">def</span> <span class="fn">fib</span>(n):
+    <span class="kw">if</span> n <= <span class="num-lit">1</span>:
+        <span class="kw">return</span> n
+    <span class="kw">if</span> n <span class="kw">in</span> memo:        <span class="cm"># 이미 계산했으면 재사용</span>
+        <span class="kw">return</span> memo[n]
+    memo[n] = <span class="fn">fib</span>(n-<span class="num-lit">1</span>) + <span class="fn">fib</span>(n-<span class="num-lit">2</span>)
+    <span class="kw">return</span> memo[n]</code></pre>
+    <p class="muted">단순 재귀로 피보나치를 풀면 같은 값을 계속 다시 계산해서 느려집니다. <code>memo</code> 딕셔너리에 결과를 저장해두고 재사용하는 것이 "메모이제이션"이며, DP의 가장 쉬운 형태입니다.</p>
+
+    <h3>DFS 기초 (격자 탐색)</h3>
+    <pre class="terminal"><code><span class="kw">def</span> <span class="fn">dfs</span>(x, y):
+    <span class="kw">if</span> <span class="kw">not</span> (<span class="num-lit">0</span><=x<n <span class="kw">and</span> <span class="num-lit">0</span><=y<m) <span class="kw">or</span> visited[x][y]:
+        <span class="kw">return</span>
+    visited[x][y] = <span class="kw">True</span>
+    <span class="kw">for</span> d <span class="kw">in</span> <span class="fn">range</span>(<span class="num-lit">4</span>):
+        <span class="fn">dfs</span>(x+dx[d], y+dy[d])</code></pre>
+  </section>
+
+  <!-- 12 -->
+  <section id="mistakes">
+    <h2><span class="num">12</span> 자주 하는 실수 체크리스트</h2>
+    <ul class="checklist">
+      <li>2차원 리스트를 <code>[[0]*m]*n</code>으로 만들어서 모든 줄이 같은 객체를 참조하는 실수</li>
+      <li>인덱스가 범위를 벗어나는지(경계 체크) 확인하지 않고 배열에 접근</li>
+      <li>문자열을 인덱스로 직접 수정하려는 시도 (문자열은 불변 — list로 바꿔서 작업)</li>
+      <li>정렬되지 않은 배열에 이분 탐색을 적용</li>
+      <li><code>arr.sort()</code>(반환값 없음)와 <code>sorted(arr)</code>(새 리스트 반환)를 혼동</li>
+      <li>재귀 함수에 종료 조건(base case)을 빼먹어 무한 재귀 발생</li>
+      <li>나눗셈에서 <code>/</code>(실수 나눗셈)와 <code>//</code>(정수 나눗셈)를 혼동</li>
+      <li>입력 형식(한 줄 정수 vs 공백 구분 여러 값 vs 함수형 매개변수)을 잘못 파악</li>
+    </ul>
+  </section>
+
+  <!-- 13 -->
+  <section id="cheatsheet">
+    <h2><span class="num">13</span> 한 장 요약 (Cheat Sheet)</h2>
+    <table>
+      <tr><th>하고 싶은 일</th><th>코드</th></tr>
+      <tr><td>리스트 뒤집기</td><td><code>arr[::-1]</code></td></tr>
+      <tr><td>리스트 정렬(내림차순)</td><td><code>sorted(arr, reverse=True)</code></td></tr>
+      <tr><td>중복 제거</td><td><code>list(set(arr))</code></td></tr>
+      <tr><td>2차원 리스트 초기화</td><td><code>[[0]*m for _ in range(n)]</code></td></tr>
+      <tr><td>최댓값/최솟값 인덱스</td><td><code>arr.index(max(arr))</code></td></tr>
+      <tr><td>문자열 ↔ 리스트</td><td><code>list(s)</code> / <code>''.join(lst)</code></td></tr>
+      <tr><td>빈도수 세기</td><td><code>from collections import Counter; Counter(arr)</code></td></tr>
+      <tr><td>순열/조합</td><td><code>from itertools import permutations, combinations</code></td></tr>
+      <tr><td>정수 무한대 비교용 초기값</td><td><code>float('inf')</code> / <code>-float('inf')</code></td></tr>
+      <tr><td>나머지 연산으로 큰 수 처리</td><td><code>result % 1000000007</code> (오버플로 방지용 관례)</td></tr>
+    </table>
+  </section>
+
+</main>
+</div>
+
+<footer>made for learning · COS Pro 2급·3급 Python reference</footer>
+
+<script>
+  function applyTheme() {
+    const params = new URLSearchParams(window.location.search);
+    const theme = params.get('theme') || 'light';
+    if (theme === 'dark') {
+      document.body.classList.add('dark');
+      document.documentElement.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+      document.documentElement.classList.remove('dark');
+    }
+  }
+  applyTheme();
+  window.addEventListener('message', (e) => {
+    if (e.data && e.data.type === 'theme-change') {
+      const theme = e.data.theme;
+      if (theme === 'dark') {
+        document.body.classList.add('dark');
+        document.documentElement.classList.add('dark');
+      } else {
+        document.body.classList.remove('dark');
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  });
+</script>
+</body>
+
+</html>
