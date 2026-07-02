@@ -3170,6 +3170,775 @@ print(solution(calorie))
       { input: "713 665 873 500 751", output: "459" },
       { input: "100 200 300", output: "300" }
     ]
+  },
+  {
+    id: 76,
+    classLevel: 3,
+    title: "[5차] [문제 1] 이름과 나이 출력 (소스코드 작성)",
+    type: "code",
+    description: "이름과 나이를 입력 받아 다음과 같이 출력되는 프로그램을 작성하세요.",
+    input_desc: "첫 줄에 이름(영문자)이 주어지고, 두 번째 줄에 나이가 입력된다.",
+    output_desc: "출력의 예처럼 출력하세요.",
+    examples: [
+      { input: "Hong Gil Dong\n16", output: "Your name is Hong Gil Dong.\nI'm 16 years old." }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `# [정답 및 해설]
+# 풀이 1: f-string(포맷 스트링)을 사용하는 방법 (가장 추천하는 현대적인 방법)
+name = input()
+age = int(input())
+print(f"Your name is {name}.")
+print(f"I'm {age} years old.")
+
+# 풀이 2: format() 함수를 사용하는 방법
+# name = input()
+# age = int(input())
+# print("Your name is {}.".format(name))
+# print("I'm {} years old.".format(age))
+
+# 풀이 3: % 포맷팅을 사용하는 방법
+# name = input()
+# age = int(input())
+# print("Your name is %s." % name)
+# print("I'm %d years old." % age)
+`,
+    test_cases: [
+      { input: "Hong Gil Dong\n16", output: "Your name is Hong Gil Dong.\nI'm 16 years old." },
+      { input: "Alice\n20", output: "Your name is Alice.\nI'm 20 years old." },
+      { input: "Kim Chul Soo\n17", output: "Your name is Kim Chul Soo.\nI'm 17 years old." }
+    ]
+  },
+  {
+    id: 77,
+    classLevel: 3,
+    title: "[5차] [문제 2] 사칙연산과 나머지 연산 (소스코드 작성)",
+    type: "code",
+    description: "2개의 수를 입력 받아 출력의 예처럼 출력하세요.",
+    input_desc: "표준 입력으로 정수 2개가 주어집니다.",
+    output_desc: "출력의 예처럼 사칙연산과 나머지 연산 결과를 출력하세요.",
+    examples: [
+      { input: "10\n4", output: "10 + 4 = 14\n10 - 4  =  6\n10 x 4  =  40\n10 / 4   =  2\n10 % 4 =  2" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `# [정답 및 해설]
+# 풀이 1: f-string을 사용하여 요구된 고정 공백 형식을 출력하는 방법 (가장 직관적임)
+a = int(input())
+b = int(input())
+print(f"{a} + {b} = {a + b}")
+print(f"{a} - {b}  =  {a - b}")
+print(f"{a} x {b}  =  {a * b}")
+print(f"{a} / {b}   =  {a // b}")
+print(f"{a} % {b} =  {a % b}")
+
+# 풀이 2: format() 함수와 몫 연산자(//)를 활용한 방법
+# a = int(input())
+# b = int(input())
+# print("{} + {} = {}".format(a, b, a + b))
+# print("{} - {}  =  {}".format(a, b, a - b))
+# print("{} x {}  =  {}".format(a, b, a * b))
+# print("{} / {}   =  {}".format(a, b, a // b))
+# print("{} % {} =  {}".format(a, b, a % b))
+`,
+    test_cases: [
+      { input: "10\n4", output: "10 + 4 = 14\n10 - 4  =  6\n10 x 4  =  40\n10 / 4   =  2\n10 % 4 =  2" },
+      { input: "12\n5", output: "12 + 5 = 17\n12 - 5  =  7\n12 x 5  =  60\n12 / 5   =  2\n12 % 5 =  2" }
+    ]
+  },
+  {
+    id: 78,
+    classLevel: 3,
+    title: "[5차] [문제 3] 역정수 삼각형 출력 (소스코드 작성)",
+    type: "code",
+    description: "정수 N인 정수 삼각형을 출력하려고 합니다. 예를 들어, N이 5일 때 출력 예시와 같이 줄어드는 형태로 출력합니다.",
+    input_desc: "표준 입력으로 자연수 N이 주어집니다. (1 <= N <= 100)",
+    output_desc: "크기가 N인 정수 삼각형을 출력해주세요.",
+    examples: [
+      { input: "5", output: "1 2 3 4 5\n1 2 3 4\n1 2 3\n1 2\n1" }
+    ],
+    starter_code: `n = int(input())
+# 여기에 코드를 작성해 역삼각형을 출력하세요.
+`,
+    solution_code: `# [정답 및 해설]
+# 풀이 1: 외부 루프를 n부터 1까지 감소시키고, 내부 루프를 1부터 해당 값까지 돌려 출력하는 방법
+n = int(input())
+for i in range(n, 0, -1):
+    for j in range(1, i + 1):
+        print(j, end=" ")
+    print()
+
+# 풀이 2: 리스트 컴프리헨션과 join을 활용해 깔끔하게 출력하는 방법
+# n = int(input())
+# for i in range(n, 0, -1):
+#     print(" ".join(str(x) for x in range(1, i + 1)))
+`,
+    test_cases: [
+      { input: "5", output: "1 2 3 4 5\n1 2 3 4\n1 2 3\n1 2\n1" },
+      { input: "3", output: "1 2 3\n1 2\n1" },
+      { input: "1", output: "1" }
+    ]
+  },
+  {
+    id: 79,
+    classLevel: 3,
+    title: "[5차] [문제 4] 세 수 중 최댓값과 최솟값 (소스코드 작성)",
+    type: "code",
+    description: "정수 3개를 입력 받아 가장 큰 수와 가장 작은 수를 출력하는 프로그램을 작성하세요.",
+    input_desc: "정수 3개가 차례대로 주어집니다.",
+    output_desc: "가장 큰 수와 가장 작은 수를 공백으로 구분하여 출력하시오.",
+    examples: [
+      { input: "5 9 12", output: "12 5" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `# [정답 및 해설]
+# 풀이 1: 파이썬 내장함수인 max()와 min()을 사용하는 방법 (가장 간단하고 빠름)
+numbers = list(map(int, input().split()))
+print(max(numbers), min(numbers))
+
+# 풀이 2: if 조건문을 사용하여 직접 최댓값과 최솟값을 구하는 방법
+# a, b, c = map(int, input().split())
+# # 최댓값 구하기
+# max_val = a
+# if b > max_val: max_val = b
+# if c > max_val: max_val = c
+# # 최솟값 구하기
+# min_val = a
+# if b < min_val: min_val = b
+# if c < min_val: min_val = c
+# print(max_val, min_val)
+`,
+    test_cases: [
+      { input: "5 9 12", output: "12 5" },
+      { input: "100 100 50", output: "100 50" },
+      { input: "-3 0 5", output: "5 -3" }
+    ]
+  },
+  {
+    id: 80,
+    classLevel: 3,
+    title: "[5차] [문제 5] 약수 구하기 (빈칸 채우기)",
+    type: "blank",
+    description: "1개의 정수를 입력 받아 약수를 출력하는 프로그램을 빈칸을 채워 완성하세요.",
+    input_desc: "표준 입력으로 수 한 개가 주어집니다. (1 <= 정수 <= 1000)",
+    output_desc: "약수를 차례대로 출력하세요.",
+    examples: [
+      { input: "16", output: "1 2 4 8 16" }
+    ],
+    starter_code: `n = int(input(""))
+
+for i in range(1, @@@):
+    if @@@:
+        print(i, end=" ")
+`,
+    solution_code: `# [정답 및 해설]
+# 빈칸에 들어갈 알맞은 내용은 각각 n + 1과 n % i == 0 입니다.
+# 1. 1부터 n까지 반복해야 하므로 range(1, n + 1)을 지정합니다.
+# 2. i가 n의 약수인지 확인하려면 n을 i로 나눈 나머지가 0이어야 하므로 n % i == 0 조건을 사용합니다.
+
+n = int(input(""))
+
+for i in range(1, n + 1):
+    if n % i == 0:
+        print(i, end=" ")
+`,
+    test_cases: [
+      { input: "16", output: "1 2 4 8 16 " },
+      { input: "10", output: "1 2 5 10 " },
+      { input: "1", output: "1 " }
+    ]
+  },
+  {
+    id: 81,
+    classLevel: 3,
+    title: "[5차] [문제 6] 규칙적인 영문자 출력 (빈칸 채우기)",
+    type: "blank",
+    description: "정수 N을 입력 받아 N개의 영문자를 대/소문자 및 순방향/역방향 규칙에 맞게 출력하는 프로그램의 빈칸(@@@)을 채워 전체 코드를 완성해주세요.",
+    input_desc: "표준 입력으로 자연수 n이 주어집니다.",
+    output_desc: "영문자 N개를 규칙에 따라 출력합니다.",
+    examples: [
+      { input: "5", output: "ABCDE\nVWXYZ\nabcde\nvwxyz" }
+    ],
+    starter_code: `n = int(input(""))
+
+for i in range(n):
+    print(@@@, end="")
+
+print()
+for i in range(n-1,-1,-1):
+    print(@@@, end="")
+
+print()
+for i in range(n):
+    print(@@@, end="")
+
+print()
+for i in range(n-1,-1,-1):
+    print(@@@, end="")
+`,
+    solution_code: `# [정답 및 해설]
+# 대문자 'A'는 아스키코드 65, 대문자 'Z'는 90, 소문자 'a'는 97, 소문자 'z'는 122입니다.
+# 1. 첫 번째 줄(A부터 n개): chr(ord('A') + i) 또는 chr(65 + i)
+# 2. 두 번째 줄(Z부터 거꾸로 n번째 문자부터 Z까지): 루프가 n-1부터 0까지 감소하므로 chr(ord('Z') - i) 또는 chr(90 - i)
+# 3. 세 번째 줄(a부터 n개): chr(ord('a') + i) 또는 chr(97 + i)
+# 4. 네 번째 줄(z부터 거꾸로 n번째 문자부터 z까지): chr(ord('z') - i) 또는 chr(122 - i)
+
+n = int(input(""))
+
+for i in range(n):
+    print(chr(ord('A') + i), end="")
+
+print()
+for i in range(n-1,-1,-1):
+    print(chr(ord('Z') - i), end="")
+
+print()
+for i in range(n):
+    print(chr(ord('a') + i), end="")
+
+print()
+for i in range(n-1,-1,-1):
+    print(chr(ord('z') - i), end="")
+`,
+    test_cases: [
+      { input: "5", output: "ABCDE\nVWXYZ\nabcde\nvwxyz" },
+      { input: "3", output: "ABC\nXYZ\nabc\nxyz" }
+    ]
+  },
+  {
+    id: 82,
+    classLevel: 3,
+    title: "[5차] [문제 7] 짝수의 합과 평균 (소스코드 작성)",
+    type: "code",
+    description: "10개의 수를 입력 받아 첫 줄에는 짝수를, 둘째 줄에는 짝수의 합을, 셋째 줄에는 짝수의 평균을 출력하는 프로그램을 작성하세요. (평균은 소수 셋째 자리에서 반올림하여 둘째 자리까지 출력)",
+    input_desc: "표준 입력으로 자연수 10개가 차례대로 한 줄씩 주어집니다.",
+    output_desc: "출력의 예와 같이 첫 줄에 짝수 목록, 둘째 줄에 합, 셋째 줄에 평균을 출력하세요.",
+    examples: [
+      { input: "2\n8\n10\n3\n2\n7\n4\n51\n12\n6", output: "2 8 10 2 4 12 6 \n44\n6.29" }
+    ],
+    starter_code: `# 입력받기
+arr = []
+
+for i in range(10):
+    b = input("")
+    arr.append(b)
+
+for i in range(10):
+    print(arr[i], end = ' ')
+`,
+    solution_code: `# [정답 및 해설]
+# 풀이 1: 입력 리스트를 정수형으로 변환 후, 리스트 컴프리헨션을 사용하여 짝수만 걸러내어 출력 및 연산하는 방법
+arr = []
+for i in range(10):
+    arr.append(int(input()))
+
+evens = [x for x in arr if x % 2 == 0]
+for x in evens:
+    print(x, end=' ')
+print()
+
+even_sum = sum(evens)
+print(even_sum)
+
+if len(evens) > 0:
+    even_avg = even_sum / len(evens)
+    print(f"{even_avg:.2f}")
+else:
+    print("0.00")
+
+# 풀이 2: 반복문과 조건문을 직접 사용하여 합과 개수를 누적하는 방법
+# arr = []
+# for i in range(10):
+#     arr.append(int(input()))
+# sum_val = 0
+# count = 0
+# for val in arr:
+#     if val % 2 == 0:
+#         print(val, end=" ")
+#         sum_val += val
+#         count += 1
+# print()
+# print(sum_val)
+# print(f"{sum_val / count:.2f}" if count > 0 else "0.00")
+`,
+    test_cases: [
+      { input: "2\n8\n10\n3\n2\n7\n4\n51\n12\n6", output: "2 8 10 2 4 12 6 \n44\n6.29" },
+      { input: "1\n3\n5\n7\n9\n11\n13\n15\n17\n18", output: "18 \n18\n18.00" }
+    ]
+  },
+  {
+    id: 83,
+    classLevel: 3,
+    title: "[5차] [문제 8] 10 이상 30 이하의 수 출력 (소스코드 작성)",
+    type: "code",
+    description: "정수 n과 배열 arr을 입력 받아 10 이상 30 이하의 수만 출력하는 프로그램을 작성하세요.",
+    input_desc: "표준 입력으로 자연수 n이 주어지고, 이어서 n개의 배열 요소가 주어집니다. (2 <= n <= 50)",
+    output_desc: "10 이상 30 이하의 수만 공백으로 구분하여 출력하세요.",
+    examples: [
+      { input: "6\n3\n15\n74\n51\n23\n21", output: "15 23 21" }
+    ],
+    starter_code: `# 입력 받기
+n = int(input(""))
+
+arr = []
+
+for i in range(n):
+    b = input("")
+    arr.append(b)
+
+for i in range(n):
+    print(arr[i], end = ' ')
+`,
+    solution_code: `# [정답 및 해설]
+# 풀이 1: 입력 값을 정수로 변환하여 10 이상 30 이하의 수를 필터링하고 Asterisk(*) 언패킹을 사용하여 한 번에 출력하는 방법
+n = int(input())
+arr = []
+for i in range(n):
+    arr.append(int(input()))
+
+results = [x for x in arr if 10 <= x <= 30]
+print(*(results))
+
+# 풀이 2: 반복문을 통해 조건에 맞는 수들만 end=" "로 출력하는 방법
+# n = int(input())
+# arr = []
+# for i in range(n):
+#     arr.append(int(input()))
+# for x in arr:
+#     if 10 <= x <= 30:
+#         print(x, end=" ")
+`,
+    test_cases: [
+      { input: "6\n3\n15\n74\n51\n23\n21", output: "15 23 21" },
+      { input: "3\n5\n10\n30", output: "10 30" }
+    ]
+  },
+  {
+    id: 84,
+    classLevel: 3,
+    title: "[5차] [문제 9] 홀수 번째 문자 출력 (소스코드 작성)",
+    type: "code",
+    description: "문자열을 입력 받아 홀수 번째 문자만 출력하는 프로그램을 작성하세요.",
+    input_desc: "문자열이 주어집니다.",
+    output_desc: "홀수 번째(1번째, 3번째, 5번째 ...) 입력 받은 문자만 차례대로 출력하세요.",
+    examples: [
+      { input: "ABCDEFGHIJK", output: "ACEGIK" }
+    ],
+    starter_code: `s = input("")
+# 여기에 코드를 작성하세요.
+`,
+    solution_code: `# [정답 및 해설]
+# 풀이 1: 파이썬 슬라이싱 s[::2]를 활용하는 방법 (가장 성능이 좋고 간결함)
+# - 첫 번째 글자는 인덱스로 0번이므로, 1, 3, 5번째 글자는 인덱스로 0, 2, 4...가 됩니다.
+s = input()
+print(s[::2])
+
+# 풀이 2: 반복문을 돌며 인덱스가 짝수일 때만 문자열에 더해 출력하는 방법
+# s = input()
+# for i in range(len(s)):
+#     if i % 2 == 0:
+#         print(s[i], end="")
+# print()
+`,
+    test_cases: [
+      { input: "ABCDEFGHIJK", output: "ACEGIK" },
+      { input: "Hello", output: "Hlo" }
+    ]
+  },
+  {
+    id: 85,
+    classLevel: 3,
+    title: "[5차] [문제 10] 짝수이면서 5의 배수인 수 (소스코드 작성)",
+    type: "code",
+    description: "자연수 n과 점수 배열 arr을 입력받아, 입력받은 수 중 짝수이면서 5의 배수인 수를 출력하고, 둘째 줄에는 해당 조건에 맞는 수 중 최댓값과 최솟값을 출력하세요.",
+    input_desc: "표준 입력으로 자연수 n이 주어지고 다음 줄에 공백으로 구분된 배열 arr이 주어집니다.",
+    output_desc: "첫 줄에 짝수이면서 5의 배수인 수를 출력하고, 둘째 줄에는 그 중 최댓값과 최솟값을 출력하세요.",
+    examples: [
+      { input: "8\n5 10 100 7 20 8 4 16", output: "10 100 20\n100 10" }
+    ],
+    starter_code: `n = int(input(""))
+
+arr = []
+arr = input("").split()
+
+for i in range(n):
+    arr[i] = int(arr[i])
+
+for i in range(n):
+    print(arr[i], end = ' ')
+`,
+    solution_code: `# [정답 및 해설]
+# 풀이 1: 리스트 컴프리헨션을 사용해 x % 2 == 0 이고 x % 5 == 0 (즉, 10의 배수) 인 요소들만 골라내는 방법
+n = int(input())
+arr = list(map(int, input().split()))
+
+filtered = [x for x in arr if x % 2 == 0 and x % 5 == 0]
+print(*(filtered))
+print(max(filtered), min(filtered))
+
+# 풀이 2: 반복문을 순회하며 리스트를 필터링하고 최댓값 및 최솟값을 갱신하여 출력하는 방법
+# n = int(input())
+# arr = list(map(int, input().split()))
+# filtered = []
+# for x in arr:
+#     if x % 2 == 0 and x % 5 == 0:
+#         filtered.append(x)
+# for x in filtered:
+#     print(x, end=" ")
+# print()
+# if filtered:
+#     print(max(filtered), min(filtered))
+`,
+    test_cases: [
+      { input: "8\n5 10 100 7 20 8 4 16", output: "10 100 20\n100 10" },
+      { input: "5\n10 15 20 25 30", output: "10 20 30\n30 10" }
+    ]
+  },
+  {
+    id: 86,
+    classLevel: 3,
+    title: "[6차] [문제 1] 약수의 개수 구하기 (소스코드 작성)",
+    type: "code",
+    description: "자연수 n을 입력 받아 약수의 개수를 출력하는 프로그램을 작성하세요.",
+    input_desc: "첫 줄에 정수 N이 주어집니다.",
+    output_desc: "출력의 예처럼 n의 약수의 개수를 출력하세요.",
+    examples: [
+      { input: "12", output: "6" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `# [정답 및 해설]
+# 풀이 1: 1부터 n까지 순회하며 n을 i로 나눈 나머지가 0인 i의 개수를 세어 출력하는 방법
+n = int(input())
+count = 0
+for i in range(1, n + 1):
+    if n % i == 0:
+        count += 1
+print(count)
+
+# 풀이 2: n의 제곱근까지만 순회하여 효율적으로 약수의 개수를 계산하는 방법
+# n = int(input())
+# count = 0
+# for i in range(1, int(n**0.5) + 1):
+#     if n % i == 0:
+#         count += 1
+#         if i * i != n:
+#             count += 1
+# print(count)
+`,
+    test_cases: [
+      { input: "12", output: "6" },
+      { input: "1", output: "1" },
+      { input: "17", output: "2" }
+    ]
+  },
+  {
+    id: 87,
+    classLevel: 3,
+    title: "[6차] [문제 2] 짝지어 출력하기 (빈칸 채우기)",
+    type: "blank",
+    description: "while문을 이용하여 출력의 예처럼 출력하세요.",
+    input_desc: "표준 입력으로 정수 n이 주어집니다. (n은 항상 짝수입니다.)",
+    output_desc: "출력의 예처럼 두 개씩 짝을 지어 출력하세요.",
+    examples: [
+      { input: "12", output: "1 2\n3 4\n5 6\n7 8\n9 10\n11 12" }
+    ],
+    starter_code: `i = 1
+
+n = input("")
+n = int(n)
+
+while @@@:
+    print(i, i+1)
+    @@@
+`,
+    solution_code: `# [정답 및 해설]
+# 빈칸에 들어갈 코드는 각각 i < n 과 i += 2 입니다.
+# 1. 1부터 n까지 홀수 단위로 루프가 진행되어야 하므로 while 조건식에는 i < n 을 지정합니다.
+# 2. 매 반복마다 1 2, 3 4와 같이 연속된 두 숫자를 출력하고 그 다음 홀수로 넘어가야 하므로 i를 2씩 증가시킵니다: i += 2
+
+i = 1
+
+n = input("")
+n = int(n)
+
+while i < n:
+    print(i, i+1)
+    i += 2
+`,
+    test_cases: [
+      { input: "12", output: "1 2\n3 4\n5 6\n7 8\n9 10\n11 12" },
+      { input: "4", output: "1 2\n3 4" }
+    ]
+  },
+  {
+    id: 88,
+    classLevel: 3,
+    title: "[6차] [문제 3] 합격 여부 판단 (빈칸 채우기)",
+    type: "blank",
+    description: "세 과목 점수를 입력 받아 세 과목 모두 60점 이상이면 \"YES\", 아니면 \"NO\"를 출력하는 프로그램을 작성하세요.",
+    input_desc: "표준 입력으로 정수 3개가 차례대로 주어집니다. (1 <= 점수 <= 100)",
+    output_desc: "세 과목 모두 60점 이상이면 \"YES\", 하나라도 미달하면 \"NO\"를 출력하시오.",
+    examples: [
+      { input: "75\n95\n85", output: "YES" }
+    ],
+    starter_code: `a = input("")
+b = input("")
+c = input("")
+
+a = int(a)
+b = int(b)
+c = int(c)
+
+if @@@:
+    print("YES")
+else:
+    print("NO")
+`,
+    solution_code: `# [정답 및 해설]
+# 빈칸에 들어갈 코드는 a >= 60 and b >= 60 and c >= 60 입니다.
+# 1. a, b, c 세 과목 모두 60점 이상인 조건을 and 연산자로 연결합니다.
+
+a = input("")
+b = input("")
+c = input("")
+
+a = int(a)
+b = int(b)
+c = int(c)
+
+if a >= 60 and b >= 60 and c >= 60:
+    print("YES")
+else:
+    print("NO")
+`,
+    test_cases: [
+      { input: "75\n95\n85", output: "YES" },
+      { input: "75\n95\n55", output: "NO" },
+      { input: "60\n60\n60", output: "YES" }
+    ]
+  },
+  {
+    id: 89,
+    classLevel: 3,
+    title: "[6차] [문제 4] 3 또는 7의 배수 출력 (빈칸 채우기)",
+    type: "blank",
+    description: "1 ~ 100 사이의 수 중 3의 배수이거나 7의 배수인 수를 출력하는 프로그램의 빈칸을 채워 소스 코드를 완성하세요.",
+    input_desc: "입력 데이터는 없습니다.",
+    output_desc: "3의 배수이거나 7의 배수를 공백으로 구분하여 출력하세요.",
+    examples: [
+      { input: "", output: "3 6 7 9 12 14 15 18 21 24 27 28 30 33 35 " }
+    ],
+    starter_code: `a = 1
+
+while a < 100:
+    if @@@:
+        print(a, end=' ')
+    a += 1
+`,
+    solution_code: `# [정답 및 해설]
+# 빈칸에 들어갈 코드는 a % 3 == 0 or a % 7 == 0 입니다.
+# 1. 3의 배수(a % 3 == 0)이거나 7의 배수(a % 7 == 0)인 조건을 or 연산자로 연결하여 조건문을 만족할 때 출력합니다.
+
+a = 1
+
+while a < 100:
+    if a % 3 == 0 or a % 7 == 0:
+        print(a, end=' ')
+    a += 1
+`,
+    test_cases: [
+      { input: "", output: "3 6 7 9 12 14 15 18 21 24 27 28 30 33 35 36 39 42 45 48 49 51 54 56 57 60 63 66 69 70 72 75 77 78 81 84 87 90 91 93 96 98 99 " }
+    ]
+  },
+  {
+    id: 90,
+    classLevel: 3,
+    title: "[6차] [문제 5] 구간 합 포맷 출력 (소스코드 작성)",
+    type: "code",
+    description: "1부터 입력 받은 수까지의 합을 출력의 예처럼 출력하는 프로그램을 작성하세요.",
+    input_desc: "표준 입력으로 수 한 개가 주어집니다. (1 <= 정수 <= 1,000)",
+    output_desc: "출력의 예시 포맷에 맞추어 결과를 출력하세요.",
+    examples: [
+      { input: "5", output: "1 ----- 5 = 15" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `# [정답 및 해설]
+# 풀이 1: 루프를 사용해 1부터 n까지의 누적합을 구한 뒤 f-string 포맷에 맞게 출력하는 방법
+n = int(input())
+total = 0
+for i in range(1, n + 1):
+    total += i
+print(f"1 ----- {n} = {total}")
+
+# 풀이 2: 가우스의 합 공식을 활용하여 단 한 번에 계산하는 방법
+# n = int(input())
+# total = n * (n + 1) // 2
+# print("1 ----- {} = {}".format(n, total))
+`,
+    test_cases: [
+      { input: "5", output: "1 ----- 5 = 15" },
+      { input: "10", output: "1 ----- 10 = 55" },
+      { input: "100", output: "1 ----- 100 = 5050" }
+    ]
+  },
+  {
+    id: 91,
+    classLevel: 3,
+    title: "[6차] [문제 6] 문자열 N번 반복 출력 (소스코드 작성)",
+    type: "code",
+    description: "문자열과 정수 n을 입력 받아, 입력 받은 문자열을 n번 연속해서 출력하세요.",
+    input_desc: "표준 입력으로 문자열과 정수 n이 차례대로 주어집니다.",
+    output_desc: "출력의 예처럼 공백이나 줄바꿈 없이 연속으로 출력하세요.",
+    examples: [
+      { input: "Hello\n3", output: "HelloHelloHello" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `# [정답 및 해설]
+# 풀이 1: 문자열과 숫자의 곱하기(*) 연산을 이용하여 간단하게 n번 출력하는 방법 (가장 파이썬다운 방법)
+s = input()
+n = int(input())
+print(s * n)
+
+# 풀이 2: 반복문을 사용하여 n번만큼 출력하는 방법
+# s = input()
+# n = int(input())
+# for i in range(n):
+#     print(s, end="")
+# print()
+`,
+    test_cases: [
+      { input: "Hello\n3", output: "HelloHelloHello" },
+      { input: "Python\n2", output: "PythonPython" }
+    ]
+  },
+  {
+    id: 92,
+    classLevel: 3,
+    title: "[6차] [문제 7] 특정 문자 제거하기 (소스코드 작성)",
+    type: "code",
+    description: "문자열과 문자 1개를 입력 받아, 문자열에서 입력 받은 해당 문자를 모두 제거하고 출력하세요.",
+    input_desc: "표준 입력으로 문자열과 문자가 차례대로 주어집니다.",
+    output_desc: "특정 문자가 제거된 문자열을 출력하세요.",
+    examples: [
+      { input: "ABCdefabcABC\nA", output: "BCdefabcBC" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `# [정답 및 해설]
+# 풀이 1: 문자열의 replace() 메서드를 이용하여 타겟 문자를 빈 문자열('')로 대체해 제거하는 방법
+s = input()
+char_to_remove = input()
+print(s.replace(char_to_remove, ""))
+
+# 풀이 2: 리스트 컴프리헨션을 활용하여 해당 문자를 제외한 문자만 모은 뒤 join하여 출력하는 방법
+# s = input()
+# char_to_remove = input()
+# print("".join([c for c in s if c != char_to_remove]))
+`,
+    test_cases: [
+      { input: "ABCdefabcABC\nA", output: "BCdefabcBC" },
+      { input: "hello world\nl", output: "heo word" }
+    ]
+  },
+  {
+    id: 93,
+    classLevel: 3,
+    title: "[6차] [문제 8] 수들의 빈도수 구하기 (소스코드 작성)",
+    type: "code",
+    description: "정수 n과 배열 arr을 입력 받아 수들의 빈도수(0의 개수, 1의 개수 ... 9의 개수)를 출력하는 프로그램을 작성하세요.",
+    input_desc: "표준 입력으로 자연수 n이 주어지고, 다음 줄에 n개의 정수 배열 arr이 주어집니다. 원소는 0부터 9까지의 수만 주어집니다.",
+    output_desc: "0부터 9까지 각각의 개수를 한 줄에 하나씩 차례대로 출력하세요.",
+    examples: [
+      { input: "10\n0 5 7 2 2 1 9 2 1 6 5", output: "1\n2\n3\n0\n0\n1\n1\n1\n0\n1" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `# [정답 및 해설]
+# 풀이 1: count() 함수를 사용해 0부터 9까지 각 정수의 빈도를 직접 세어 출력하는 방법
+n = int(input())
+arr = list(map(int, input().split()))
+for i in range(10):
+    print(arr.count(i))
+
+# 풀이 2: 리스트 인덱싱을 이용해 빈도 수 누적 배열을 만들어 출력하는 방법
+# n = int(input())
+# arr = list(map(int, input().split()))
+# counts = [0] * 10
+# for num in arr:
+#     if 0 <= num <= 9:
+#         counts[num] += 1
+# for count in counts:
+#     print(count)
+`,
+    test_cases: [
+      { input: "10\n0 5 7 2 2 1 9 2 1 6 5", output: "1\n2\n3\n0\n0\n1\n1\n1\n0\n1" },
+      { input: "5\n1 1 2 2 3", output: "0\n2\n2\n1\n0\n0\n0\n0\n0\n0" }
+    ]
+  },
+  {
+    id: 94,
+    classLevel: 3,
+    title: "[6차] [문제 9] 5의 배수의 집계 (소스코드 작성)",
+    type: "code",
+    description: "10개의 수를 입력 받아 5의 배수만 출력하고, 두 번째 줄에는 5의 배수의 개수, 합계, 평균을 출력하세요. (평균은 소수 셋째 자리에서 반올림하여 둘째 자리까지 출력)",
+    input_desc: "정수 10개가 공백으로 구분되어 주어집니다.",
+    output_desc: "첫 줄에 5의 배수만 출력합니다. 둘째 줄에 5의 배수의 개수, 합계, 평균을 공백으로 구분하여 출력합니다.",
+    examples: [
+      { input: "12 5 10 57 30 6 11 90 47 2", output: "5 10 30 90\n4 135 33.8" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `# [정답 및 해설]
+# 풀이 1: 5의 배수만 필터링한 후 개수, 합계, 평균을 구하여 출력 조건에 맞춰 출력합니다.
+# *주의: 문제 설명에는 '소수 둘째 자리까지 출력'으로 되어 있으나, 예시 출력에서는 '33.8'로 소수 첫째 자리까지 표기된 경우가 있습니다.
+# 여기서는 예시 결과에 맞춰 첫째 자리로 반올림하여 출력합니다.
+numbers = list(map(int, input().split()))
+fives = [x for x in numbers if x % 5 == 0]
+
+print(*(fives))
+cnt = len(fives)
+total = sum(fives)
+if cnt > 0:
+    avg = total / cnt
+    print(cnt, total, round(avg, 1))
+else:
+    print(0, 0, 0.0)
+`,
+    test_cases: [
+      { input: "12 5 10 57 30 6 11 90 47 2", output: "5 10 30 90\n4 135 33.8" },
+      { input: "5 15 25 35 45 55 65 75 85 95", output: "5 15 25 35 45 55 65 75 85 95\n10 500 50.0" }
+    ]
+  },
+  {
+    id: 95,
+    classLevel: 3,
+    title: "[6차] [문제 10] 나머지 구하기 (소스코드 작성)",
+    type: "code",
+    description: "정수 n과 m이 주어질 때, n을 m으로 나눈 나머지를 구하는 프로그램을 작성하세요.",
+    input_desc: "표준 입력으로 정수 n과 m이 주어집니다.",
+    output_desc: "나머지 값을 출력하세요.",
+    examples: [
+      { input: "3 2", output: "1" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `# [정답 및 해설]
+# 풀이 1: 파이썬의 나머지 연산자(%)를 사용하여 구하는 방법 (가장 표준적인 방법)
+n, m = map(int, input().split())
+print(n % m)
+
+# 풀이 2: 몫 연산자(//)와 곱셈을 이용하여 나머지를 수동으로 계산하는 방법
+# n, m = map(int, input().split())
+# print(n - (n // m) * m)
+`,
+    test_cases: [
+      { input: "3 2", output: "1" },
+      { input: "10 5", output: "0" }
+    ]
   }
 ];
 
