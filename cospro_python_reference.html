@@ -292,19 +292,63 @@ arr.reverse()         <span class="cm"># 순서 뒤집기</span>
 sorted(arr)           <span class="cm"># 새 리스트로 정렬 반환 (원본 유지)</span></code></pre>
 
     <h3>리스트 컴프리헨션 — 코스프로 단골 문법</h3>
-    <pre class="terminal"><code><span class="cm"># 1~10의 제곱</span>
-squares = [x**<span class="num-lit">2</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="num-lit">1</span>,<span class="num-lit">11</span>)]
+    <p>리스트 컴프리헨션(List Comprehension)은 기존 리스트나 반복 가능한(iterable) 객체를 기반으로 새로운 리스트를 쉽고 빠르게 만드는 방법입니다. 코스프로 시험에서 코드 한 줄로 빈번히 활용되는 핵심 문법입니다.</p>
 
-<span class="cm"># 짝수만 골라내기</span>
+    <pre class="terminal"><code><span class="cm"># 1. 기본 구조: [표현식 for 항목 in 반복가능객체]</span>
+squares = [x**<span class="num-lit">2</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="num-lit">1</span>, <span class="num-lit">11</span>)]
+<span class="cm"># 결과: [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]</span>
+
+<span class="cm"># 2. 필터링 (if 사용): [표현식 for 항목 in 반복가능객체 if 조건식]</span>
+<span class="cm"># arr에서 짝수만 골라내기</span>
+arr = [<span class="num-lit">1</span>, <span class="num-lit">2</span>, <span class="num-lit">3</span>, <span class="num-lit">4</span>, <span class="num-lit">5</span>, <span class="num-lit">6</span>]
 evens = [x <span class="kw">for</span> x <span class="kw">in</span> arr <span class="kw">if</span> x % <span class="num-lit">2</span> == <span class="num-lit">0</span>]
+<span class="cm"># 결과: [2, 4, 6]</span>
 
-<span class="cm"># 2차원 리스트(N x M) 초기화 — 주의해서 만들어야 하는 패턴</span>
+<span class="cm"># 3. 조건부 표현식 (if-else 사용): [참일때_값 if 조건식 else 거짓일때_값 for 항목 in 반복가능객체]</span>
+<span class="cm"># 홀수는 'odd', 짝수는 'even'으로 변환</span>
+parity = [<span class="str">'even'</span> <span class="kw">if</span> x % <span class="num-lit">2</span> == <span class="num-lit">0</span> <span class="kw">else</span> <span class="str">'odd'</span> <span class="kw">for</span> x <span class="kw">in</span> arr]
+<span class="cm"># 결과: ['odd', 'even', 'odd', 'even', 'odd', 'even']</span>
+
+<span class="cm"># 4. 2차원 리스트(N x M) 초기화 (m열, n행)</span>
 grid = [[<span class="num-lit">0</span>] * m <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(n)]</code></pre>
 
     <div class="callout callout-warn">
       <span class="label">자주 하는 실수</span>
-      2차원 리스트를 <code>[[0]*m] * n</code>으로 만들면 <strong>안의 리스트가 모두 같은 객체를 참조</strong>해서, 한 줄을 수정하면 모든 줄이 같이 바뀝니다. 반드시 <code>[[0]*m for _ in range(n)]</code> 형태로 만드세요.
+      2차원 리스트를 <code>[[0]*m] * n</code>으로 만들면 <strong>안의 모든 행 리스트가 동일한 메모리 주소를 참조</strong>하게 됩니다. 따라서 <code>grid[0][0] = 1</code>을 실행했을 때 모든 행의 첫 번째 열 값이 동시에 1로 변하는 치명적인 버그가 발생합니다. 반드시 <code>[[0]*m for _ in range(n)]</code> 형태로 행마다 독립된 리스트 객체를 생성하세요.
     </div>
+
+    <h3>컴프리헨션을 활용한 문제 풀이 패턴</h3>
+    
+    <h4>패턴 A. 조건 필터링 후 합계/평균 구하기</h4>
+    <p><strong>문제:</strong> 시험 점수 리스트 <code>scores</code>가 주어질 때, 과락 기준인 60점 이상인 점수들만의 평균을 구하세요.</p>
+    <pre class="terminal"><code>scores = [<span class="num-lit">55</span>, <span class="num-lit">80</span>, <span class="num-lit">92</span>, <span class="num-lit">45</span>, <span class="num-lit">70</span>, <span class="num-lit">60</span>]
+
+<span class="cm"># 60점 이상인 점수만 리스트 컴프리헨션으로 필터링</span>
+passed = [s <span class="kw">for</span> s <span class="kw">in</span> scores <span class="kw">if</span> s >= <span class="num-lit">60</span>] <span class="cm"># [80, 92, 70, 60]</span>
+average = <span class="fn">sum</span>(passed) / <span class="fn">len</span>(passed)
+<span class="fn">print</span>(average) <span class="cm"># 75.5</span></code></pre>
+
+    <h4>패턴 B. 문자열 특정 문자 필터링 & join</h4>
+    <p><strong>문제:</strong> 알파벳 소문자 문자열 <code>s</code>에서 모음(a, e, i, o, u)을 모두 제거한 문자열을 반환하세요.</p>
+    <pre class="terminal"><code>s = <span class="str">"hello world"</span>
+vowels = <span class="str">"aeiou"</span>
+
+<span class="cm"># 모음이 아닌 문자들만 모아서 리스트로 만든 뒤 join</span>
+result = <span class="str">""</span>.join([ch <span class="kw">for</span> ch <span class="kw">in</span> s <span class="kw">if</span> ch <span class="kw">not in</span> vowels])
+<span class="fn">print</span>(result) <span class="cm"># "hll wrld"</span></code></pre>
+
+    <h4>패턴 C. 2차원 리스트의 행/열 변환 및 합계 구하기</h4>
+    <p><strong>문제:</strong> <code>N x N</code> 크기의 2차원 격자 <code>grid</code>에서 각 행의 합계 중 최댓값을 구하세요.</p>
+    <pre class="terminal"><code>grid = [
+    [<span class="num-lit">1</span>, <span class="num-lit">2</span>, <span class="num-lit">3</span>],
+    [<span class="num-lit">4</span>, <span class="num-lit">5</span>, <span class="num-lit">6</span>],
+    [<span class="num-lit">7</span>, <span class="num-lit">8</span>, <span class="num-lit">9</span>]
+]
+
+<span class="cm"># 각 행(row)의 sum을 구한 새 리스트 생성</span>
+row_sums = [<span class="fn">sum</span>(row) <span class="kw">for</span> row <span class="kw">in</span> grid] <span class="cm"># [6, 15, 24]</span>
+max_row_sum = <span class="fn">max</span>(row_sums)
+<span class="fn">print</span>(max_row_sum) <span class="cm"># 24</span></code></pre>
 
     <h3>자주 쓰는 내장 함수</h3>
     <table>
