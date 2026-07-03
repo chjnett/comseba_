@@ -336,45 +336,45 @@ export function runMockSQL(query: string): SqlResult {
 export const pythonConcepts = [
   {
     id: 1,
-    title: "1. 변수와 연산자 (Variables & Operators)",
-    desc: "변수 선언법과 산술, 비교, 논리 연산자",
-    content: `파이썬에서 변수는 값을 저장하는 공간입니다. 별도의 타입 선언 없이 값을 대입하는 순간 변수가 생성되고 타입이 결정됩니다.
+    title: "1. 변수 대입 & 값 바꾸기 (Swap)",
+    desc: "변수 선언법과 두 변수의 값을 서로 바꾸는 방법",
+    content: `파이썬에서 변수는 값을 저장하는 상자입니다. 3급 시험에서는 두 변수의 값을 서로 바꾸는 Swap 기법이 자주 출제됩니다.
 
-### 산술 연산자
-* \`+\` : 더하기
-* \`-\` : 빼기
-* \`*\` : 곱하기
-* \`/\` : 나누기 (소수점 포함 결과 반환)
-* \`//\` : 몫 (소수점 버림)
-* \`%\` : 나머지 (나눈 나머지 값 반환)
-* \`**\` : 거듭제곱
-
-### 예제 코드
+### 변수 교환 (Swap)
 \`\`\`python
 a = 10
-b = 3
+b = 20
 
-print(a + b)  # 13
-print(a // b) # 3 (몫)
-print(a % b)  # 1 (나머지)
-print(a ** b) # 1000 (10의 3승)
+# 두 값을 교환
+a, b = b, a
+
+print(a)  # 20
+print(b)  # 10
 \`\`\``
   },
   {
     id: 2,
-    title: "2. 조건문 (Conditionals)",
-    desc: "if, elif, else를 사용한 흐름 제어",
-    content: `조건문은 프로그램의 흐름을 분기할 때 사용합니다. 파이썬은 들여쓰기(Indentation)를 사용하여 코드 블록을 구분하므로 들여쓰기 규칙을 반드시 준수해야 합니다.
+    title: "2. 필수 연산자 (몫과 나머지)",
+    desc: "나눗셈(/), 몫(//), 나머지(%) 연산자의 구분",
+    content: `홀수/짝수 판별이나 시간 계산(초 -> 분) 등에서 매우 요긴하게 쓰이는 세 가지 나눗셈 연산자입니다.
 
-### 문법 구조
+* \`/\` : 일반 나눗셈 (소수점 결과 반환)
+* \`//\` : 몫 (소수점 아래를 버린 정수 반환)
+* \`%\` : 나머지 (나눈 뒤 남은 나머지 반환)
+
+### 예제 코드
 \`\`\`python
-if 조건식1:
-    # 조건식1이 참일 때 실행
-elif 조건식2:
-    # 조건식1이 거짓이고 조건식2가 참일 때 실행
-else:
-    # 위 조건이 모두 거짓일 때 실행
-\`\`\`
+total_seconds = 130
+minutes = total_seconds // 60  # 2 (몫)
+seconds = total_seconds % 60   # 10 (나머지)
+print(minutes, "분", seconds, "초") # 2 분 10 초
+\`\`\``
+  },
+  {
+    id: 3,
+    title: "3. 조건문 (if-else)",
+    desc: "if, elif, else를 활용한 조건 흐름 분기",
+    content: `조건식의 결과(참/거짓)에 따라 코드의 실행 흐름을 제어합니다. 들여쓰기(Indentation) 규칙에 주의해야 합니다.
 
 ### 예제 코드
 \`\`\`python
@@ -386,127 +386,78 @@ elif score >= 80:
     print("B 학점")
 else:
     print("C 학점")
-# 결과: B 학점
-\`\`\``
-  },
-  {
-    id: 3,
-    title: "3. 반복문 (Loops)",
-    desc: "for, while 루프와 range() 함수 활용",
-    content: `반복문은 동일하거나 유사한 작업을 반복 수행할 때 사용합니다.
-
-### for 문과 range()
-\`range(start, stop, step)\` 함수는 특정 범위의 숫자 시퀀스를 생성합니다.
-* \`range(5)\` : 0부터 4까지 (5개)
-* \`range(1, 6)\` : 1부터 5까지
-* \`range(1, 10, 2)\` : 1부터 9까지 2씩 증가
-
-### 예제 코드 (for 문)
-\`\`\`python
-# 1부터 5까지의 합 구하기
-total = 0
-for i in range(1, 6):
-    total += i
-print("합계:", total) # 합계: 15
-\`\`\`
-
-### 예제 코드 (while 문)
-\`\`\`python
-count = 0
-while count < 3:
-    print("hello")
-    count += 1
 \`\`\``
   },
   {
     id: 4,
-    title: "4. 리스트 (Lists)",
-    desc: "인덱싱, 슬라이싱, 주요 리스트 메서드",
-    content: `리스트는 여러 값을 순서대로 저장하는 자료구조입니다. 다른 타입의 데이터를 섞어서 저장할 수도 있습니다.
+    title: "4. 반복문 (for & range)",
+    desc: "range() 함수의 작동 원리와 반복 실행",
+    content: `특정 횟수만큼 반복할 때 \`for\` 문과 \`range()\` 함수를 조합하여 사용합니다.
 
-### 주요 기능
-* **인덱싱**: \`lst[0]\` (첫 번째 요소)
-* **슬라이싱**: \`lst[1:4]\` (인덱스 1부터 3까지 추출)
-* **요소 추가**: \`lst.append(value)\`
-* **요소 제거**: \`lst.remove(value)\` 또는 \`del lst[index]\`
-* **정렬**: \`lst.sort()\` (오름차순)
+* \`range(5)\` : 0부터 4까지 (총 5번 반복)
+* \`range(1, 6)\` : 1부터 5까지
 
 ### 예제 코드
 \`\`\`python
-fruits = ["apple", "banana"]
-fruits.append("cherry")
-print(fruits) # ['apple', 'banana', 'cherry']
-
-numbers = [3, 1, 4, 1, 5]
-numbers.sort()
-print(numbers) # [1, 1, 3, 4, 5]
+total = 0
+for i in range(1, 6):
+    total += i
+print("1부터 5까지의 합:", total) # 15
 \`\`\``
   },
   {
     id: 5,
-    title: "5. 사용자 정의 함수 (Functions)",
-    desc: "def 예약어를 통한 함수 정의와 반환값 처리",
-    content: `함수는 코드의 재사용성을 높이기 위해 특정 코드를 블록으로 묶어 이름을 붙인 것입니다.
+    title: "5. 리스트 완전 정복 (기본 연산과 응용)",
+    desc: "인덱싱, 원소 추가/삭제, 슬라이싱, 검색 및 정렬법",
+    content: `리스트는 여러 값을 순서대로 늘어놓는 자료구조입니다. COS Pro 3급의 많은 문제들이 리스트 조작을 물어봅니다.
 
-### 문법 구조
+### 1. 인덱싱 & 값 수정
 \`\`\`python
-def 함수이름(매개변수1, 매개변수2):
-    # 수행할 문장
-    return 결과값
+arr = [10, 20, 30]
+arr[1] = 99
+print(arr)  # [10, 99, 30]
 \`\`\`
 
-### 예제 코드
-\`\`\`python
-def add_and_mul(a, b):
-    sum_val = a + b
-    mul_val = a * b
-    return sum_val, mul_val # 튜플 형태로 복수 반환 가능
+### 2. 값 추가/삭제
+* \`append(값)\` : 맨 뒤에 값 추가
+* \`pop()\` : 맨 뒤의 값 꺼내고 삭제
+* \`remove(값)\` : 특정 값을 찾아서 첫 번째 대상을 삭제
 
-s, m = add_and_mul(3, 5)
-print("합:", s, "곱:", m) # 합: 8 곱: 15
+\`\`\`python
+arr = [1, 2]
+arr.append(3)  # [1, 2, 3]
+arr.remove(2)  # [1, 3]
+\`\`\`
+
+### 3. 자르기(슬라이싱) & 뒤집기
+\`\`\`python
+arr = [10, 20, 30, 40]
+print(arr[0:2])  # [10, 20]
+print(arr[::-1]) # [40, 30, 20, 10]
+\`\`\`
+
+### 4. 존재 여부 & 정렬
+\`\`\`python
+arr = [3, 1, 2]
+print(2 in arr)  # True (값의 존재 여부 확인)
+arr.sort()       # 원본 정렬
+print(arr)       # [1, 2, 3]
 \`\`\``
   },
   {
     id: 6,
-    title: "6. 문자열 처리 (Strings)",
-    desc: "문자열 인덱싱, 슬라이싱 및 주요 메서드",
-    content: `파이썬에서 문자열은 변경 불가능(Immutable)한 시퀀스 자료형입니다.
-
-### 주요 메서드
-* \`len(str)\`: 문자열 길이 반환
-* \`str.upper()\` / \`str.lower()\`: 대/소문자 변환
-* \`str.split(separator)\`: 구분자를 기준으로 리스트로 분할
-* \`str.replace(old, new)\`: 문자열 치환
-* \`str.count(sub)\`: 특정 문자나 문자열의 개수 카운트
+    title: "6. 함수와 return",
+    desc: "def를 사용한 함수 정의와 반환(return) 처리",
+    content: `함수는 입력값(매개변수)을 받아서 처리 결과를 \`return\`을 통해 돌려주는 코드 블록입니다.
 
 ### 예제 코드
 \`\`\`python
-text = "Python Programming"
-print(len(text))          # 18
-print(text[0:6])          # Python
-print(text.lower())       # python programming
-print("apple,banana".split(",")) # ['apple', 'banana']
-\`\`\``
-  },
-  {
-    id: 7,
-    title: "7. 내장 함수와 모듈 (Builtins & Modules)",
-    desc: "자주 쓰이는 내장 함수와 모듈 활용법",
-    content: `파이썬은 수많은 유용한 내장 함수와 표준 라이브러리(모듈)를 기본 제공합니다.
+def add(x, y):
+    result = x + y
+    return result
 
-### 주요 내장 함수
-* \`sum(iterable)\`: 합계 계산
-* \`min()\` / \`max()\`: 최솟값 / 최댓값 반환
-* \`abs(x)\`: 절대값 반환
-* \`sorted(iterable)\`: 정렬된 새 리스트 반환
-
-### 표준 모듈 가져오기 (math)
-\`\`\`python
-import math
-
-print(math.ceil(3.14))  # 4 (올림)
-print(math.floor(3.14)) # 3 (내림)
-print(math.sqrt(16))    # 4.0 (제곱근)
+answer = add(3, 5)
+print(answer) # 8
 \`\`\``
   }
 ];
