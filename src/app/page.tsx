@@ -453,12 +453,25 @@ export default function Home() {
     const actualNormalized = normalize(actual);
     const expectedNormalized = normalize(expected);
     
-    // Check if the normalized expected string exists inside or matches the tail of the normalized actual string.
+    // 1. Check if the normalized expected string exists inside or matches the tail of the normalized actual string.
     if (actualNormalized.endsWith(expectedNormalized) || actualNormalized.includes(expectedNormalized)) {
       return true;
     }
 
-    // Fallback: strip all whitespace entirely for a fully lenient check (e.g. ignoring random spaces/newlines)
+    // 2. Check the last N lines of the actual output (ignores intermediate debug prints)
+    const expectedLines = expected.trim().split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    const actualLines = actual.trim().split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    
+    if (actualLines.length >= expectedLines.length) {
+      const lastActualLines = actualLines.slice(-expectedLines.length);
+      const collapsedActual = normalize(lastActualLines.join(" "));
+      const collapsedExpected = normalize(expectedLines.join(" "));
+      if (collapsedActual === collapsedExpected) {
+        return true;
+      }
+    }
+
+    // 3. Fallback: strip all whitespace entirely for a fully lenient check (e.g. ignoring random spaces/newlines)
     const stripAllSpace = (text: string) => text.replace(/\s+/g, "").trim();
     const actualNoSpace = stripAllSpace(actual);
     const expectedNoSpace = stripAllSpace(expected);
