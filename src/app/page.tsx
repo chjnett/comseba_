@@ -454,9 +454,16 @@ export default function Home() {
     const expectedNormalized = normalize(expected);
     
     // Check if the normalized expected string exists inside or matches the tail of the normalized actual string.
-    // Online Judge solutions can output prompts or extra text before the final output.
-    // By checking if the actual output ends with or contains the expected output, we make it highly robust.
-    return actualNormalized.endsWith(expectedNormalized) || actualNormalized.includes(expectedNormalized);
+    if (actualNormalized.endsWith(expectedNormalized) || actualNormalized.includes(expectedNormalized)) {
+      return true;
+    }
+
+    // Fallback: strip all whitespace entirely for a fully lenient check (e.g. ignoring random spaces/newlines)
+    const stripAllSpace = (text: string) => text.replace(/\s+/g, "").trim();
+    const actualNoSpace = stripAllSpace(actual);
+    const expectedNoSpace = stripAllSpace(expected);
+
+    return actualNoSpace.endsWith(expectedNoSpace) || actualNoSpace.includes(expectedNoSpace);
   };
 
   // Run Test cases
