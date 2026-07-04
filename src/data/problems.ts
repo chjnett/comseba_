@@ -3853,7 +3853,7 @@ print(s.replace(char_to_remove, ""))
     input_desc: "표준 입력으로 자연수 n이 주어지고, 다음 줄에 n개의 정수 배열 arr이 주어집니다. 원소는 0부터 9까지의 수만 주어집니다.",
     output_desc: "0부터 9까지 각각의 개수를 한 줄에 하나씩 차례대로 출력하세요.",
     examples: [
-      { input: "10\n0 5 7 2 2 1 9 2 1 6 5", output: "1\n2\n3\n0\n0\n1\n1\n1\n0\n1" }
+      { input: "10\n0 5 7 2 2 1 9 2 1 6", output: "1\n2\n3\n0\n0\n1\n1\n1\n0\n1" }
     ],
     starter_code: `# 여기에 코드를 작성하세요.
 `,
@@ -3875,7 +3875,7 @@ for i in range(10):
 #     print(count)
 `,
     test_cases: [
-      { input: "10\n0 5 7 2 2 1 9 2 1 6 5", output: "1\n2\n3\n0\n0\n1\n1\n1\n0\n1" },
+      { input: "10\n0 5 7 2 2 1 9 2 1 6", output: "1\n2\n3\n0\n0\n1\n1\n1\n0\n1" },
       { input: "5\n1 1 2 2 3", output: "0\n2\n2\n1\n0\n0\n0\n0\n0\n0" }
     ]
   },
