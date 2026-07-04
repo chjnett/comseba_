@@ -3939,6 +3939,706 @@ print(n % m)
       { input: "3 2", output: "1" },
       { input: "10 5", output: "0" }
     ]
+  },
+  {
+    id: 96,
+    classLevel: 2,
+    title: "[4차] [문제 6] 포인트 최대한 사용하기 (한 줄 수정)",
+    type: "code",
+    description: "적립된 포인트를 최대한으로 사용하려고 합니다. 포인트를 사용하는 규칙은 다음과 같습니다.\n* 포인트는 100포인트 단위로 사용합니다.\n* 1000포인트 이상 있을 때만 포인트를 사용할 수 있습니다.\n\n적립된 포인트 point가 매개변수로 주어질 때, 최대 몇 포인트를 쓸 수 있는지 return 하도록 solution 함수를 작성했습니다. 주어진 코드에서 한 줄만 변경해서 모든 입력에 대해 올바르게 동작하도록 수정하세요.",
+    input_desc: "포인트 point가 정수로 주어집니다.",
+    output_desc: "최대 사용 가능한 포인트를 출력하거나 반환합니다.",
+    examples: [
+      { input: "2323", output: "2300" }
+    ],
+    starter_code: `def solution(point):
+    if point < 1000:
+        return 0
+    return point * 100 // 100
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+point = int(input())
+print(solution(point))
+`,
+    solution_code: `def solution(point):
+    if point < 1000:
+        return 0
+    return point // 100 * 100
+
+point = int(input())
+print(solution(point))
+`,
+    test_cases: [
+      { input: "2323", output: "2300" },
+      { input: "999", output: "0" },
+      { input: "1000", output: "1000" },
+      { input: "1050", output: "1000" }
+    ]
+  },
+  {
+    id: 97,
+    classLevel: 2,
+    title: "[4차] [문제 7] 성적 변화가 가장 큰 학생 구하기 (한 줄 수정)",
+    type: "code",
+    description: "중간시험 점수와 기말시험 점수를 바탕으로, 점수가 가장 많이 오른 학생의 점수 차이와 가장 많이 떨어진 학생의 점수 차이를 구하려 합니다.\n\n1. 기말고사 점수에서 중간고사 점수를 뺀 값의 최댓값을 구합니다. (func_a)\n2. 기말고사 점수에서 중간고사 점수를 뺀 값의 최솟값을 구합니다. (func_b)\n3. 두 과정을 통해 구한 점수를 배열에 담아 return 합니다. (점수가 떨어진 경우 음수로 표현)\n\n주어진 코드에서 한 줄만 변경해서 모든 입력에 대해 올바르게 동작하도록 수정하세요.",
+    input_desc: "첫 번째 줄에 공백으로 구분된 중간고사 점수들이 주어집니다. 두 번째 줄에 공백으로 구분된 기말고사 점수들이 주어집니다.",
+    output_desc: "[최대 상승 점수, 최대 하락 점수]를 출력하거나 반환합니다.",
+    examples: [
+      { input: "20 50 40\n10 50 70", output: "[30, -10]" }
+    ],
+    starter_code: `def func_a(scores1, scores2):
+    answer = 0
+    for score1, score2 in zip(scores1, scores2):
+        answer = max(answer, score2 - score1)
+    return answer
+
+def func_b(scores1, scores2):
+    answer = 0
+    for score1, score2 in zip(scores1, scores2):
+        answer = min(answer, score1 - score2)
+    return answer
+            
+def solution(mid_scores, final_scores):
+    up = func_a(mid_scores, final_scores)
+    down = func_b(mid_scores, final_scores)
+    return [up, down]
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+mid_scores = list(map(int, input().split()))
+final_scores = list(map(int, input().split()))
+print(solution(mid_scores, final_scores))
+`,
+    solution_code: `def func_a(scores1, scores2):
+    answer = 0
+    for score1, score2 in zip(scores1, scores2):
+        answer = max(answer, score2 - score1)
+    return answer
+
+def func_b(scores1, scores2):
+    answer = 0
+    for score1, score2 in zip(scores1, scores2):
+        answer = min(answer, score2 - score1)
+    return answer
+            
+def solution(mid_scores, final_scores):
+    up = func_a(mid_scores, final_scores)
+    down = func_b(mid_scores, final_scores)
+    return [up, down]
+
+mid_scores = list(map(int, input().split()))
+final_scores = list(map(int, input().split()))
+print(solution(mid_scores, final_scores))
+`,
+    test_cases: [
+      { input: "20 50 40\n10 50 70", output: "[30, -10]" },
+      { input: "90 80 70\n90 80 70", output: "[0, 0]" },
+      { input: "50 50 50\n60 70 80", output: "[30, 0]" }
+    ]
+  },
+  {
+    id: 98,
+    classLevel: 2,
+    title: "[4차] [문제 8] 과반수 득표자 구하기 (한 줄 수정)",
+    type: "code",
+    description: "1번부터 n번까지의 후보에 대한 투표 결과가 주어질 때, 과반수(절반이 넘는 수)를 득표한 후보자의 번호를 구하려고 합니다. 과반수 득표자가 없다면 -1을 return 합니다.\n\n주어진 코드에서 한 줄만 변경해서 모든 입력에 대해 올바르게 동작하도록 수정하세요.",
+    input_desc: "첫 번째 줄에 후보 수 n이 주어집니다. 두 번째 줄에 공백으로 구분된 투표 결과가 주어집니다.",
+    output_desc: "과반수 득표 후보 번호 또는 -1을 출력하거나 반환합니다.",
+    examples: [
+      { input: "3\n1 2 1 3 1 2 1", output: "1" }
+    ],
+    starter_code: `def solution(n, votes):
+    arr = [0] * (n + 1)
+    for vote in votes:
+        arr[vote] += 1
+
+    for i in range(1, n+1):
+        if arr[i] > n/2:
+            return i
+    return -1
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+n = int(input())
+votes = list(map(int, input().split()))
+print(solution(n, votes))
+`,
+    solution_code: `def solution(n, votes):
+    arr = [0] * (n + 1)
+    for vote in votes:
+        arr[vote] += 1
+
+    for i in range(1, n+1):
+        if arr[i] > len(votes) / 2:
+            return i
+    return -1
+
+n = int(input())
+votes = list(map(int, input().split()))
+print(solution(n, votes))
+`,
+    test_cases: [
+      { input: "3\n1 2 1 3 1 2 1", output: "1" },
+      { input: "2\n1 2 1 2", output: "-1" },
+      { input: "3\n1 2 3", output: "-1" }
+    ]
+  },
+  {
+    id: 99,
+    classLevel: 2,
+    title: "[4차] [문제 9] 위험 지역 개수 구하기 (소스코드 작성)",
+    type: "code",
+    description: "4 x 4 크기 격자 모양 지형에서 위험 지역의 개수를 세려고 합니다. 위험 지역이란 동, 서, 남, 북 인접한 지역이 모두 해당 지역보다 높은 지역을 뜻합니다. 격자 경계를 벗어나는 인접 지역은 고려하지 않습니다.",
+    input_desc: "4줄에 걸쳐 각 줄마다 4개의 정수 지형 높이가 공백으로 구분되어 주어집니다.",
+    output_desc: "위험 지역의 개수를 출력하거나 반환합니다.",
+    examples: [
+      { input: "3 6 2 8\n7 3 4 2\n8 6 7 3\n5 3 2 9", output: "5" }
+    ],
+    starter_code: `def solution(height):
+    # 여기에 코드를 작성하세요.
+    answer = 0
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+height = []
+for _ in range(4):
+    height.append(list(map(int, input().split())))
+print(solution(height))
+`,
+    solution_code: `def solution(height):
+    count = 0
+    dx = [-1, 1, 0, 0]
+    dy = [0, 0, -1, 1]
+    
+    for i in range(4):
+        for j in range(4):
+            is_danger = True
+            for k in range(4):
+                nx = i + dx[k]
+                ny = j + dy[k]
+                if 0 <= nx < 4 and 0 <= ny < 4:
+                    if height[nx][ny] <= height[i][j]:
+                        is_danger = False
+                        break
+            if is_danger:
+                count += 1
+    return count
+
+height = []
+for _ in range(4):
+    height.append(list(map(int, input().split())))
+print(solution(height))
+`,
+    test_cases: [
+      { input: "3 6 2 8\n7 3 4 2\n8 6 7 3\n5 3 2 9", output: "5" },
+      { input: "10 10 10 10\n10 10 10 10\n10 10 10 10\n10 10 10 10", output: "0" }
+    ]
+  },
+  {
+    id: 100,
+    classLevel: 2,
+    title: "[4차] [문제 10] 시험 합격자 수 구하기 (소스코드 작성)",
+    type: "code",
+    description: "수험생들의 시험 점수가 들어있는 배열 scores와 커트라인 점수 cutline이 매개변수로 주어질 때, 커트라인 이상의 점수를 받은 합격자 수를 구하는 함수를 완성하세요.",
+    input_desc: "첫 번째 줄에 공백으로 구분된 시험 점수 리스트가 주어집니다. 두 번째 줄에 커트라인 점수가 주어집니다.",
+    output_desc: "합격자 수를 출력하거나 반환합니다.",
+    examples: [
+      { input: "80 90 55 60 59\n60", output: "3" }
+    ],
+    starter_code: `def solution(scores, cutline):
+    # 여기에 코드를 작성하세요.
+    answer = 0
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+scores = list(map(int, input().split()))
+cutline = int(input())
+print(solution(scores, cutline))
+`,
+    solution_code: `def solution(scores, cutline):
+    answer = 0
+    for s in scores:
+        if s >= cutline:
+            answer += 1
+    return answer
+
+scores = list(map(int, input().split()))
+cutline = int(input())
+print(solution(scores, cutline))
+`,
+    test_cases: [
+      { input: "80 90 55 60 59\n60", output: "3" },
+      { input: "50 40 30\n60", output: "0" }
+    ]
+  },
+  {
+    id: 101,
+    classLevel: 2,
+    title: "[5차] [문제 1] 사다리 게임 당첨자 시작 위치 (빈칸 채우기)",
+    type: "blank",
+    description: "6명이 사다리 게임을 할 때, 몇 번째 위치에서 시작하는 사람이 상품을 타는지 알고 싶습니다. 가로줄 정보 배열 ladders와 당첨 상품 세로줄 위치 win이 주어질 때, 당첨자의 시작 위치를 구하는 빈칸을 채워주세요.",
+    input_desc: "첫 번째 줄에 가로줄의 개수 m이 주어집니다.\n이후 m개의 줄에 걸쳐 가로줄 연결 정보(두 개의 세로선 번호)가 공백으로 구분되어 주어집니다.\n마지막 줄에 당첨 상품 위치 win이 주어집니다.",
+    output_desc: "당첨자의 시작 위치 번호(1~6)를 출력하거나 반환합니다.",
+    examples: [
+      { input: "4\n1 2\n3 4\n2 3\n5 6\n3", output: "1" }
+    ],
+    starter_code: `def solution(ladders, win):
+    answer = 0
+    player = [1, 2, 3, 4, 5, 6]
+    for e in ladders:
+        temp = player[e[0]-1]
+        player[e[0]-1] = @@@
+        player[e[1]-1] = @@@
+        
+    answer = player[win-1]
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+m = int(input())
+ladders = []
+for _ in range(m):
+    ladders.append(list(map(int, input().split())))
+win = int(input())
+print(solution(ladders, win))
+`,
+    solution_code: `def solution(ladders, win):
+    answer = 0
+    player = [1, 2, 3, 4, 5, 6]
+    for e in ladders:
+        temp = player[e[0]-1]
+        player[e[0]-1] = player[e[1]-1]
+        player[e[1]-1] = temp
+        
+    answer = player[win-1]
+    return answer
+
+m = int(input())
+ladders = []
+for _ in range(m):
+    ladders.append(list(map(int, input().split())))
+win = int(input())
+print(solution(ladders, win))
+`,
+    test_cases: [
+      { input: "4\n1 2\n3 4\n2 3\n5 6\n3", output: "1" },
+      { input: "1\n1 2\n2", output: "1" }
+    ]
+  },
+  {
+    id: 102,
+    classLevel: 2,
+    title: "[5차] [문제 2] 공강 시간 계산하기 (빈칸 채우기)",
+    type: "blank",
+    description: "시간표 상에서 첫 수업과 마지막 수업 사이에 비어있는 시간(공강)이 총 몇 시간인지 구하려고 합니다. 수업이 있으면 1, 없으면 0입니다. 주어진 하위 함수들을 활용하여 빈칸을 알맞게 매칭하세요.",
+    input_desc: "공백으로 구분된 시간표 리스트(0과 1로 구성)가 주어집니다.",
+    output_desc: "총 공강 시간(시간표 사이 0의 개수)을 출력하거나 반환합니다.",
+    examples: [
+      { input: "1 0 1 0 0 1 0", output: "3" }
+    ],
+    starter_code: `def func_a(time_table):
+    for i, t in reversed(list(enumerate(time_table))):
+        if t == 1: return i
+    return 0
+
+def func_b(time_table, class1, class2):
+    answer = 0
+    for i in range(class1, class2):
+        if time_table[i] == 0: answer += 1
+    return answer
+
+def func_c(time_table):
+    for i, t in enumerate(time_table):
+        if t == 1: return i
+    return 0
+
+def solution(time_table):
+    answer = 0
+    first_class = @@@
+    last_class = @@@
+    answer = @@@
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+time_table = list(map(int, input().split()))
+print(solution(time_table))
+`,
+    solution_code: `def func_a(time_table):
+    for i, t in reversed(list(enumerate(time_table))):
+        if t == 1: return i
+    return 0
+
+def func_b(time_table, class1, class2):
+    answer = 0
+    for i in range(class1, class2):
+        if time_table[i] == 0: answer += 1
+    return answer
+
+def func_c(time_table):
+    for i, t in enumerate(time_table):
+        if t == 1: return i
+    return 0
+
+def solution(time_table):
+    answer = 0
+    first_class = func_c(time_table)
+    last_class = func_a(time_table)
+    answer = func_b(time_table, first_class, last_class)
+    return answer
+
+time_table = list(map(int, input().split()))
+print(solution(time_table))
+`,
+    test_cases: [
+      { input: "1 0 1 0 0 1 0", output: "3" },
+      { input: "1 1 1 1", output: "0" },
+      { input: "0 0 1 0 0 0 0 1", output: "4" }
+    ]
+  },
+  {
+    id: 103,
+    classLevel: 2,
+    title: "[5차] [문제 3] 속도위반 벌금 총액 (빈칸 채우기)",
+    type: "blank",
+    description: "차량들의 속도 위반 정도에 따라 부과되는 총벌금을 구하려 합니다.\n\n* 규정 속도 10% 이상 20% 미만 위반: 3만 원\n* 규정 속도 20% 이상 30% 미만 위반: 5만 원\n* 규정 속도 30% 이상 위반: 7만 원",
+    input_desc: "첫 번째 줄에 규정 속도 speed가 주어집니다. 두 번째 줄에 공백으로 구분된 차량 주행 속도 리스트가 주어집니다.",
+    output_desc: "총 벌금(단위: 만 원)을 출력하거나 반환합니다.",
+    examples: [
+      { input: "100\n110 120 130 90", output: "15" }
+    ],
+    starter_code: `def solution(speed, cars):
+    answer = 0
+    for x in cars:
+        if x >= speed * 11 / 10 and x < speed * 12 / 10:
+            answer += 3
+        elif @@@:
+            answer += 5
+        elif @@@:
+            answer += 7
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+speed = int(input())
+cars = list(map(int, input().split()))
+print(solution(speed, cars))
+`,
+    solution_code: `def solution(speed, cars):
+    answer = 0
+    for x in cars:
+        if x >= speed * 11 / 10 and x < speed * 12 / 10:
+            answer += 3
+        elif x >= speed * 12 / 10 and x < speed * 13 / 10:
+            answer += 5
+        elif x >= speed * 13 / 10:
+            answer += 7
+    return answer
+
+speed = int(input())
+cars = list(map(int, input().split()))
+print(solution(speed, cars))
+`,
+    test_cases: [
+      { input: "100\n110 120 130 90", output: "15" },
+      { input: "60\n60 62 65 70 80", output: "10" }
+    ]
+  },
+  {
+    id: 104,
+    classLevel: 2,
+    title: "[5차] [문제 4] 삼종경기 점수 산출 (빈칸 채우기)",
+    type: "blank",
+    description: "선수의 세 종목 기록에 따른 점수 합계를 산출하려 합니다.\n\n* 태권도: 25승 이상이면 250점, 미만이면 1승당 8점\n* 달리기: 60초 완주 시 기본 250점 (1초 빠르면 +5점, 1초 느리면 -5점)\n* 사격: 10발 기록의 합산점, 단 10점을 7번 이상 맞추면 추가 보너스 100점",
+    input_desc: "첫 번째 줄에 태권도 승수, 두 번째 줄에 달리기 초(기록), 세 번째 줄에 공백으로 구분된 사격 점수 10개가 주어집니다.",
+    output_desc: "삼종경기 점수 총합을 출력하거나 반환합니다.",
+    examples: [
+      { input: "27\n58\n10 10 10 10 10 10 10 9 8 7", output: "704" }
+    ],
+    starter_code: `def solution(taekwondo, running, shooting):
+    answer = 0
+    if taekwondo >= 25:
+        answer += @@@
+    else:
+        answer += taekwondo * 8
+    answer += 250 + (60 - running) * 5
+    count = 0
+    for s in shooting:
+        answer += s
+        if s == 10: count += 1
+    if count >= 7:
+        answer += @@@
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+taekwondo = int(input())
+running = int(input())
+shooting = list(map(int, input().split()))
+print(solution(taekwondo, running, shooting))
+`,
+    solution_code: `def solution(taekwondo, running, shooting):
+    answer = 0
+    if taekwondo >= 25:
+        answer += 250
+    else:
+        answer += taekwondo * 8
+    answer += 250 + (60 - running) * 5
+    count = 0
+    for s in shooting:
+        answer += s
+        if s == 10: count += 1
+    if count >= 7:
+        answer += 100
+    return answer
+
+taekwondo = int(input())
+running = int(input())
+shooting = list(map(int, input().split()))
+print(solution(taekwondo, running, shooting))
+`,
+    test_cases: [
+      { input: "27\n58\n10 10 10 10 10 10 10 9 8 7", output: "704" },
+      { input: "20\n62\n9 9 9 9 9 9 9 9 9 9", output: "490" }
+    ]
+  },
+  {
+    id: 105,
+    classLevel: 2,
+    title: "[5차] [문제 5] 함께 열리는 주기 (한 줄 수정)",
+    type: "code",
+    description: "a일장과 b일장이 동시에 열린 날 이후, 다음번에 다시 함께 열리는 주기(최소공배수)를 구하려 합니다. 주어진 코드에서 한 줄만 변경하여 올바른 최소공배수를 구하도록 수정하세요.",
+    input_desc: "두 장날의 주기 a와 b가 공백으로 구분되어 주어집니다.",
+    output_desc: "동시에 열리는 최소 공배수 주기를 출력하거나 반환합니다.",
+    examples: [
+      { input: "4 6", output: "12" }
+    ],
+    starter_code: `def solution(a, b):
+    answer = 0
+    for i in range(1, b + 1):
+        if (a * i) % b == 0:
+            answer = b * i
+            break
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+a, b = map(int, input().split())
+print(solution(a, b))
+`,
+    solution_code: `def solution(a, b):
+    answer = 0
+    for i in range(1, b + 1):
+        if (a * i) % b == 0:
+            answer = a * i
+            break
+    return answer
+
+a, b = map(int, input().split())
+print(solution(a, b))
+`,
+    test_cases: [
+      { input: "4 6", output: "12" },
+      { input: "3 5", output: "15" }
+    ]
+  },
+  {
+    id: 106,
+    classLevel: 2,
+    title: "[5차] [문제 6] 평균 70점을 위한 수학 점수 (한 줄 수정)",
+    type: "code",
+    description: "국어점수 korean과 영어점수 english가 주어질 때, 세 과목의 평균이 70점 이상이 되기 위한 수학 점수의 최솟값을 구해야 합니다. 수학 점수를 100점을 맞아도 평균이 70점이 안 되면 -1을 반환합니다. 주어진 코드에서 한 줄만 수정하세요.",
+    input_desc: "국어 점수 korean과 영어 점수 english가 공백으로 구분되어 주어집니다.",
+    output_desc: "수학 과목의 최소 필요 점수를 출력하거나 반환합니다.",
+    examples: [
+      { input: "70 60", output: "80" }
+    ],
+    starter_code: `def solution(korean, english):
+    answer = 0
+    math = 210 - korean + english
+    if math > 100:
+        answer = -1
+    else:
+        answer = math
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+korean, english = map(int, input().split())
+print(solution(korean, english))
+`,
+    solution_code: `def solution(korean, english):
+    answer = 0
+    math = 210 - (korean + english)
+    if math > 100:
+        answer = -1
+    else:
+        answer = math
+    return answer
+
+korean, english = map(int, input().split())
+print(solution(korean, english))
+`,
+    test_cases: [
+      { input: "70 60", output: "80" },
+      { input: "50 50", output: "-1" },
+      { input: "100 100", output: "10" }
+    ]
+  },
+  {
+    id: 107,
+    classLevel: 2,
+    title: "[5차] [문제 7] 마트 계산대 소요 시간 (한 줄 수정)",
+    type: "code",
+    description: "물건이 3개 이하이면 소량 계산대(small_counter), 초과하면 일반 계산대(general_counter)에서 순서대로 줄을 서서 계산합니다. 물건 1개당 1분이 소요될 때 모든 물건을 계산하는 데 걸리는 최종 시간(두 계산대 작업 시간 중 최댓값)을 구해야 합니다. 주어진 코드에서 한 줄만 수정하세요.",
+    input_desc: "각 손님들의 물건 수 목록이 공백으로 구분되어 한 줄로 주어집니다.",
+    output_desc: "두 계산대 중 더 늦게 작업이 끝나는 소요 시간을 출력하거나 반환합니다.",
+    examples: [
+      { input: "2 4 1 5 1 2", output: "9" }
+    ],
+    starter_code: `def solution(stuffs):
+    answer = 0
+    small_counter, general_counter = 0, 0
+    for s in stuffs:
+        if s > 3:   general_counter += s
+        else:       small_counter += s
+        
+    if small_counter < general_counter:
+        answer = small_counter
+    else:
+        answer = general_counter
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+stuffs = list(map(int, input().split()))
+print(solution(stuffs))
+`,
+    solution_code: `def solution(stuffs):
+    answer = 0
+    small_counter, general_counter = 0, 0
+    for s in stuffs:
+        if s > 3:   general_counter += s
+        else:       small_counter += s
+        
+    if small_counter > general_counter:
+        answer = small_counter
+    else:
+        answer = general_counter
+    return answer
+
+stuffs = list(map(int, input().split()))
+print(solution(stuffs))
+`,
+    test_cases: [
+      { input: "2 4 1 5 1 2", output: "9" },
+      { input: "1 2 3", output: "6" }
+    ]
+  },
+  {
+    id: 108,
+    classLevel: 2,
+    title: "[5차] [문제 8] 단계별 상수도 요금 (한 줄 수정)",
+    type: "code",
+    description: "사용량에 따라 누적 구간별 요금을 계산하려 합니다.\n\n* 1단계 (0~20톤): 톤당 430원\n* 2단계 (21~30톤): 톤당 570원\n* 3단계 (31톤 이상): 톤당 840원\n\n주어진 코드에서 한 줄만 변경해서 3단계 요금 계산식을 올바르게 수정하세요.",
+    input_desc: "물 사용량 usage(톤)가 정수로 주어집니다.",
+    output_desc: "총 사용 요금을 출력하거나 반환합니다.",
+    examples: [
+      { input: "35", output: "18500" }
+    ],
+    starter_code: `def solution(usage):
+    answer = 0
+    if usage > 30:
+        answer = 20 * 430 + 10 * 570 + (usage - 20) * 840
+    elif usage > 20:
+        answer = 20 * 430 + (usage - 20) * 570
+    else:
+        answer = usage * 430
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+usage = int(input())
+print(solution(usage))
+`,
+    solution_code: `def solution(usage):
+    answer = 0
+    if usage > 30:
+        answer = 20 * 430 + 10 * 570 + (usage - 30) * 840
+    elif usage > 20:
+        answer = 20 * 430 + (usage - 20) * 570
+    else:
+        answer = usage * 430
+    return answer
+
+usage = int(input())
+print(solution(usage))
+`,
+    test_cases: [
+      { input: "35", output: "18500" },
+      { input: "15", output: "6450" },
+      { input: "25", output: "11450" }
+    ]
+  },
+  {
+    id: 109,
+    classLevel: 2,
+    title: "[5차] [문제 9] 시험 점수 순위 매기기 (소스코드 작성)",
+    type: "code",
+    description: "학생들의 점수 배열 score가 주어질 때 순위를 담은 배열을 반환해야 합니다. 동점자는 가능한 순위 중 가장 높은 순위(공동 등수)로 채웁니다.",
+    input_desc: "학생들의 점수가 공백으로 구분되어 한 줄로 주어집니다.",
+    output_desc: "각 학생의 등수가 담긴 배열을 대괄호([]) 형태의 리스트 포맷으로 출력하거나 반환합니다.",
+    examples: [
+      { input: "90 87 87 23 35 28 12 46", output: "[1, 2, 2, 7, 5, 6, 8, 4]" }
+    ],
+    starter_code: `def solution(score):
+    # 여기에 코드를 작성하세요.
+    answer = []
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+score = list(map(int, input().split()))
+print(solution(score))
+`,
+    solution_code: `def solution(score):
+    answer = [0] * len(score)
+    for i in range(len(score)):
+        answer[i] = sum(map(lambda x: x > score[i], score)) + 1
+    return answer
+
+score = list(map(int, input().split()))
+print(solution(score))
+`,
+    test_cases: [
+      { input: "90 87 87 23 35 28 12 46", output: "[1, 2, 2, 7, 5, 6, 8, 4]" },
+      { input: "100 100 100", output: "[1, 1, 1]" }
+    ]
+  },
+  {
+    id: 110,
+    classLevel: 2,
+    title: "[5차] [문제 10] 순환 교대 근무 시간 계산 (소스코드 작성)",
+    type: "code",
+    description: "n명의 사람이 근무 시간표 time_table에 따라 순서대로 로테이션 교대 근무를 합니다. n번째 사람 다음에는 다시 1번째 사람이 일하게 됩니다. 이때 가장 오래 일한 사람의 근무 시간을 반환하세요.",
+    input_desc: "첫 번째 줄에 시간표 time_table이 공백으로 구분되어 주어집니다. 두 번째 줄에 근무자 수 n이 주어집니다.",
+    output_desc: "가장 오래 근무한 시간(최댓값)을 출력하거나 반환합니다.",
+    examples: [
+      { input: "4 8 2 5 4 6 7\n4", output: "14" }
+    ],
+    starter_code: `def solution(time_table, n):
+    # 여기에 코드를 작성하세요.
+    answer = 0
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+time_table = list(map(int, input().split()))
+n = int(input())
+print(solution(time_table, n))
+`,
+    solution_code: `def solution(time_table, n):
+    lst = [0 for _ in range(n)]
+    for i, t in enumerate(time_table):
+        lst[i % n] += t
+    return max(lst)
+
+time_table = list(map(int, input().split()))
+n = int(input())
+print(solution(time_table, n))
+`,
+    test_cases: [
+      { input: "4 8 2 5 4 6 7\n4", output: "14" },
+      { input: "10 20\n2", output: "20" }
+    ]
   }
 ];
 
