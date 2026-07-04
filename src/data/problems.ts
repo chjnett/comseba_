@@ -4639,6 +4639,245 @@ print(solution(time_table, n))
       { input: "4 8 2 5 4 6 7\n4", output: "14" },
       { input: "10 20\n2", output: "20" }
     ]
+  },
+  {
+    id: 111,
+    classLevel: 3,
+    title: "[테스트] [문제 1] 두 수의 합 구하기 (소스코드 작성)",
+    type: "code",
+    description: "두 숫자를 더한 값을 구하려 합니다. 표준 입력으로 숫자 두 개를 입력받아, 두 수의 합을 출력하는 파이썬 코드를 작성해주세요.",
+    input_desc: "표준 입력으로 숫자 두 개가 줄바꿈으로 구분되어 주어집니다. (두 수는 1 이상 100 이하인 자연수)",
+    output_desc: "두 수의 합을 출력합니다.",
+    examples: [
+      { input: "5\n3", output: "8" },
+      { input: "1\n4", output: "5" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `a = int(input())
+b = int(input())
+print(a + b)
+`,
+    test_cases: [
+      { input: "5\n3", output: "8" },
+      { input: "1\n4", output: "5" },
+      { input: "10\n20", output: "30" }
+    ]
+  },
+  {
+    id: 112,
+    classLevel: 3,
+    title: "[테스트] [문제 2] 더 긴 문자열 찾기 (소스코드 작성)",
+    type: "code",
+    description: "두 문자열 중 더 긴 문자열을 찾고자 합니다. 표준 입력으로 문자열 두 개를 입력받아, 두 문자열 중 더 긴 문자열을 출력해주세요.",
+    input_desc: "표준 입력으로 문자열 두 개가 줄바꿈으로 구분되어 주어집니다. 두 문자열의 길이는 1 이상 100 이하입니다. 두 문자열의 길이가 같은 경우는 없습니다.",
+    output_desc: "두 문자열 중 길이가 더 긴 문자열을 출력합니다.",
+    examples: [
+      { input: "HelloWorld\nProgrammingisfun", output: "Programmingisfun" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `s1 = input()
+s2 = input()
+if len(s1) > len(s2):
+    print(s1)
+else:
+    print(s2)
+`,
+    test_cases: [
+      { input: "HelloWorld\nProgrammingisfun", output: "Programmingisfun" },
+      { input: "apple\nbanana", output: "banana" },
+      { input: "python\njs", output: "python" }
+    ]
+  },
+  {
+    id: 113,
+    classLevel: 3,
+    title: "[테스트] [문제 3] 거꾸로 정삼각형 별 찍기 (소스코드 작성)",
+    type: "code",
+    description: "문자 '*'를 사용하여 밑변과 높이가 N인 직각삼각형을 거꾸로 출력하려고 합니다. 표준 입력으로 자연수 N을 입력받아 형태를 구현해주세요.",
+    input_desc: "표준 입력으로 자연수 N이 주어집니다. (1 <= N <= 100)",
+    output_desc: "별로 밑변과 높이가 N인 거꾸로 된 직각삼각형을 출력합니다.",
+    examples: [
+      { input: "5", output: "*****\n****\n***\n**\n*" }
+    ],
+    starter_code: `n = int(input())
+# 여기에 코드를 작성하세요.
+`,
+    solution_code: `n = int(input())
+for i in range(n, 0, -1):
+    print('*' * i)
+`,
+    test_cases: [
+      { input: "5", output: "*****\n****\n***\n**\n*" },
+      { input: "3", output: "***\n**\n*" },
+      { input: "1", output: "*" }
+    ]
+  },
+  {
+    id: 114,
+    classLevel: 3,
+    title: "[테스트] [문제 4] 문자열 양 옆에 큰따옴표 붙이기 (소스코드 작성)",
+    type: "code",
+    description: "문자열 한 개가 주어졌을 때, 주어진 문자열 양 옆에 큰따옴표('\"')를 붙여 출력하는 코드를 완성하려 합니다.",
+    input_desc: "알파벳 대소문자로만 이루어진 길이 1 이상 100 이하의 문자열 한 개가 주어집니다.",
+    output_desc: "입력받은 문자열 양 옆에 큰따옴표를 붙여 출력합니다.",
+    examples: [
+      { input: "HelloWorld", output: '"HelloWorld"' },
+      { input: "Quote", output: '"Quote"' }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `s = input()
+print(f'"{s}"')
+`,
+    test_cases: [
+      { input: "HelloWorld", output: '"HelloWorld"' },
+      { input: "Quote", output: '"Quote"' },
+      { input: "Python", output: '"Python"' }
+    ]
+  },
+  {
+    id: 115,
+    classLevel: 3,
+    title: "[테스트] [문제 5] 숫자의 절댓값 구하기 (소스코드 작성)",
+    type: "code",
+    description: "숫자 한 개가 주어졌을 때 그 숫자의 절댓값을 구하려 합니다. 표준 입력으로 정수 한 개를 입력받아, 그 수의 절댓값을 출력해주세요.",
+    input_desc: "-1,000 이상 1,000 이하인 정수 한 개가 주어집니다.",
+    output_desc: "입력받은 수의 절댓값을 출력합니다.",
+    examples: [
+      { input: "-13", output: "13" },
+      { input: "7", output: "7" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `n = int(input())
+print(abs(n))
+`,
+    test_cases: [
+      { input: "-13", output: "13" },
+      { input: "7", output: "7" },
+      { input: "0", output: "0" }
+    ]
+  },
+  {
+    id: 116,
+    classLevel: 3,
+    title: "[테스트] [문제 6] 같으면 합, 다르면 차 구하기 (소스코드 작성)",
+    type: "code",
+    description: "두 숫자가 같으면 두 숫자의 합을, 다르면 두 숫자의 차를 구하려 합니다. 표준 입력으로 숫자 두 개를 입력받아 연산 결과를 출력해주세요.",
+    input_desc: "1 이상 100 이하인 자연수 두 개가 주어집니다. 두 번째 숫자는 첫 번째 숫자와 같거나 큽니다.",
+    output_desc: "같으면 합을, 다르면 차(두 번째 수 - 첫 번째 수)를 출력합니다.",
+    examples: [
+      { input: "5\n5", output: "10" },
+      { input: "7\n10", output: "3" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `a = int(input())
+b = int(input())
+if a == b:
+    print(a + b)
+else:
+    print(b - a)
+`,
+    test_cases: [
+      { input: "5\n5", output: "10" },
+      { input: "7\n10", output: "3" },
+      { input: "10\n20", output: "10" }
+    ]
+  },
+  {
+    id: 117,
+    classLevel: 3,
+    title: "[테스트] [문제 7] 1부터 n까지 출력하기 (소스코드 작성)",
+    type: "code",
+    description: "표준 입력으로 자연수 n을 받아 1부터 n까지의 정수를 한 줄에 하나씩 출력하는 코드를 작성하려 합니다.",
+    input_desc: "자연수 n이 주어집니다. (1 <= n <= 1,000)",
+    output_desc: "1부터 n까지의 자연수를 차례대로 출력합니다.",
+    examples: [
+      { input: "5", output: "1\n2\n3\n4\n5" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `n = int(input())
+for i in range(1, n + 1):
+    print(i)
+`,
+    test_cases: [
+      { input: "5", output: "1\n2\n3\n4\n5" },
+      { input: "3", output: "1\n2\n3" },
+      { input: "1", output: "1" }
+    ]
+  },
+  {
+    id: 118,
+    classLevel: 3,
+    title: "[테스트] [문제 8] 인접한 원소의 차이 구하기 (소스코드 작성)",
+    type: "code",
+    description: "길이가 n인 리스트 arr에서 인접하는 두 숫자 중, [첫 번째 숫자에서 두 번째 숫자를 뺀 값]을 모두 출력하려 합니다.",
+    input_desc: "첫째 줄에 n이 주어지고, 둘째 줄에 공백으로 구분된 n개의 원소를 가진 리스트 arr이 주어집니다. (2 <= n <= 50, 원소는 -100 이상 100 이하 정수)",
+    output_desc: "인접한 숫자 중 앞의 수에서 뒤의 수를 뺀 값을 차례대로 출력합니다.",
+    examples: [
+      { input: "4\n1 3 6 2", output: "-2\n-3\n4" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `n = int(input())
+arr = list(map(int, input().split()))
+for i in range(n - 1):
+    print(arr[i] - arr[i + 1])
+`,
+    test_cases: [
+      { input: "4\n1 3 6 2", output: "-2\n-3\n4" },
+      { input: "2\n10 5", output: "5" },
+      { input: "3\n-5 5 10", output: "-10\n-5" }
+    ]
+  },
+  {
+    id: 119,
+    classLevel: 3,
+    title: "[테스트] [문제 9] 숫자 거꾸로 출력하기 (소스코드 작성)",
+    type: "code",
+    description: "자연수 n을 입력받았을 때, 숫자를 뒤집어서 거꾸로 출력하는 코드를 작성하려 합니다.",
+    input_desc: "자연수 n이 주어집니다. (1 <= n <= 100,000,000, 단 n은 0으로 끝나지 않습니다.)",
+    output_desc: "숫자 n의 앞뒤를 뒤집은 형태를 출력합니다.",
+    examples: [
+      { input: "12345", output: "54321" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `s = input()
+print(s[::-1])
+`,
+    test_cases: [
+      { input: "12345", output: "54321" },
+      { input: "987654321", output: "123456789" },
+      { input: "1101", output: "1011" }
+    ]
+  },
+  {
+    id: 120,
+    classLevel: 3,
+    title: "[테스트] [문제 10] 문자열에서 '1'의 개수 세기 (소스코드 작성)",
+    type: "code",
+    description: "문자열 s에서 문자 '1'의 총 개수를 구하려 합니다.",
+    input_desc: "'1'부터 '9'까지의 숫자로만 이루어진 길이 1 이상 1,000 이하의 문자열 s가 주어집니다.",
+    output_desc: "문자열 내에 존재하는 '1'의 개수를 정수로 출력합니다.",
+    examples: [
+      { input: "4156721", output: "2" },
+      { input: "48273", output: "0" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `s = input()
+print(s.count('1'))
+`,
+    test_cases: [
+      { input: "4156721", output: "2" },
+      { input: "48273", output: "0" },
+      { input: "11111", output: "5" }
+    ]
   }
 ];
 
