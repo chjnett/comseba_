@@ -4878,6 +4878,129 @@ print(s.count('1'))
       { input: "48273", output: "0" },
       { input: "11111", output: "5" }
     ]
+  },
+  {
+    id: 121,
+    classLevel: 3,
+    title: "[테스트추가문제] [문제 11] 특정 배수의 합 구하기 (소스코드 작성)",
+    type: "code",
+    description: "표준 입력으로 자연수 N과 X가 주어집니다. 1부터 N까지의 자연수 중에서 X의 배수인 숫자들만 골라 모두 더한 값을 출력하는 코드를 작성해주세요.",
+    input_desc: "표준 입력으로 두 자연수 N과 X가 줄바꿈으로 구분되어 주어집니다. (1 <= N <= 1,000, 2 <= X <= 10)",
+    output_desc: "1 이상 N 이하의 자연수 중 X의 배수인 수들의 총합을 출력합니다.",
+    examples: [
+      { input: "10\n3", output: "18" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `n = int(input())
+x = int(input())
+total = 0
+for i in range(1, n + 1):
+    if i % x == 0:
+        total += i
+print(total)
+`,
+    test_cases: [
+      { input: "10\n3", output: "18" },
+      { input: "100\n7", output: "735" },
+      { input: "5\n6", output: "0" }
+    ]
+  },
+  {
+    id: 122,
+    classLevel: 3,
+    title: "[테스트추가문제] [문제 12] 모음 제거하고 출력하기 (소스코드 작성)",
+    type: "code",
+    description: "표준 입력으로 알파벳 소문자로만 이루어진 문자열 S가 주어집니다. 이 문자열에서 알파벳 모음(a, e, i, o, u)을 모두 제거한 결과를 출력해주세요.",
+    input_desc: "알파벳 소문자로만 구성된 길이 1 이상 100 이하의 문자열 S가 주어집니다.",
+    output_desc: "모음이 제거된 문자열을 출력합니다.",
+    examples: [
+      { input: "pythonisfun", output: "pythnsfn" },
+      { input: "apple", output: "ppl" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `s = input()
+vowels = "aeiou"
+result = "".join([char for char in s if char not in vowels])
+print(result)
+`,
+    test_cases: [
+      { input: "pythonisfun", output: "pythnsfn" },
+      { input: "apple", output: "ppl" },
+      { input: "aeiou", output: "" }
+    ]
+  },
+  {
+    id: 123,
+    classLevel: 3,
+    title: "[테스트추가문제] [문제 13] 짝수 번째 원소들의 평균 구하기 (소스코드 작성)",
+    type: "code",
+    description: "길이가 N인 리스트 arr이 주어집니다. 리스트의 짝수 번째 인덱스(0, 2, 4, ...)에 위치한 원소들의 평균값을 구하는 코드를 작성해주세요.",
+    input_desc: "첫째 줄에 리스트의 길이 N이 주어지고, 둘째 줄에 공백으로 구분된 N개의 정수가 주어집니다. (2 <= N <= 100, 원소는 1 이상 100 이하의 자연수)",
+    output_desc: "짝수 번째 인덱스 원소들의 평균을 구하여 출력합니다.",
+    examples: [
+      { input: "5\n10 20 30 40 50", output: "30.0" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `n = int(input())
+arr = list(map(int, input().split()))
+even_elements = [arr[i] for i in range(0, n, 2)]
+print(sum(even_elements) / len(even_elements))
+`,
+    test_cases: [
+      { input: "5\n10 20 30 40 50", output: "30.0" },
+      { input: "2\n10 20", output: "10.0" },
+      { input: "4\n1 5 3 7", output: "2.0" }
+    ]
+  },
+  {
+    id: 124,
+    classLevel: 3,
+    title: "[테스트추가문제] [문제 14] 숫자의 계단 출력하기 (소스코드 작성)",
+    type: "code",
+    description: "표준 입력으로 자연수 N을 입력받아 다음과 같이 숫자가 하나씩 늘어나는 계단 모양을 출력해주세요.",
+    input_desc: "표준 입력으로 자연수 N이 주어집니다. (1 <= N <= 9)",
+    output_desc: "첫 번째 줄에는 1, 두 번째 줄에는 1 2, i번째 줄에는 1부터 i까지 공백으로 구분하여 숫자를 출력합니다.",
+    examples: [
+      { input: "4", output: "1\n1 2\n1 2 3\n1 2 3 4" }
+    ],
+    starter_code: `n = int(input())
+# 여기에 코드를 작성하세요.
+`,
+    solution_code: `n = int(input())
+for i in range(1, n + 1):
+    print(*(range(1, i + 1)))
+`,
+    test_cases: [
+      { input: "4", output: "1\n1 2\n1 2 3\n1 2 3 4" },
+      { input: "1", output: "1" },
+      { input: "3", output: "1\n1 2\n1 2 3" }
+    ]
+  },
+  {
+    id: 125,
+    classLevel: 3,
+    title: "[테스트추가문제] [문제 15] 가장 큰 수와 가장 작은 수의 차이 (소스코드 작성)",
+    type: "code",
+    description: "사용자로부터 N개의 정수를 입력받아, 그중 가장 큰 값과 가장 작은 값의 차이(대푯값 간의 거리가 얼마인지)를 구하는 코드를 작성하려 합니다.",
+    input_desc: "첫째 줄에 정수의 개수 N이 주어지고, 둘째 줄에 공백으로 구분된 N개의 정수가 주어집니다. (2 <= N <= 50, 입력되는 정수는 -1,000 이상 1,000 이하)",
+    output_desc: "[가장 큰 수]에서 [가장 작은 수]를 뺀 결과를 출력합니다.",
+    examples: [
+      { input: "6\n5 -2 10 3 8 1", output: "12" }
+    ],
+    starter_code: `# 여기에 코드를 작성하세요.
+`,
+    solution_code: `n = int(input())
+arr = list(map(int, input().split()))
+print(max(arr) - min(arr))
+`,
+    test_cases: [
+      { input: "6\n5 -2 10 3 8 1", output: "12" },
+      { input: "2\n100 -100", output: "200" },
+      { input: "5\n0 0 0 0 0", output: "0" }
+    ]
   }
 ];
 
