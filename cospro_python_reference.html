@@ -111,6 +111,47 @@ tr:nth-child(even) td{background:rgba(255,255,255,0.015);}
 .badge.danger{color:var(--danger);border-color:#5a2a2a;}
 .badge.safe{color:var(--accent-3);border-color:#1f4a35;}
 
+
+.concept-problem-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent-2);
+  color: #ffffff !important;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 8px;
+  text-decoration: none !important;
+  margin-top: 8px;
+  margin-right: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+}
+.concept-problem-link:hover {
+  opacity: 0.95;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.concept-problem-link:active {
+  transform: translateY(0);
+}
+.problem-links-box {
+  margin: 20px 0;
+  padding: 16px;
+  background: var(--panel-2);
+  border-radius: 10px;
+  border-left: 4px solid var(--accent-2);
+}
+.problem-links-box h4 {
+  margin: 0 0 12px 0;
+  font-size: 13.5px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 footer{text-align:center;color:var(--muted);font-family:var(--mono);font-size:12px;padding:40px 0;border-top:1px solid var(--line);margin-top:30px;}
 </style>
 </head>
@@ -135,6 +176,8 @@ footer{text-align:center;color:var(--muted);font-family:var(--mono);font-size:12
   <a href="#algo">11. 알고리즘 정리</a>
   <a href="#mistakes">12. 자주 하는 실수</a>
   <a href="#cheatsheet">13. 한 장 요약</a>
+  <h3>부록</h3>
+  <a href="#appendix" style="color: var(--accent-3); font-weight: bold;">14. 특별 추가 부록 (문제 매핑)</a>
 </aside>
 
 <main>
@@ -656,12 +699,105 @@ count = <span class="num-lit">0</span>
     </table>
   </section>
 
+  <!-- 14 -->
+  <section id="appendix">
+    <h2><span class="num">14</span> 특별 추가 부록: 개념별 코스프로 실전 문제 매핑</h2>
+    <p>본 문서에서 학습한 개념이 실제 코스프로 문제 풀기에서 어떻게 적용되는지 확인하고, 버튼을 클릭하여 즉시 해당 문제 풀이로 이동해 보세요.</p>
+    
+    <div class="grid2">
+      <div class="card" style="grid-column: span 2;">
+        <h4 style="color:var(--accent-2);">기본 문법 & 이론 적용 문제</h4>
+        <div style="margin-top: 10px;">
+          <h5 style="margin: 8px 0 4px; font-size: 13px;">01. 변수·입출력·자료형</h5>
+          <button class="concept-problem-link" onclick="goToProblem(1)">문제 1 - 세 수의 합과 평균</button>
+          <button class="concept-problem-link" onclick="goToProblem(11)">문제 11 - 두 수의 합</button>
+          <button class="concept-problem-link" onclick="goToProblem(25)">문제 25 - 합 출력 형식</button>
+        </div>
+        <div style="margin-top: 16px; border-top: 1px dashed var(--line); padding-top: 10px;">
+          <h5 style="margin: 8px 0 4px; font-size: 13px;">02. 조건문 & 반복문</h5>
+          <button class="concept-problem-link" onclick="goToProblem(3)">문제 3 - 직각삼각형 출력</button>
+          <button class="concept-problem-link" onclick="goToProblem(5)">문제 5 - 홀짝 판별</button>
+          <button class="concept-problem-link" onclick="goToProblem(6)">문제 6 - 두 수의 차</button>
+          <button class="concept-problem-link" onclick="goToProblem(17)">문제 17 - 1부터 n까지 출력</button>
+          <button class="concept-problem-link" onclick="goToProblem(21)">문제 21 - 약수의 개수</button>
+          <button class="concept-problem-link" onclick="goToProblem(46)">문제 46 - 369 게임 박수 횟수</button>
+        </div>
+        <div style="margin-top: 16px; border-top: 1px dashed var(--line); padding-top: 10px;">
+          <h5 style="margin: 8px 0 4px; font-size: 13px;">03. 문자열 다루기</h5>
+          <button class="concept-problem-link" onclick="goToProblem(2)">문제 2 - 두 문자열의 길이 합</button>
+          <button class="concept-problem-link" onclick="goToProblem(4)">문제 4 - 따옴표 붙이기</button>
+          <button class="concept-problem-link" onclick="goToProblem(10)">문제 10 - p와 P의 개수</button>
+          <button class="concept-problem-link" onclick="goToProblem(12)">문제 12 - 더 긴 문자열 찾기</button>
+          <button class="concept-problem-link" onclick="goToProblem(26)">문제 26 - 문자열 N번 반복</button>
+          <button class="concept-problem-link" onclick="goToProblem(27)">문제 27 - 특정 문자 제거하기</button>
+        </div>
+        <div style="margin-top: 16px; border-top: 1px dashed var(--line); padding-top: 10px;">
+          <h5 style="margin: 8px 0 4px; font-size: 13px;">04. 리스트 완전정복</h5>
+          <button class="concept-problem-link" onclick="goToProblem(8)">문제 8 - 짝수와 홀수의 개수</button>
+          <button class="concept-problem-link" onclick="goToProblem(9)">문제 9 - 배열의 합과 평균</button>
+          <button class="concept-problem-link" onclick="goToProblem(18)">문제 18 - 인접 원소 차 출력</button>
+          <button class="concept-problem-link" onclick="goToProblem(19)">문제 19 - 숫자를 거꾸로 출력</button>
+          <button class="concept-problem-link" onclick="goToProblem(39)">문제 39 - 역순 및 구간 필터링</button>
+          <button class="concept-problem-link" onclick="goToProblem(40)">문제 40 - 최댓값과 최솟값</button>
+          <button class="concept-problem-link" onclick="goToProblem(45)">문제 45 - 배열 순서 뒤집기 (투포인터)</button>
+          <button class="concept-problem-link" onclick="goToProblem(50)">문제 50 - 평균 이하인 원소 개수</button>
+        </div>
+        <div style="margin-top: 16px; border-top: 1px dashed var(--line); padding-top: 10px;">
+          <h5 style="margin: 8px 0 4px; font-size: 13px;">05. 딕셔너리 & 집합</h5>
+          <button class="concept-problem-link" onclick="goToProblem(28)">문제 28 - 숫자 빈도수 구하기</button>
+          <button class="concept-problem-link" onclick="goToProblem(32)">문제 32 - 문자 집계</button>
+          <button class="concept-problem-link" onclick="goToProblem(44)">문제 44 - 최빈값과 최저빈도 비율</button>
+        </div>
+        <div style="margin-top: 16px; border-top: 1px dashed var(--line); padding-top: 10px;">
+          <h5 style="margin: 8px 0 4px; font-size: 13px;">06. 함수와 재귀</h5>
+          <button class="concept-problem-link" onclick="goToProblem(15)">문제 15 - 절댓값 구하기</button>
+          <button class="concept-problem-link" onclick="goToProblem(23)">문제 23 - 과목 통과 판별</button>
+          <button class="concept-problem-link" onclick="goToProblem(43)">문제 43 - 날짜 간격 구하기</button>
+        </div>
+      </div>
+      
+      <div class="card" style="grid-column: span 2;">
+        <h4 style="color:var(--accent-3);">유형별 풀이 & 알고리즘 적용 문제</h4>
+        <div style="margin-top: 10px;">
+          <h5 style="margin: 8px 0 4px; font-size: 13px;">07. 문자열 유형</h5>
+          <button class="concept-problem-link" onclick="goToProblem(48)">문제 48 - 팰린드롬 판단하기</button>
+          <button class="concept-problem-link" onclick="goToProblem(49)">문제 49 - 연속하는 중복 문자 제거</button>
+        </div>
+        <div style="margin-top: 16px; border-top: 1px dashed var(--line); padding-top: 10px;">
+          <h5 style="margin: 8px 0 4px; font-size: 13px;">08. 배열/리스트 유형</h5>
+          <button class="concept-problem-link" onclick="goToProblem(41)">문제 41 - 티셔츠 주문 수량 구하기</button>
+          <button class="concept-problem-link" onclick="goToProblem(45)">문제 45 - 배열 순서 뒤집기 (투포인터)</button>
+          <button class="concept-problem-link" onclick="goToProblem(50)">문제 50 - 평균 이하인 원소 개수 구하기</button>
+        </div>
+        <div style="margin-top: 16px; border-top: 1px dashed var(--line); padding-top: 10px;">
+          <h5 style="margin: 8px 0 4px; font-size: 13px;">09. 시뮬레이션 유형</h5>
+          <button class="concept-problem-link" onclick="goToProblem(42)">문제 42 - 회원 등급별 할인율 적용</button>
+          <button class="concept-problem-link" onclick="goToProblem(43)">문제 43 - 날짜 간격 구하기</button>
+          <button class="concept-problem-link" onclick="goToProblem(46)">문제 46 - 369 게임 박수 횟수 구하기</button>
+        </div>
+        <div style="margin-top: 16px; border-top: 1px dashed var(--line); padding-top: 10px;">
+          <h5 style="margin: 8px 0 4px; font-size: 13px;">10. 탐색·정렬 유형</h5>
+          <button class="concept-problem-link" onclick="goToProblem(37)">문제 37 - 구구단 정렬 출력</button>
+          <button class="concept-problem-link" onclick="goToProblem(47)">문제 47 - 초급 영어 수강 대상 인원수</button>
+        </div>
+        <div style="margin-top: 16px; border-top: 1px dashed var(--line); padding-top: 10px;">
+          <h5 style="margin: 8px 0 4px; font-size: 13px;">11. 알고리즘 정리</h5>
+          <button class="concept-problem-link" onclick="goToProblem(20)">문제 20 - 1의 개수 구하기</button>
+          <button class="concept-problem-link" onclick="goToProblem(29)">문제 29 - 5의 배수 통계</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>
 </div>
 
 <footer>made for learning · COS Pro 2급·3급 Python reference</footer>
 
 <script>
+  function goToProblem(problemId) {
+    window.parent.postMessage({ type: 'NAVIGATE_TO_PROBLEM', problemId: problemId }, '*');
+  }
   function applyTheme() {
     const params = new URLSearchParams(window.location.search);
     const theme = params.get('theme') || 'light';

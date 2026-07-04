@@ -80,6 +80,92 @@ finally:
 `;
 }
 
+function getConceptSummaryForProblem(prob: Problem): { title: string; points: string[]; code: string } {
+  const id = prob.id;
+
+  if (id === 1 || id === 11 || id === 25) {
+    return {
+      title: "변수 및 연산자 (몫과 나머지)",
+      points: [
+        "변수는 값을 저장하는 상자입니다. 파이썬은 변수 선언 시 타입을 명시하지 않습니다.",
+        "// 연산자는 나눗셈의 '몫'을 구하고, % 연산자는 나눗셈의 '나머지'를 구합니다.",
+        "수 계산식이나 조건 판단(예: 짝수/홀수 판별, 배수 확인)에서 매우 빈번하게 사용됩니다."
+      ],
+      code: "a = 10\nb = 3\nprint(a // b) # 3 (몫)\nprint(a % b)  # 1 (나머지)"
+    };
+  }
+  
+  if (id === 5 || id === 6 || id === 15 || id === 16 || id === 23 || id === 35 || id === 42) {
+    return {
+      title: "조건문 (if-elif-else)",
+      points: [
+        "특정 조건이 참(True)인지 거짓(False)인지에 따라 실행 흐름을 제어합니다.",
+        "elif와 else를 조합하여 다중 분기를 만들 수 있습니다.",
+        "들여쓰기(Indentation) 규칙에 매우 민감하므로 공백 4칸 또는 탭을 일관되게 적용해야 합니다."
+      ],
+      code: "score = 85\nif score >= 90:\n    print('A')\nelif score >= 80:\n    print('B')\nelse:\n    print('C')"
+    };
+  }
+
+  if (id === 3 || id === 13 || id === 17 || id === 21 || id === 24 || id === 33 || id === 36 || id === 37 || id === 38 || id === 46) {
+    return {
+      title: "반복문 (for & range)",
+      points: [
+        "range(start, stop, step) 함수를 사용하여 원하는 횟수만큼 루프를 돌릴 수 있습니다.",
+        "stop 값은 범위에 포함되지 않으므로 주의해야 합니다. (예: range(1, 5)는 1부터 4까지)",
+        "별 출력, 특정 구간 숫자 합산, 구구단 출력 등 반복 처리가 필요한 모든 곳에 쓰입니다."
+      ],
+      code: "total = 0\nfor i in range(1, 6): # 1부터 5까지\n    total += i\nprint(total) # 15"
+    };
+  }
+
+  if (id === 2 || id === 4 || id === 10 || id === 12 || id === 14 || id === 26 || id === 27 || id === 48 || id === 49) {
+    return {
+      title: "문자열 다루기 & 슬라이싱",
+      points: [
+        "문자열은 변경 불가능(immutable)하므로 특정 위치를 직접 바꿀 수 없습니다 (예: s[0] = 'X' 에러).",
+        "s[::-1] 처럼 슬라이싱을 이용해 문자열을 쉽게 뒤집을 수 있어 팰린드롬 판별 등에 유용합니다.",
+        "join(), count(), upper(), lower(), replace() 등의 문자열 내장 함수를 활용하세요."
+      ],
+      code: "s = 'hello'\nprint(s[::-1])     # 'olleh'\nprint(s.count('l')) # 2\n# 수정 시 리스트 변환 필수:\nlst = list(s)\nlst[0] = 'H'\ns = ''.join(lst) # 'Hello'"
+    };
+  }
+
+  if (id === 8 || id === 9 || id === 18 || id === 19 || id === 20 || id === 29 || id === 34 || id === 39 || id === 40 || id === 41 || id === 45 || id === 50) {
+    return {
+      title: "리스트 다루기 & 투 포인터",
+      points: [
+        "리스트는 순서가 있고 가변적(mutable)인 파이썬의 핵심 자료 구조입니다.",
+        "append(), insert(), pop(), remove() 함수로 리스트를 수정합니다.",
+        "투 포인터(Two Pointer)는 left, right 인덱스를 좁혀가며 스왑하거나 탐색할 때 사용됩니다."
+      ],
+      code: "arr = [1, 2, 3]\narr.append(4)  # [1, 2, 3, 4]\narr.reverse()  # [4, 3, 2, 1]\n\n# 투 포인터 뒤집기 예시\nleft, right = 0, len(arr) - 1\nwhile left < right:\n    arr[left], arr[right] = arr[right], arr[left]\n    left += 1\n    right -= 1"
+    };
+  }
+
+  if (id === 28 || id === 32 || id === 44) {
+    return {
+      title: "딕셔너리 & 빈도수 세기",
+      points: [
+        "딕셔너리는 키-값(key-value) 쌍으로 이루어져 검색이 매우 빠릅니다(O(1)).",
+        "get(key, default) 메서드를 사용하면 키가 없는 경우에도 에러 없이 기본값을 지정해 개수를 셀 수 있습니다.",
+        "collections 라이브러리의 Counter를 활용하면 한 줄로 빈도수를 수집할 수 있습니다."
+      ],
+      code: "cnt = {}\nfor ch in 'banana':\n    cnt[ch] = cnt.get(ch, 0) + 1\n# cnt = {'b': 1, 'a': 3, 'n': 2}\n\n# Counter 사용:\nfrom collections import Counter\nc = Counter('banana')"
+    };
+  }
+
+  return {
+    title: "코스프로 기본 알고리즘 & 구현",
+    points: [
+      "문제의 요구 사항과 제약 조건을 꼼꼼히 확인하고 한 단계씩 구현하세요.",
+      "변수명과 함수 반환값(return)을 정확하게 다루는지 점검합니다.",
+      "입출력 형식(공백 구분 데이터 읽기, 출력 정밀도 등)이 맞는지 주의해야 합니다."
+    ],
+    code: "def solution(data):\n    # 문제를 한 단계씩 논리적으로 해결해 보세요\n    answer = sum(data) / len(data)\n    return answer"
+  };
+}
+
 export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
@@ -105,6 +191,8 @@ export default function Home() {
   // Custom dialog state
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [showConceptModal, setShowConceptModal] = useState<boolean>(false);
+  const [pendingProblem, setPendingProblem] = useState<Problem | null>(null);
 
   // New Problem Form States
   const [newTitle, setNewTitle] = useState("");
@@ -253,8 +341,30 @@ export default function Home() {
     setIsMounted(true);
   }, []);
 
+  // Listen for navigation messages from concept iframe
+  useEffect(() => {
+    const handleMessage = (e: MessageEvent) => {
+      if (e.data && e.data.type === "NAVIGATE_TO_PROBLEM") {
+        const problemId = parseInt(e.data.problemId, 10);
+        const found = problems.find(p => p.id === problemId);
+        if (found) {
+          setPendingProblem(found);
+          setShowConceptModal(true);
+          setCurrentCategory('oj');
+        }
+      }
+    };
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, [problems]);
+
   // Update editor code when current problem changes
   const handleSelectProblem = (prob: Problem) => {
+    setPendingProblem(prob);
+    setShowConceptModal(true);
+  };
+
+  const handleSelectProblemDirect = (prob: Problem) => {
     setCurrentProblem(prob);
     const pid = prob.id.toString();
     const savedCode = submissions[pid] || prob.starter_code;
@@ -766,7 +876,7 @@ export default function Home() {
                     setSelectedClass(3);
                     const class3 = problems.filter(p => (p.classLevel || 3) === 3);
                     if (class3.length > 0) {
-                      handleSelectProblem(class3[0]);
+                      handleSelectProblemDirect(class3[0]);
                     }
                   }}
                   className={"px-3 py-1 rounded-lg text-xs font-bold transition-all duration-200 " + (
@@ -782,7 +892,7 @@ export default function Home() {
                     setSelectedClass(2);
                     const class2 = problems.filter(p => (p.classLevel || 3) === 2);
                     if (class2.length > 0) {
-                      handleSelectProblem(class2[0]);
+                      handleSelectProblemDirect(class2[0]);
                     }
                   }}
                   className={"px-3 py-1 rounded-lg text-xs font-bold transition-all duration-200 " + (
@@ -1287,6 +1397,79 @@ export default function Home() {
         </div>
       )}
 
+      {/* Concept Summary Modal Dialog */}
+      {showConceptModal && pendingProblem && (() => {
+        const summary = getConceptSummaryForProblem(pendingProblem);
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <div className="w-full max-w-lg bg-[var(--panel-2)] border border-[var(--line)] rounded-2xl overflow-hidden flex flex-col shadow-2xl">
+              <div className="bg-[var(--panel)] px-6 py-4 flex items-center justify-between border-b border-[var(--line)]">
+                <div className="flex items-center gap-2">
+                  <div className="bg-[var(--accent-2)]/10 text-[var(--accent-2)] p-1.5 rounded-lg">
+                    <BookOpen size={16} />
+                  </div>
+                  <h3 className="text-base font-bold text-[var(--text)]">💡 핵심 개념 요약 노트</h3>
+                </div>
+                <button 
+                  onClick={() => setShowConceptModal(false)}
+                  className="text-[var(--muted)] hover:text-[var(--text)] transition-colors"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              <div className="p-6 space-y-5 overflow-y-auto max-h-[70vh]">
+                <div>
+                  <span className="text-[10px] uppercase font-bold text-[var(--accent-2)] bg-[var(--accent-2)]/10 px-2.5 py-1 rounded-full">
+                    {summary.title}
+                  </span>
+                  <h4 className="text-base font-bold text-[var(--text)] mt-2">
+                    {pendingProblem.title}
+                  </h4>
+                </div>
+
+                <div className="bg-[var(--panel)] p-4 rounded-xl border border-[var(--line)] space-y-2">
+                  <h5 className="text-xs font-bold text-[var(--muted)] uppercase tracking-wider mb-2">핵심 체크포인트</h5>
+                  <ul className="space-y-1.5 text-xs text-[var(--text)] leading-relaxed">
+                    {summary.points.map((pt, idx) => (
+                      <li key={idx} className="flex gap-2 items-start">
+                        <span className="text-[var(--accent-2)] font-bold mt-0.5">•</span>
+                        <span>{pt}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="text-xs font-bold text-[var(--muted)] uppercase tracking-wider mb-2">참고 코드 스니펫</h5>
+                  <pre className="bg-[var(--panel)] p-3 rounded-xl border border-[var(--line)] text-[11px] font-mono text-[var(--text)] overflow-x-auto leading-relaxed">
+                    <code>{summary.code}</code>
+                  </pre>
+                </div>
+              </div>
+
+              <div className="px-6 py-4 bg-[var(--panel)] border-t border-[var(--line)] flex justify-end gap-3">
+                <button 
+                  onClick={() => setShowConceptModal(false)}
+                  className="bg-[var(--line)] hover:bg-[var(--line-hover)] text-[var(--text)] px-4 py-2 rounded-xl text-xs font-semibold transition-colors"
+                >
+                  닫기
+                </button>
+                <button 
+                  onClick={() => {
+                    handleSelectProblemDirect(pendingProblem);
+                    setShowConceptModal(false);
+                  }}
+                  className="bg-[var(--accent-3)] hover:bg-[#b4befe] text-[var(--bg)] px-5 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-1"
+                >
+                  <Play size={12} />
+                  문제 풀러가기
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
       {/* Add Problem Modal Dialog */}
       {isAddModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
