@@ -3077,7 +3077,7 @@ print(solution(n, bundle))
 `,
     test_cases: [
       { input: "4\ncacdbdedccbb", output: "[0, 13]" },
-      { input: "3\nabcde", output: "[1, 4]" }
+      { input: "3\nabcde", output: "[1, 9]" }
     ]
   },
   {
