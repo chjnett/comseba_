@@ -792,8 +792,8 @@ count = <span class="num-lit">0</span>
 
   <!-- 15 -->
   <section id="algo-cards">
-    <h2><span class="num">15</span> 코테 합격 핵심 알고리즘 & 자료구조 카드</h2>
-    <p>코딩 테스트 합격을 위해 반드시 숙지해야 하는 핵심 알고리즘과 자료구조를 키워드 기반으로 일목요연하게 정리하고 개념 풀이 코드를 제공합니다.</p>
+    <h2><span class="num">15</span> 코테 합격 핵심 알고리즘 & 자료구조 카드 (Python & C++)</h2>
+    <p>코딩 테스트 합격을 위해 반드시 숙지해야 하는 핵심 알고리즘과 자료구조를 키워드 기반으로 일목요연하게 정리하고 파이썬과 C++ 개념 풀이 코드를 제공합니다.</p>
 
     <h3>1. 기초 자료구조 (Data Structures)</h3>
     <div class="grid2">
@@ -801,7 +801,9 @@ count = <span class="num-lit">0</span>
         <h4>스택 (Stack) / 큐 (Queue) <span class="tag">기초</span></h4>
         <p><strong>개념:</strong> LIFO(후입선출) / FIFO(선입출) 자료구조입니다.</p>
         <p style="margin-top: 6px;"><strong>💡 키워드:</strong> 올바른 괄호 찾기, 프로세스 스케줄링, 작업 순서 계산.</p>
-        <pre style="margin-top: 10px; font-size: 12px; padding: 10px;"><code># 스택 (list)
+        <div style="margin-top: 10px;">
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-2);">🐍 Python</h5>
+          <pre style="margin-bottom: 12px; font-size: 11.5px; padding: 10px;"><code># 스택 (list)
 stack = []
 stack.append(1)  # 삽입
 stack.pop()       # 삭제 (맨 위 원소 제거)
@@ -811,38 +813,70 @@ from collections import deque
 queue = deque()
 queue.append(1)   # 삽입
 queue.popleft()   # 삭제 (맨 앞 원소 제거)</code></pre>
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-3);">🟦 C++</h5>
+          <pre style="margin-bottom: 0; font-size: 11.5px; padding: 10px;"><code>#include &lt;stack&gt;
+#include &lt;queue&gt;
+
+// 스택
+std::stack&lt;int&gt; s;
+s.push(1);  s.pop();
+
+// 큐
+std::queue&lt;int&gt; q;
+q.push(1);  q.pop();</code></pre>
+        </div>
       </div>
 
       <div class="card">
         <h4>우선순위 큐 (Priority Queue / Heap) <span class="tag">기초</span></h4>
         <p><strong>개념:</strong> 최댓값이나 최솟값을 $O(\log N)$에 빠르게 찾아야 할 때 사용합니다.</p>
-        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> 다익스트라, 중앙값 구하기, 정렬된 상태 유지하며 데이터 추가/삭제.</p>
-        <pre style="margin-top: 10px; font-size: 12px; padding: 10px;"><code>import heapq
+        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> 다익스트라, 중앙값 구하기, 정렬 상태 유지하며 데이터 추가/삭제.</p>
+        <div style="margin-top: 10px;">
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-2);">🐍 Python</h5>
+          <pre style="margin-bottom: 12px; font-size: 11.5px; padding: 10px;"><code>import heapq
 heap = []
-
-# 최소 힙 (기본)
 heapq.heappush(heap, 3)
 heapq.heappush(heap, 1)
-min_val = heapq.heappop(heap)  # 1 (최솟값 제거)
+min_val = heapq.heappop(heap) # 최소값 꺼내기</code></pre>
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-3);">🟦 C++</h5>
+          <pre style="margin-bottom: 0; font-size: 11.5px; padding: 10px;"><code>#include &lt;queue&gt;
+#include &lt;vector&gt;
 
-# 최대 힙 구현 (음수 적용)
-heapq.heappush(heap, -value)
-max_val = -heapq.heappop(heap)</code></pre>
+// 최대 힙 (기본)
+std::priority_queue&lt;int&gt; max_pq;
+
+// 최소 힙
+std::priority_queue&lt;int, std::vector&lt;int&gt;, std::greater&lt;int&gt;&gt; min_pq;
+min_pq.push(3); min_pq.pop();</code></pre>
+        </div>
       </div>
 
       <div class="card" style="grid-column: span 2;">
         <h4>해시 맵 (Hash Map / Set) <span class="tag">기초</span></h4>
         <p><strong>개념:</strong> Key-Value 쌍으로 데이터를 저장하여 평균 $O(1)$의 시간 복잡도로 탐색합니다.</p>
         <p style="margin-top: 6px;"><strong>💡 키워드:</strong> 중복 제거, 빈도수 체크, 완주하지 못한 선수 찾기.</p>
-        <pre style="margin-top: 10px; font-size: 12px; padding: 10px;"><code># 딕셔너리를 이용한 빈도수 체크
-from collections import Counter
-arr = ['apple', 'banana', 'apple']
-counter = Counter(arr)  # {'apple': 2, 'banana': 1}
+        <div style="margin-top: 10px;">
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-2);">🐍 Python</h5>
+          <pre style="margin-bottom: 12px; font-size: 11.5px; padding: 10px;"><code># 해시 맵 (dict)
+counter = {}
+counter['apple'] = counter.get('apple', 0) + 1
 
-# Set을 이용한 중복 제거 및 탐색
-unique_items = set(arr)  # {'apple', 'banana'}
-if 'apple' in unique_items:  # O(1) 탐색
-    print("Exists")</code></pre>
+# 해시 셋 (set)
+unique = set()
+unique.add('apple')</code></pre>
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-3);">🟦 C++</h5>
+          <pre style="margin-bottom: 0; font-size: 11.5px; padding: 10px;"><code>#include &lt;unordered_map&gt;
+#include &lt;unordered_set&gt;
+
+// 해시 맵
+std::unordered_map&lt;std::string, int&gt; hash_map;
+hash_map["apple"]++;
+
+// 해시 셋
+std::unordered_set&lt;std::string&gt; hash_set;
+hash_set.insert("apple");
+if (hash_set.find("apple") != hash_set.end()) { /* 발견 */ }</code></pre>
+        </div>
       </div>
     </div>
 
@@ -851,53 +885,82 @@ if 'apple' in unique_items:  # O(1) 탐색
       <div class="card">
         <h4>BFS (너비 우선 탐색) <span class="tag">빈출</span></h4>
         <p><strong>개념:</strong> 큐(Queue)를 이용하여 시작점부터 인접한 노드를 레벨별로 탐색합니다.</p>
-        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> <strong>최단 거리(가중치 없는 그래프)</strong>, 미로 탈출 최단 칸수, 네트워크 연결 컴포넌트.</p>
-        <pre style="margin-top: 10px; font-size: 12px; padding: 10px;"><code>from collections import deque
-
+        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> <strong>최단 거리(가중치 없는 그래프)</strong>, 미로 탈출 최단 칸수.</p>
+        <div style="margin-top: 10px;">
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-2);">🐍 Python</h5>
+          <pre style="margin-bottom: 12px; font-size: 11.5px; padding: 10px;"><code>from collections import deque
 def bfs(graph, start, visited):
-    queue = deque([start])
+    q = deque([start])
     visited[start] = True
-    while queue:
-        v = queue.popleft()
+    while q:
+        v = q.popleft()
         for i in graph[v]:
             if not visited[i]:
-                queue.append(i)
+                q.append(i)
                 visited[i] = True</code></pre>
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-3);">🟦 C++</h5>
+          <pre style="margin-bottom: 0; font-size: 11.5px; padding: 10px;"><code>#include &lt;queue&gt;
+#include &lt;vector&gt;
+
+void bfs(int start, const std::vector&lt;std::vector&lt;int&gt;&gt;&amp; graph, std::vector&lt;bool&gt;&amp; visited) {
+    std::queue&lt;int&gt; q;
+    q.push(start); visited[start] = true;
+    while(!q.empty()) {
+        int v = q.front(); q.pop();
+        for(int next : graph[v]) {
+            if(!visited[next]) {
+                q.push(next); visited[next] = true;
+            }
+        }
+    }
+}</code></pre>
+        </div>
       </div>
 
       <div class="card">
         <h4>DFS (깊이 우선 탐색) <span class="tag">빈출</span></h4>
         <p><strong>개념:</strong> 재귀 호출이나 스택을 이용하여 가능한 깊숙이 들어가 탐색한 뒤 되돌아옵니다.</p>
-        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> <strong>모든 경로 탐색</strong>, 사이클 백트래킹, 조합/순열 생성, 트리 지름.</p>
-        <pre style="margin-top: 10px; font-size: 12px; padding: 10px;"><code>def dfs(graph, v, visited):
+        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> <strong>모든 경로 탐색</strong>, 사이클 백트래킹, 조합/순열 생성.</p>
+        <div style="margin-top: 10px;">
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-2);">🐍 Python</h5>
+          <pre style="margin-bottom: 12px; font-size: 11.5px; padding: 10px;"><code>def dfs(graph, v, visited):
     visited[v] = True
     for i in graph[v]:
         if not visited[i]:
-            dfs(graph, i, visited)
+            dfs(graph, i, visited)</code></pre>
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-3);">🟦 C++</h5>
+          <pre style="margin-bottom: 0; font-size: 11.5px; padding: 10px;"><code>#include &lt;vector&gt;
 
-# 조합/순열 백트래킹 구조
-def backtrack(depth, path):
-    if depth == target:
-        print(path)
-        return
-    for next_val in candidate:
-        backtrack(depth + 1, path + [next_val])</code></pre>
+void dfs(int v, const std::vector&lt;std::vector&lt;int&gt;&gt;&amp; graph, std::vector&lt;bool&gt;&amp; visited) {
+    visited[v] = true;
+    for(int next : graph[v]) {
+        if(!visited[next]) dfs(next, graph, visited);
+    }
+}</code></pre>
+        </div>
       </div>
 
       <div class="card" style="grid-column: span 2;">
         <h4>이진 탐색 (Binary Search) <span class="tag">빈출</span></h4>
         <p><strong>개념:</strong> 이미 정렬되어 있는 리스트에서 탐색 범위를 반씩 줄여가며 데이터를 찾아냅니다 ($O(\log N)$).</p>
-        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> <strong>데이터 범위가 압도적으로 클 때 ($N \ge 10,000,000$)</strong>, 파라메트릭 서치(최적화 문제를 결정 문제로 변환).</p>
-        <pre style="margin-top: 10px; font-size: 12px; padding: 10px;"><code>def binary_search(array, target, start, end):
+        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> <strong>데이터 범위가 매우 클 때 ($N \ge 10,000,000$)</strong>, 파라메트릭 서치.</p>
+        <div style="margin-top: 10px;">
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-2);">🐍 Python</h5>
+          <pre style="margin-bottom: 12px; font-size: 11.5px; padding: 10px;"><code>def binary_search(array, target, start, end):
     while start &lt;= end:
         mid = (start + end) // 2
-        if array[mid] == target:
-            return mid
-        elif array[mid] &gt; target:
-            end = mid - 1
-        else:
-            start = mid + 1
+        if array[mid] == target: return mid
+        elif array[mid] &gt; target: end = mid - 1
+        else: start = mid + 1
     return None</code></pre>
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-3);">🟦 C++</h5>
+          <pre style="margin-bottom: 0; font-size: 11.5px; padding: 10px;"><code>#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+
+// STL 함수 활용
+bool exists = std::binary_search(v.begin(), v.end(), target);
+auto it = std::lower_bound(v.begin(), v.end(), target); // 시작 인덱스</code></pre>
+        </div>
       </div>
     </div>
 
@@ -907,40 +970,75 @@ def backtrack(depth, path):
         <h4>다익스트라 (Dijkstra) <span class="tag">심화</span></h4>
         <p><strong>개념:</strong> 하나의 시작 노드에서 다른 모든 노드까지의 최단 경로를 구합니다 (음수 가중치 없음).</p>
         <p style="margin-top: 6px;"><strong>💡 키워드:</strong> 가중치 그래프 최단 경로, 최소 비용 도로 탐색.</p>
-        <pre style="margin-top: 10px; font-size: 12px; padding: 10px;"><code>import heapq
+        <div style="margin-top: 10px;">
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-2);">🐍 Python</h5>
+          <pre style="margin-bottom: 12px; font-size: 11.5px; padding: 10px;"><code>import heapq
 def dijkstra(start, graph, distance):
     q = []
     heapq.heappush(q, (0, start))
     distance[start] = 0
     while q:
         dist, now = heapq.heappop(q)
-        if distance[now] &lt; dist:
-            continue
-        for next_node, next_dist in graph[now]:
-            cost = dist + next_dist
-            if cost &lt; distance[next_node]:
-                distance[next_node] = cost
-                heapq.heappush(q, (cost, next_node))</code></pre>
+        if distance[now] &lt; dist: continue
+        for nxt, nxt_dist in graph[now]:
+            cost = dist + nxt_dist
+            if cost &lt; distance[nxt]:
+                distance[nxt] = cost
+                heapq.heappush(q, (cost, nxt))</code></pre>
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-3);">🟦 C++</h5>
+          <pre style="margin-bottom: 0; font-size: 11.5px; padding: 10px;"><code>#include &lt;queue&gt;
+#include &lt;vector&gt;
+#define INF 1e9
+
+void dijkstra(int start, const std::vector&lt;std::vector&lt;std::pair&lt;int, int&gt;&gt;&gt;&amp; graph, std::vector&lt;int&gt;&amp; distance) {
+    std::priority_queue&lt;std::pair&lt;int, int&gt;, std::vector&lt;std::pair&lt;int, int&gt;&gt;, std::greater&lt;std::pair&lt;int, int&gt;&gt;&gt; pq;
+    pq.push({0, start}); distance[start] = 0;
+    while (!pq.empty()) {
+        auto [dist, now] = pq.top(); pq.pop();
+        if (distance[now] &lt; dist) continue;
+        for (auto [next_node, next_dist] : graph[now]) {
+            int cost = dist + next_dist;
+            if (cost &lt; distance[next_node]) {
+                distance[next_node] = cost; pq.push({cost, next_node});
+            }
+        }
+    }
+}</code></pre>
+        </div>
       </div>
 
       <div class="card">
         <h4>플로이드-워셜 (Floyd-Warshall) <span class="tag">심화</span></h4>
         <p><strong>개념:</strong> 모든 노드 쌍 간의 최단 경로를 한 번에 구합니다 ($O(N^3)$).</p>
-        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> $N \le 500$으로 작을 때, "A에서 B로 이동 가능한가?", 관계의 연결성.</p>
-        <pre style="margin-top: 10px; font-size: 12px; padding: 10px;"><code># 3중 루프를 통한 최단 거리 최적화
-for k in range(1, n + 1):  # 거쳐가는 노드
-    for a in range(1, n + 1):  # 출발 노드
-        for b in range(1, n + 1):  # 도착 노드
+        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> $N \le 500$으로 작을 때, 모든 정점 간 최단거리 갱신.</p>
+        <div style="margin-top: 10px;">
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-2);">🐍 Python</h5>
+          <pre style="margin-bottom: 12px; font-size: 11.5px; padding: 10px;"><code>for k in range(1, n + 1):
+    for a in range(1, n + 1):
+        for b in range(1, n + 1):
             graph[a][b] = min(graph[a][b], graph[a][k] + graph[k][b])</code></pre>
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-3);">🟦 C++</h5>
+          <pre style="margin-bottom: 0; font-size: 11.5px; padding: 10px;"><code>#include &lt;algorithm&gt;
+
+for (int k = 1; k &lt;= n; ++k) {
+    for (int a = 1; a &lt;= n; ++a) {
+        for (int b = 1; b &lt;= n; ++b) {
+            graph[a][b] = std::min(graph[a][b], graph[a][k] + graph[k][b]);
+        }
+    }
+}</code></pre>
+        </div>
       </div>
 
       <div class="card">
         <h4>유니온 파인드 (Union-Find) <span class="tag">심화</span></h4>
-        <p><strong>개념:</strong> 여러 원소들 중에서 서로 다른 두 원소가 같은 집합에 속해 있는지 확인하고 합치는 연산입니다.</p>
-        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> 그래프 내의 사이클 존재 판별, 친구 네트워크(그룹 관계) 확인.</p>
-        <pre style="margin-top: 10px; font-size: 12px; padding: 10px;"><code>def find_parent(parent, x):
+        <p><strong>개념:</strong> 여러 원소 중 두 원소가 같은 집합에 속해 있는지 확인하고 합치는 연산입니다.</p>
+        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> 그래프 내의 사이클 존재 판별, 관계 네트워크 확인.</p>
+        <div style="margin-top: 10px;">
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-2);">🐍 Python</h5>
+          <pre style="margin-bottom: 12px; font-size: 11.5px; padding: 10px;"><code>def find_parent(parent, x):
     if parent[x] != x:
-        parent[x] = find_parent(parent, parent[x])  # 경로 압축
+        parent[x] = find_parent(parent, parent[x])
     return parent[x]
 
 def union_parent(parent, a, b):
@@ -948,19 +1046,46 @@ def union_parent(parent, a, b):
     b = find_parent(parent, b)
     if a &lt; b: parent[b] = a
     else: parent[a] = b</code></pre>
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-3);">🟦 C++</h5>
+          <pre style="margin-bottom: 0; font-size: 11.5px; padding: 10px;"><code>#include &lt;vector&gt;
+
+int findParent(std::vector&lt;int&gt;&amp; parent, int x) {
+    if (parent[x] != x) parent[x] = findParent(parent, parent[x]);
+    return parent[x];
+}
+
+void unionParent(std::vector&lt;int&gt;&amp; parent, int a, int b) {
+    a = findParent(parent, a); b = findParent(parent, b);
+    if (a &lt; b) parent[b] = a;
+    else parent[a] = b;
+}</code></pre>
+        </div>
       </div>
 
       <div class="card">
         <h4>크루스칼 (Kruskal) <span class="tag">심화</span></h4>
-        <p><strong>개념:</strong> 유니온 파인드를 활용하여 사이클을 형성하지 않는 최소 비용 가중치 간선들을 모아 MST를 형성합니다.</p>
-        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> 최소 비용 도로 건설, 모든 도시 연결하기.</p>
-        <pre style="margin-top: 10px; font-size: 12px; padding: 10px;"><code># edges를 cost 기준으로 오름차순 정렬 후 진행
-edges.sort()
-total_cost = 0
+        <p><strong>개념:</strong> 비용 기준으로 간선을 정렬한 뒤, 사이클이 없을 때만 연결하여 MST를 구합니다.</p>
+        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> 최소 비용 도로 건설, 최소 신장 트리(MST) 구성.</p>
+        <div style="margin-top: 10px;">
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-2);">🐍 Python</h5>
+          <pre style="margin-bottom: 12px; font-size: 11.5px; padding: 10px;"><code>edges.sort()
 for cost, a, b in edges:
     if find_parent(parent, a) != find_parent(parent, b):
         union_parent(parent, a, b)
         total_cost += cost</code></pre>
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-3);">🟦 C++</h5>
+          <pre style="margin-bottom: 0; font-size: 11.5px; padding: 10px;"><code>#include &lt;algorithm&gt;
+#include &lt;tuple&gt;
+
+std::sort(edges.begin(), edges.end()); // cost 기준 정렬
+int total_cost = 0;
+for (const auto&amp; edge : edges) {
+    auto [cost, a, b] = edge;
+    if (findParent(parent, a) != findParent(parent, b)) {
+        unionParent(parent, a, b); total_cost += cost;
+    }
+}</code></pre>
+        </div>
       </div>
     </div>
 
@@ -968,57 +1093,101 @@ for cost, a, b in edges:
     <div class="grid2">
       <div class="card">
         <h4>그리디 (Greedy) <span class="tag">전략</span></h4>
-        <p><strong>개념:</strong> 지금 당장 가장 최적인 답을 선택하며 전진하여 최종 결론을 냅니다.</p>
-        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> 거스름돈 최소 개수, 회의실 배정(활동 선택 문제), "가장 ~한 순서대로".</p>
-        <pre style="margin-top: 10px; font-size: 12px; padding: 10px;"><code># 회의실 배정 (회의 끝나는 시간이 빠른 순서대로 선택)
-meetings.sort(key=lambda x: (x[1], x[0]))
-count = 0
-last_end_time = 0
+        <p><strong>개념:</strong> 지금 당장 가장 좋아 보이는 선택을 반복하여 최적의 해를 찾아갑니다.</p>
+        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> 거스름돈 최소 개수, 활동 선택(종료 시간 기준 정렬).</p>
+        <div style="margin-top: 10px;">
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-2);">🐍 Python</h5>
+          <pre style="margin-bottom: 12px; font-size: 11.5px; padding: 10px;"><code>meetings.sort(key=lambda x: (x[1], x[0]))
+count, last_end = 0, 0
 for start, end in meetings:
-    if start &gt;= last_end_time:
+    if start &gt;= last_end:
         count += 1
-        last_end_time = end</code></pre>
+        last_end = end</code></pre>
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-3);">🟦 C++</h5>
+          <pre style="margin-bottom: 0; font-size: 11.5px; padding: 10px;"><code>#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+
+// 정렬 후 탐색
+std::sort(meetings.begin(), meetings.end(), [](const auto&amp; a, const auto&amp; b) {
+    if (a.second == b.second) return a.first &lt; b.first;
+    return a.second &lt; b.second;
+});
+int count = 0, last_end = 0;
+for(const auto&amp; m : meetings) {
+    if(m.first &gt;= last_end) { count++; last_end = m.second; }
+}</code></pre>
+        </div>
       </div>
 
       <div class="card">
         <h4>투 포인터 (Two Pointers) <span class="tag">전략</span></h4>
-        <p><strong>개념:</strong> 리스트에 두 개의 포인터를 두고 범위를 좁히거나 넓히며 특정 조건의 값을 선형 시간 $O(N)$에 찾습니다.</p>
-        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> 연속된 수열의 합, 특정 구간의 공통 원소 찾기.</p>
-        <pre style="margin-top: 10px; font-size: 12px; padding: 10px;"><code># 합이 target인 연속 수열의 개수 구하기
-count, current_sum, end = 0, 0, 0
+        <p><strong>개념:</strong> 두 개의 포인터를 대칭 혹은 동일 방향으로 움직여 구간 합 등을 O(N)에 탐색합니다.</p>
+        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> 연속된 수열의 합, 특정 구간 만족 여부 판별.</p>
+        <div style="margin-top: 10px;">
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-2);">🐍 Python</h5>
+          <pre style="margin-bottom: 12px; font-size: 11.5px; padding: 10px;"><code>current_sum, end, count = 0, 0, 0
 for start in range(n):
     while current_sum &lt; target and end &lt; n:
         current_sum += arr[end]
         end += 1
-    if current_sum == target:
-        count += 1
+    if current_sum == target: count += 1
     current_sum -= arr[start]</code></pre>
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-3);">🟦 C++</h5>
+          <pre style="margin-bottom: 0; font-size: 11.5px; padding: 10px;"><code>int current_sum = 0, end = 0, count = 0;
+for(int start = 0; start &lt; n; ++start) {
+    while(current_sum &lt; target &amp;&amp; end &lt; n) {
+        current_sum += arr[end++];
+    }
+    if(current_sum == target) count++;
+    current_sum -= arr[start];
+}</code></pre>
+        </div>
       </div>
 
       <div class="card">
         <h4>동적 계획법 (DP) <span class="tag">전략</span></h4>
-        <p><strong>개념:</strong> 큰 문제를 작은 단위로 쪼개고 이미 계산한 값을 캐시(Memoization)하여 중복 연산을 피합니다.</p>
-        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> <strong>최적화/가짓수 구하기</strong>, 이전의 선택이 현재에 영향을 미치는 경우.</p>
-        <pre style="margin-top: 10px; font-size: 12px; padding: 10px;"><code># 바텀업 (피보나치 수열)
-dp = [0] * 100
+        <p><strong>개념:</strong> 계산된 하위 문제 값을 메모하여 중복 연산을 회피하고 상위 문제를 해결합니다.</p>
+        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> <strong>최적화/가짓수 구하기</strong>, 이전의 최적 선택이 현재에 누적.</p>
+        <div style="margin-top: 10px;">
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-2);">🐍 Python</h5>
+          <pre style="margin-bottom: 12px; font-size: 11.5px; padding: 10px;"><code>dp = [0] * (n + 1)
 dp[1], dp[2] = 1, 1
 for i in range(3, n + 1):
-    dp[i] = dp[i - 1] + dp[i - 2]
-print(dp[n])</code></pre>
+    dp[i] = dp[i-1] + dp[i-2]</code></pre>
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-3);">🟦 C++</h5>
+          <pre style="margin-bottom: 0; font-size: 11.5px; padding: 10px;"><code>#include &lt;vector&gt;
+
+std::vector&lt;int&gt; dp(n + 1, 0);
+dp[1] = 1; dp[2] = 1;
+for(int i = 3; i &lt;= n; ++i) {
+    dp[i] = dp[i-1] + dp[i-2];
+}</code></pre>
+        </div>
       </div>
 
       <div class="card">
         <h4>구현 / 시뮬레이션 <span class="tag">전략</span></h4>
-        <p><strong>개념:</strong> 별도의 수학적, 알고리즘적 기법 없이 문제에서 요구하는 흐름을 그대로 코딩하는 방식입니다.</p>
-        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> 행렬 회전/대칭, 방향 벡터(dx, dy) 이동, 완전 탐색, 조건식 처리.</p>
-        <pre style="margin-top: 10px; font-size: 12px; padding: 10px;"><code># 2차원 리스트 시계방향 90도 회전
+        <p><strong>개념:</strong> 별도의 알고리즘 대신, 문제의 규칙을 효율적이고 세밀하게 소스코드로 옮깁니다.</p>
+        <p style="margin-top: 6px;"><strong>💡 키워드:</strong> 행렬 회전/대칭, 방향 벡터(dx, dy) 활용, 조건 탐색.</p>
+        <div style="margin-top: 10px;">
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-2);">🐍 Python</h5>
+          <pre style="margin-bottom: 12px; font-size: 11.5px; padding: 10px;"><code># 90도 시계방향 회전
 def rotate_90(matrix):
-    return [list(row) for row in zip(*matrix[::-1])]
+    return [list(row) for row in zip(*matrix[::-1])]</code></pre>
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-3);">🟦 C++</h5>
+          <pre style="margin-bottom: 0; font-size: 11.5px; padding: 10px;"><code>#include &lt;vector&gt;
 
-# 방향 벡터 (동, 서, 남, 북)
-dx = [0, 0, 1, -1]
-dy = [1, -1, 0, 0]
-nx, ny = x + dx[direction], y + dy[direction]</code></pre>
+std::vector&lt;std::vector&lt;int&gt;&gt; rotate90(const std::vector&lt;std::vector&lt;int&gt;&gt;&amp; mat) {
+    int n = mat.size();
+    std::vector&lt;std::vector&lt;int&gt;&gt; res(n, std::vector&lt;int&gt;(n));
+    for (int i = 0; i &lt; n; ++i) {
+        for (int j = 0; j &lt; n; ++j) {
+            res[j][n - 1 - i] = mat[i][j];
+        }
+    }
+    return res;
+}</code></pre>
+        </div>
       </div>
     </div>
 

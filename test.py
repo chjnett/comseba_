@@ -1,4 +1,5 @@
 
-num=10.234
-avg=()
-print(f"{avg:.2f}")
+
+arr = list(map(int, input().split()))
+max(arr)
+min(arr)

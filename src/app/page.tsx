@@ -205,7 +205,7 @@ export default function Home() {
   const [newTestCases, setNewTestCases] = useState("[\n  {\n    \"input\": \"입력값\",\n    \"output\": \"출력값\"\n  }\n]");
   
   // Category & Learning states
-  const [currentCategory, setCurrentCategory] = useState<'home' | 'oj' | 'concept' | 'sql_basic' | 'sql_advanced'>('home');
+  const [currentCategory, setCurrentCategory] = useState<'home' | 'oj' | 'concept' | 'python_basic' | 'sql_basic' | 'sql_advanced'>('home');
   const [activeConceptIndex, setActiveConceptIndex] = useState<number>(0);
   const [activeSqlLessonIndex, setActiveSqlLessonIndex] = useState<number>(0);
   const [sqlQuery, setSqlQuery] = useState<string>("");
@@ -762,7 +762,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl w-full">
             {/* Card 1: COS Pro OJ */}
             <div 
               onClick={() => setCurrentCategory('oj')}
@@ -803,6 +803,28 @@ export default function Home() {
               <div className="flex items-center justify-between mt-4">
                 <span className="text-xs font-bold text-[var(--accent-2)] bg-[var(--accent-2)]/10 px-3 py-1 rounded-full">파이썬 핵심 문법 수록</span>
                 <ChevronRight size={18} className="text-[var(--accent-2)] group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
+
+            {/* Card 3: Python Basic */}
+            <div 
+              onClick={() => {
+                setCurrentCategory('python_basic');
+              }}
+              className="bg-[var(--panel)] border border-[var(--line)] hover:border-[var(--accent-3)]/50 p-6 rounded-2xl cursor-pointer transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl flex flex-col justify-between group"
+            >
+              <div>
+                <div className="bg-[var(--accent-3)]/10 text-[var(--accent-3)] p-4 rounded-xl w-14 h-14 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                  <Code size={28} />
+                </div>
+                <h3 className="text-xl font-bold text-[var(--accent-3)] mb-2">파이썬 기초 문법</h3>
+                <p className="text-sm text-[var(--muted)] leading-relaxed mb-4">
+                  변수, 연산자, 조건문, 반복문, 리스트, 함수 등 프로그래밍 입문자를 위한 파이썬의 가장 기초적인 문법을 학습합니다.
+                </p>
+              </div>
+              <div className="flex items-center justify-between mt-4">
+                <span className="text-xs font-bold text-[var(--accent-3)] bg-[var(--accent-3)]/10 px-3 py-1 rounded-full">인터랙티브 파이썬 실습</span>
+                <ChevronRight size={18} className="text-[var(--accent-3)] group-hover:translate-x-1 transition-transform" />
               </div>
             </div>
 
@@ -1324,6 +1346,50 @@ export default function Home() {
 
           <iframe 
             src={`/cospro_python_reference.html?theme=${theme}`} 
+            className="w-full flex-1 border-0 bg-[var(--bg)]" 
+          />
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* 3-2. PYTHON BASIC GRAMMAR VIEW */}
+      {/* ========================================================================= */}
+      {currentCategory === 'python_basic' && (
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Header */}
+          <header className="border-b border-[var(--line)] bg-[var(--panel-2)] px-6 py-4 flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => setCurrentCategory('home')}
+                className="flex items-center gap-1 bg-[var(--line)] border border-[var(--line-hover)] hover:bg-[var(--line-hover)] text-[var(--text)] px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200"
+              >
+                <ArrowLeft size={14} />
+                홈으로
+              </button>
+              <div className="bg-[var(--accent-3)]/25 p-2 rounded-xl text-[var(--accent-3)]">
+                <Code size={20} />
+              </div>
+              <div>
+                <h1 className="text-base font-bold tracking-wide text-[var(--accent-3)]">
+                  파이썬 기초 문법
+                </h1>
+                <p className="text-[10px] text-[var(--muted)]">프로그래밍을 시작하는 분들을 위한 파이썬의 완전 기초 핵심 가이드</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={toggleTheme}
+                className="flex items-center justify-center bg-[var(--line)] border border-[var(--line-hover)] hover:bg-[var(--line-hover)] text-[var(--text)] p-2 rounded-xl transition-all duration-200"
+                title="테마 변경"
+              >
+                {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
+              </button>
+            </div>
+          </header>
+
+          <iframe 
+            src={`/python_basic_reference.html?theme=${theme}`} 
             className="w-full flex-1 border-0 bg-[var(--bg)]" 
           />
         </div>

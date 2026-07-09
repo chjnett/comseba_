@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>파이썬 완전 기초 문법</title>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js"></script>
+<style>
+:root {
+  --bg: #fbf9f4;
+  --panel: #ffffff;
+  --panel-2: #f3efe4;
+  --line: #e6dfc9;
+  --text: #2b2a25;
+  --muted: #766f5c;
+  --accent: #b8860b;
+  --accent-2: #2f5fa3;
+  --accent-3: #1f8a5c;
+  --danger: #c1432e;
+  --sans: "Pretendard", "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", "Fira Code", Consolas, monospace;
+}
+
+body.dark, html.dark {
+  --bg: #0d1117;
+  --panel: #141a23;
+  --panel-2: #1b232f;
+  --line: #263141;
+  --text: #dde4ee;
+  --muted: #7d8aa0;
+  --accent: #ffd866;
+  --accent-2: #4fc3f7;
+  --accent-3: #7ee787;
+  --danger: #ff8585;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.65; }
+body { padding-bottom: 120px; }
+
+.shell { display: grid; grid-template-columns: 260px 1fr; max-width: 1280px; margin: 0 auto; }
+@media (max-width: 900px) { .shell { grid-template-columns: 1fr; } .sidebar { display: none; } }
+
+.sidebar { position: sticky; top: 0; height: 100vh; overflow-y: auto; border-right: 1px solid var(--line); padding: 28px 18px; }
+.sidebar h3 { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; color: var(--muted); text-transform: uppercase; margin: 22px 0 8px; }
+.sidebar a { display: block; color: var(--text); text-decoration: none; font-size: 13.5px; padding: 6px 10px; border-radius: 6px; border-left: 2px solid transparent; transition: all 0.2s; }
+.sidebar a:hover { background: var(--panel-2); border-left-color: var(--accent-3); }
+.brand { font-family: var(--mono); font-size: 15px; color: var(--accent-3); display: flex; align-items: center; gap: 8px; font-weight: bold; }
+.brand .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-3); box-shadow: 0 0 8px var(--accent-3); }
+
+main { padding: 48px 56px 0; }
+@media (max-width: 600px) { main { padding: 32px 20px 0; } }
+
+.hero { margin-bottom: 56px; }
+.hero .eyebrow { font-family: var(--mono); font-size: 12px; color: var(--accent-3); letter-spacing: .15em; text-transform: uppercase; }
+.hero h1 { font-size: clamp(26px, 4vw, 40px); margin: 10px 0 14px; font-weight: 800; }
+.hero h1 span { color: var(--accent-3); }
+.hero p { color: var(--muted); max-width: 680px; font-size: 15px; }
+
+section { margin-bottom: 60px; padding-top: 8px; border-bottom: 1px solid var(--line); padding-bottom: 40px; }
+section:last-of-type { border-bottom: none; }
+section h2 { font-size: 21px; display: flex; align-items: baseline; gap: 10px; padding-bottom: 14px; margin-bottom: 22px; color: var(--text); }
+section h2 .num { font-family: var(--mono); color: var(--accent-3); font-size: 14px; font-weight: bold; }
+section h3 { font-size: 15.5px; color: var(--accent-2); margin: 26px 0 12px; }
+p { margin: 0 0 12px; font-size: 14.5px; }
+.muted { color: var(--muted); font-size: 14px; }
+
+/* Interactive Playground Card */
+.playground-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 20px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.playground-card:hover {
+  border-color: rgba(31, 138, 92, 0.4);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+}
+.playground-header {
+  background: var(--panel-2);
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.playground-title {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-weight: bold;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.playground-title::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff5f56;
+  box-shadow: 14px 0 0 #ffbd2e, 28px 0 0 #27c93f;
+}
+.playground-editor-wrapper {
+  position: relative;
+  border-bottom: 1px solid var(--line);
+}
+.playground-editor {
+  width: 100%;
+  height: 120px;
+  border: none;
+  background: var(--panel);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  padding: 16px;
+  resize: vertical;
+  outline: none;
+  line-height: 1.6;
+}
+.playground-actions {
+  display: flex;
+  justify-content: flex-end;
+  background: var(--panel-2);
+  padding: 8px 16px;
+  gap: 10px;
+}
+.btn-run {
+  background: var(--accent-3);
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.btn-run:hover { opacity: 0.9; }
+.btn-run:active { transform: scale(0.97); }
+.btn-reset {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  padding: 6px 14px;
+  font-size: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.btn-reset:hover { background-color: var(--line); }
+.playground-console {
+  background: #141721;
+  color: #a9b2c3;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  padding: 14px 16px;
+  min-height: 60px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  border-top: 1px solid var(--line);
+}
+.playground-console.error { color: #f87171; }
+.playground-console.success { color: #34d399; }
+
+.callout {
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin: 18px 0;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+}
+.callout-tip { border-left: 4px solid var(--accent-3); }
+.callout-warn { border-left: 4px solid var(--danger); }
+.callout .label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+.callout-tip .label { color: var(--accent-3); }
+.callout-warn .label { color: var(--danger); }
+
+code {
+  font-family: var(--mono);
+  font-size: 13px;
+  background: var(--panel-2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--accent-2);
+}
+
+footer { text-align: center; color: var(--muted); font-family: var(--mono); font-size: 12px; padding: 40px 0; border-top: 1px solid var(--line); margin-top: 30px; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<aside class="sidebar">
+  <div class="brand"><span class="dot"></span> 파이썬 기초</div>
+  <h3>완전 기초 문법</h3>
+  <a href="#intro">01. 시작하기 & 출력</a>
+  <a href="#variables">02. 변수와 자료형</a>
+  <a href="#operators">03. 기본 연산자</a>
+  <a href="#conditionals">04. 조건문 (if)</a>
+  <a href="#loops">05. 반복문 (for·while)</a>
+  <a href="#lists">06. 리스트 (배열)</a>
+  <a href="#functions">07. 함수 정의하기</a>
+</aside>
+
+<main>
+
+  <div class="hero">
+    <div class="eyebrow">Python Absolute Basics</div>
+    <h1>파이썬 <span>완전 기초</span> 문법</h1>
+    <p>프로그래밍을 처음 시작하시는 분들을 위해 가장 쉽고 단순한 예제로 구성했습니다. 각 코드 카드는 자유롭게 편집하여 <strong>실시간으로 실행</strong>해 볼 수 있습니다.</p>
+  </div>
+
+  <!-- Section 1 -->
+  <section id="intro">
+    <h2><span class="num">01</span> 시작하기 & 화면 출력</h2>
+    <p>파이썬에서 화면에 글자나 숫자를 보여주려면 <code>print()</code> 함수를 사용합니다. 문자열을 나타낼 때는 큰따옴표(<code>"</code>)나 작은따옴표(<code>'</code>)로 감싸야 합니다.</p>
+    
+    <div class="playground-card">
+      <div class="playground-header">
+        <div class="playground-title">hello_world.py</div>
+      </div>
+      <div class="playground-editor-wrapper">
+        <textarea class="playground-editor" spellcheck="false" id="code-intro">print("안녕하세요! 파이썬의 세계에 오신 것을 환영합니다.")
+print(100 + 200)</textarea>
+      </div>
+      <div class="playground-actions">
+        <button class="btn-reset" onclick="resetCode('code-intro', `print(&quot;안녕하세요! 파이썬의 세계에 오신 것을 환영합니다.&quot;)\nprint(100 + 200)`)">초기화</button>
+        <button class="btn-run" onclick="runPlayground('code-intro', 'console-intro')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> 실행하기
+        </button>
+      </div>
+      <div class="playground-console" id="console-intro">(여기에 실행 결과가 표시됩니다)</div>
+    </div>
+  </section>
+
+  <!-- Section 2 -->
+  <section id="variables">
+    <h2><span class="num">02</span> 변수와 자료형</h2>
+    <p>변수는 값을 담아두는 상자입니다. <code>=</code> 기호를 기준으로 왼쪽에 변수 이름, 오른쪽에 저장할 값을 씁니다. 파이썬은 변수의 데이터 종류(정수, 실수, 글자 등)를 스스로 알아챕니다.</p>
+    
+    <div class="playground-card">
+      <div class="playground-header">
+        <div class="playground-title">variables.py</div>
+      </div>
+      <div class="playground-editor-wrapper">
+        <textarea class="playground-editor" spellcheck="false" id="code-vars"># 정수 (Integer)
+age = 25
+# 실수 (Float)
+height = 175.5
+# 문자열 (String)
+name = "민수"
+# 불리언 (Boolean)
+is_student = True
+
+print("이름:", name)
+print("나이:", age)
+print("학생인가요?", is_student)</textarea>
+      </div>
+      <div class="playground-actions">
+        <button class="btn-reset" onclick="resetCode('code-vars', `# 정수 (Integer)\nage = 25\n# 실수 (Float)\nheight = 175.5\n# 문자열 (String)\nname = &quot;민수&quot;\n# 불리언 (Boolean)\nis_student = True\n\nprint(&quot;이름:&quot;, name)\nprint(&quot;나이:&quot;, age)\nprint(&quot;학생인가요?&quot;, is_student)`)">초기화</button>
+        <button class="btn-run" onclick="runPlayground('code-vars', 'console-vars')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> 실행하기
+        </button>
+      </div>
+      <div class="playground-console" id="console-vars">(여기에 실행 결과가 표시됩니다)</div>
+    </div>
+  </section>
+
+  <!-- Section 3 -->
+  <section id="operators">
+    <h2><span class="num">03</span> 기본 연산자</h2>
+    <p>덧셈, 뺄셈뿐만 아니라 프로그래밍에서 핵심적인 나눗셈 몫(<code>//</code>)과 나머지(<code>%</code>) 연산자를 알아봅시다.</p>
+    <ul>
+      <li><code>/</code> : 소수점까지 나오는 나누기</li>
+      <li><code>//</code> : 소수점을 버린 몫</li>
+      <li><code>%</code> : 나누고 남은 나머지</li>
+    </ul>
+
+    <div class="playground-card">
+      <div class="playground-header">
+        <div class="playground-title">operators.py</div>
+      </div>
+      <div class="playground-editor-wrapper">
+        <textarea class="playground-editor" spellcheck="false" id="code-ops">a = 7
+b = 3
+
+print("7 / 3 =", a / b)   # 2.333...
+print("7 // 3 =", a // b) # 몫: 2
+print("7 % 3 =", a % b)   # 나머지: 1
+print("2의 3제곱 =", 2 ** 3) # 거듭제곱: 8</textarea>
+      </div>
+      <div class="playground-actions">
+        <button class="btn-reset" onclick="resetCode('code-ops', `a = 7\nb = 3\n\nprint(&quot;7 / 3 =&quot;, a / b)\nprint(&quot;7 // 3 =&quot;, a // b)\nprint(&quot;7 % 3 =&quot;, a % b)\nprint(&quot;2의 3제곱 =&quot;, 2 ** 3)`)">초기화</button>
+        <button class="btn-run" onclick="runPlayground('code-ops', 'console-ops')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> 실행하기
+        </button>
+      </div>
+      <div class="playground-console" id="console-ops">(여기에 실행 결과가 표시됩니다)</div>
+    </div>
+  </section>
+
+  <!-- Section 4 -->
+  <section id="conditionals">
+    <h2><span class="num">04</span> 조건문 (if-elif-else)</h2>
+    <p>조건식의 참(True) 또는 거짓(False) 여부에 따라 실행할 코드를 고릅니다. 파이썬에서는 <strong>들여쓰기(띄어쓰기 4칸 또는 Tab)</strong>가 조건문에 포함될 범위를 알려주므로 필수적입니다.</p>
+
+    <div class="playground-card">
+      <div class="playground-header">
+        <div class="playground-title">conditionals.py</div>
+      </div>
+      <div class="playground-editor-wrapper">
+        <textarea class="playground-editor" spellcheck="false" id="code-cond">score = 85
+
+if score >= 90:
+    print("성적: A")
+elif score >= 80:
+    print("성적: B")
+else:
+    print("성적: C")</textarea>
+      </div>
+      <div class="playground-actions">
+        <button class="btn-reset" onclick="resetCode('code-cond', `score = 85\n\nif score >= 90:\n    print(&quot;성적: A&quot;)\nelif score >= 80:\n    print(&quot;성적: B&quot;)\nelse:\n    print(&quot;성적: C&quot;)`)">초기화</button>
+        <button class="btn-run" onclick="runPlayground('code-cond', 'console-cond')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> 실행하기
+        </button>
+      </div>
+      <div class="playground-console" id="console-cond">(여기에 실행 결과가 표시됩니다)</div>
+    </div>
+  </section>
+
+  <!-- Section 5 -->
+  <section id="loops">
+    <h2><span class="num">05</span> 반복문 (for, while)</h2>
+    <p>특정 횟수만큼 반복하거나 리스트의 요소들을 차례로 가져와 처리하고 싶을 때 사용합니다. <code>range(시작, 끝)</code>은 시작값부터 끝값 직전까지의 숫자를 만들어줍니다.</p>
+
+    <div class="playground-card">
+      <div class="playground-header">
+        <div class="playground-title">loops.py</div>
+      </div>
+      <div class="playground-editor-wrapper">
+        <textarea class="playground-editor" spellcheck="false" id="code-loops"># for문을 이용해 1부터 5까지 더하기
+sum_val = 0
+for i in range(1, 6): # range(1, 6)은 1, 2, 3, 4, 5
+    sum_val += i
+print("1부터 5까지의 합:", sum_val)
+
+# while문을 이용한 반복
+count = 0
+while count < 3:
+    print("현재 count는", count)
+    count += 1</textarea>
+      </div>
+      <div class="playground-actions">
+        <button class="btn-reset" onclick="resetCode('code-loops', `# for문을 이용해 1부터 5까지 더하기\nsum_val = 0\nfor i in range(1, 6):\n    sum_val += i\nprint(&quot;1부터 5까지의 합:&quot;, sum_val)\n\n# while문을 이용한 반복\ncount = 0\nwhile count < 3:\n    print(&quot;현재 count는&quot;, count)\n    count += 1`)">초기화</button>
+        <button class="btn-run" onclick="runPlayground('code-loops', 'console-loops')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> 실행하기
+        </button>
+      </div>
+      <div class="playground-console" id="console-loops">(여기에 실행 결과가 표시됩니다)</div>
+    </div>
+  </section>
+
+  <!-- Section 6 -->
+  <section id="lists">
+    <h2><span class="num">06</span> 리스트 (List)</h2>
+    <p>여러 개의 값을 한 묶음으로 보관하는 자료형입니다. 인덱스(0부터 시작)를 사용해 개별 값에 접근하고 수정할 수 있으며, <code>append()</code>로 값을 추가할 수 있습니다.</p>
+
+    <div class="playground-card">
+      <div class="playground-header">
+        <div class="playground-title">lists.py</div>
+      </div>
+      <div class="playground-editor-wrapper">
+        <textarea class="playground-editor" spellcheck="false" id="code-lists">fruits = ["사과", "바나나", "포도"]
+
+# 값 추가하기
+fruits.append("오렌지")
+print("리스트 전체:", fruits)
+
+# 특정 인덱스의 값 출력
+print("첫 번째 과일:", fruits[0])
+
+# 리스트 크기 구하기
+print("과일 개수:", len(fruits))</textarea>
+      </div>
+      <div class="playground-actions">
+        <button class="btn-reset" onclick="resetCode('code-lists', `fruits = [&quot;사과&quot;, &quot;바나나&quot;, &quot;포도&quot;]\n\n# 값 추가하기\nfruits.append(&quot;오렌지&quot;)\nprint(&quot;리스트 전체:&quot;, fruits)\n\n# 특정 인덱스의 값 출력\nprint(&quot;첫 번째 과일:&quot;, fruits[0])\n\n# 리스트 크기 구하기\nprint(&quot;과일 개수:&quot;, len(fruits))`)">초기화</button>
+        <button class="btn-run" onclick="runPlayground('code-lists', 'console-lists')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> 실행하기
+        </button>
+      </div>
+      <div class="playground-console" id="console-lists">(여기에 실행 결과가 표시됩니다)</div>
+    </div>
+  </section>
+
+  <!-- Section 7 -->
+  <section id="functions">
+    <h2><span class="num">07</span> 함수 정의하기 (def)</h2>
+    <p>자주 쓰이는 똑같은 코드 조각을 모아 하나의 묶음으로 선언한 것입니다. <code>def 함수이름(매개변수):</code> 형태로 정의하고, <code>return</code>을 통해 결과값을 돌려줍니다.</p>
+
+    <div class="playground-card">
+      <div class="playground-header">
+        <div class="playground-title">functions.py</div>
+      </div>
+      <div class="playground-editor-wrapper">
+        <textarea class="playground-editor" spellcheck="false" id="code-funcs"># 더하기 기능을 하는 함수 정의
+def add_numbers(x, y):
+    result = x + y
+    return result
+
+# 함수 호출하고 결과 받기
+total = add_numbers(15, 25)
+print("15 + 25 =", total)</textarea>
+      </div>
+      <div class="playground-actions">
+        <button class="btn-reset" onclick="resetCode('code-funcs', `# 더하기 기능을 하는 함수 정의\ndef add_numbers(x, y):\n    result = x + y\n    return result\n\n# 함수 호출하고 결과 받기\ntotal = add_numbers(15, 25)\nprint(&quot;15 + 25 =&quot;, total)`)">초기화</button>
+        <button class="btn-run" onclick="runPlayground('code-funcs', 'console-funcs')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> 실행하기
+        </button>
+      </div>
+      <div class="playground-console" id="console-funcs">(여기에 실행 결과가 표시됩니다)</div>
+    </div>
+  </section>
+
+</main>
+</div>
+
+<footer>made for learning · Python Basics Playground</footer>
+
+<script>
+  let pyodide = null;
+  let pyodideReady = false;
+
+  async function loadPyodideEngine() {
+    if (pyodideReady) return pyodide;
+    try {
+      pyodide = await loadPyodide({
+        indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.1/full/"
+      });
+      pyodideReady = true;
+      return pyodide;
+    } catch (err) {
+      console.error("Pyodide 로드 실패:", err);
+      throw err;
+    }
+  }
+
+  async function runPlayground(codeId, consoleId) {
+    const codeArea = document.getElementById(codeId);
+    const consoleDiv = document.getElementById(consoleId);
+    const pythonCode = codeArea.value;
+
+    consoleDiv.innerHTML = "⚙️ 파이썬 실행 엔진 로드 및 준비 중...";
+    consoleDiv.className = "playground-console";
+
+    try {
+      const py = await loadPyodideEngine();
+      consoleDiv.innerHTML = "🏃 실행 중...";
+
+      // Reset variables and redirect stdout
+      const escapedCode = JSON.stringify(pythonCode);
+      const prepCode = `
+import sys
+import io
+import builtins
+
+_output = io.StringIO()
+sys.stdout = _output
+
+try:
+    exec(${escapedCode}, globals())
+except Exception as e:
+    import traceback
+    print("Error:", e, file=sys.stderr)
+    traceback.print_exc(file=sys.stderr)
+
+_captured = _output.getvalue()
+`;
+      await py.runPythonAsync(prepCode);
+      const stdout = py.globals.get("_captured") || "";
+      
+      consoleDiv.className = "playground-console success";
+      consoleDiv.innerText = stdout || "(출력 결과가 없습니다. print 문을 사용했는지 확인하세요)";
+    } catch (err) {
+      consoleDiv.className = "playground-console error";
+      consoleDiv.innerText = "에러: " + (err.message || err);
+    }
+  }
+
+  function resetCode(codeId, originalCode) {
+    document.getElementById(codeId).value = originalCode;
+  }
+
+  function applyTheme() {
+    const params = new URLSearchParams(window.location.search);
+    const theme = params.get('theme') || 'light';
+    if (theme === 'dark') {
+      document.body.classList.add('dark');
+      document.documentElement.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+      document.documentElement.classList.remove('dark');
+    }
+  }
+  applyTheme();
+
+  window.addEventListener('message', (e) => {
+    if (e.data && e.data.type === 'theme-change') {
+      const theme = e.data.theme;
+      if (theme === 'dark') {
+        document.body.classList.add('dark');
+        document.documentElement.classList.add('dark');
+      } else {
+        document.body.classList.remove('dark');
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  });
+</script>
+</body>
+</html>
