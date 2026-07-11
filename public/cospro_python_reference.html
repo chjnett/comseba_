@@ -179,6 +179,7 @@ footer{text-align:center;color:var(--muted);font-family:var(--mono);font-size:12
   <h3>부록</h3>
   <a href="#appendix" style="color: var(--accent-3); font-weight: bold;">14. 특별 추가 부록 (문제 매핑)</a>
   <a href="#algo-cards" style="color: var(--accent); font-weight: bold;">15. 코테 합격 핵심 알고리즘</a>
+  <a href="#algo-5-cards" style="color: var(--accent-2); font-weight: bold;">16. 대표 알고리즘 5선 카드</a>
 </aside>
 
 <main>
@@ -1198,6 +1199,178 @@ std::vector&lt;std::vector&lt;int&gt;&gt; rotate90(const std::vector&lt;std::vec
         <li><strong>"가장 짧은 거리/최소 횟수"를 구하는데 가중치가 없다?</strong> &rarr; 무조건 <strong>BFS</strong>.</li>
         <li><strong>"경로의 수"나 "모든 경우의 수"를 구하는데 $N$이 작다?</strong> &rarr; <strong>DFS / 백트래킹</strong>.</li>
         <li><strong>이미 구한 값이 다음 단계에 그대로 쓰인다?</strong> &rarr; <strong>DP</strong> (점화식 세우기).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 16 -->
+  <section id="algo-5-cards">
+    <h2><span class="num">16</span> 대표 알고리즘 5선 개념 & 핵심 카드</h2>
+    <p>코딩 테스트 및 알고리즘 대회에서 빈출되는 5가지 핵심 알고리즘 유형을 선별하여, 필수 기초 개념 설명과 함께 검증된 대표 문제 풀이 코드를 카드로 정리했습니다.</p>
+
+    <div class="grid2">
+      <!-- Card 1: 구현/시뮬레이션 -->
+      <div class="card">
+        <h4>1. 구현 / 시뮬레이션 (Simulation) <span class="tag">빈출</span></h4>
+        <p><strong>개념:</strong> 문제에서 요구하는 조건과 규칙들을 빠짐없이 파악하고, 이를 정확하고 효율적인 코드로 그대로 재현하는 유형입니다. 주로 2차원 격자판 탐색, 방향 이동, 조건 제어 등이 빈번하게 출제됩니다.</p>
+        <p style="margin-top: 6px;"><strong>💡 핵심 개념:</strong> 2차원 배열 제어, 시뮬레이션 루프, 방향 벡터(dx, dy)를 이용한 경계선 및 장애물 탐색.</p>
+        <p style="margin-top: 4px;"><strong>⭐ 대표 문제:</strong> [CodeUp 6098] 성실한 개미</p>
+        <div style="margin-top: 10px;">
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-2);">🐍 Python 예제 코드</h5>
+          <pre style="margin-bottom: 0; font-size: 11.5px; padding: 10px;"><code><span class="cm"># 10x10 격자판 입력받기 (공백 구분)</span>
+board = [<span class="fn">list</span>(<span class="fn">map</span>(<span class="fn">int</span>, <span class="fn">input</span>().split())) <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(<span class="num-lit">10</span>)]
+
+<span class="cm"># 개미의 초기 위치 (2, 2) -&gt; 인덱스로는 (1, 1)</span>
+x, y = <span class="num-lit">1</span>, <span class="num-lit">1</span>
+
+<span class="kw">while</span> <span class="kw">True</span>:
+    <span class="cm"># 현재 위치를 방문 표시(9)로 변경</span>
+    board[x][y] = <span class="num-lit">9</span>
+    
+    <span class="cm"># 오른쪽 길(y+1)이 열려있거나(0) 먹이(2)가 있는 경우</span>
+    <span class="kw">if</span> board[x][y+<span class="num-lit">1</span>] == <span class="num-lit">0</span> <span class="kw">or</span> board[x][y+<span class="num-lit">1</span>] == <span class="num-lit">2</span>:
+        y += <span class="num-lit">1</span> <span class="cm"># 오른쪽으로 이동</span>
+    <span class="cm"># 오른쪽이 막혔고, 아래쪽 길(x+1)이 열려있거나 먹이가 있는 경우</span>
+    <span class="kw">elif</span> board[x+<span class="num-lit">1</span>][y] == <span class="num-lit">0</span> <span class="kw">or</span> board[x+<span class="num-lit">1</span>][y] == <span class="num-lit">2</span>:
+        x += <span class="num-lit">1</span> <span class="cm"># 아래쪽으로 이동</span>
+    <span class="cm"># 오른쪽과 아래쪽이 모두 벽(1)으로 막힌 경우</span>
+    <span class="kw">else</span>:
+        <span class="kw">break</span> <span class="cm"># 이동 불가, 종료</span>
+        
+    <span class="cm"># 이동한 자리에 먹이(2)를 찾았다면</span>
+    <span class="kw">if</span> board[x][y] == <span class="num-lit">2</span>:
+        board[x][y] = <span class="num-lit">9</span> <span class="cm"># 먹이를 먹고 (9로 변경)</span>
+        <span class="kw">break</span> <span class="cm"># 종료</span>
+
+<span class="cm"># 최종 격자판 상태 출력</span>
+<span class="kw">for</span> row <span class="kw">in</span> board:
+    <span class="fn">print</span>(*(row)) <span class="cm"># 리스트 요소를 공백 구분하여 한 줄씩 출력</span></code></pre>
+        </div>
+      </div>
+
+      <!-- Card 2: 완전탐색 / 재귀 -->
+      <div class="card">
+        <h4>2. 완전 탐색 (Brute Force) / 재귀 (Recursion) <span class="tag">기초</span></h4>
+        <p><strong>개념:</strong> 컴퓨터의 빠른 연산 속도를 믿고 모든 가능한 가짓수를 남김없이 대입해보는 단순 명료한 해결책입니다. 동일한 작동 구조를 갖는 크기가 작은 서브 태스크를 반복 처리하기 위해 <strong>재귀 호출</strong> 방식을 즐겨 사용합니다.</p>
+        <p style="margin-top: 6px;"><strong>💡 핵심 개념:</strong> 탐색 공간의 크기 파악, 재귀 기저 조건(Base Case) 설정, 함수 콜스택 이해.</p>
+        <p style="margin-top: 4px;"><strong>⭐ 대표 문제:</strong> [CodeUp 1904] 두 수 사이의 홀수 출력하기</p>
+        <div style="margin-top: 10px;">
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-2);">🐍 Python 예제 코드</h5>
+          <pre style="margin-bottom: 0; font-size: 11.5px; padding: 10px;"><code><span class="cm"># 시작 값(a)과 끝 값(b) 입력받기</span>
+a, b = <span class="fn">map</span>(<span class="fn">int</span>, <span class="fn">input</span>().split())
+
+<span class="kw">def</span> <span class="fn">print_odds</span>(start, end):
+    <span class="cm"># 기저 조건: 시작 값이 끝 값을 초과하면 즉시 재귀 종료</span>
+    <span class="kw">if</span> start &gt; end:
+        <span class="kw">return</span>
+    
+    <span class="cm"># 만약 현재 숫자가 홀수라면 공백을 두고 출력</span>
+    <span class="kw">if</span> start % <span class="num-lit">2</span> != <span class="num-lit">0</span>:
+        <span class="fn">print</span>(start, end=<span class="str">' '</span>)
+        
+    <span class="cm"># 다음 숫자를 판별하기 위해 자기 자신을 호출 (파라미터 증가)</span>
+    <span class="fn">print_odds</span>(start + <span class="num-lit">1</span>, end)
+
+<span class="cm"># 함수 실행</span>
+<span class="fn">print_odds</span>(a, b)</code></pre>
+        </div>
+      </div>
+
+      <!-- Card 3: 정렬 -->
+      <div class="card">
+        <h4>3. 정렬 (Sorting) <span class="tag">기초</span></h4>
+        <p><strong>개념:</strong> 여러 데이터를 오름차순, 내림차순 또는 문제에서 정의한 임의의 우선순위에 입각하여 순서대로 배치하는 기법입니다. 효율적인 정렬을 통해 다음 연산의 탐색이나 검색 범위를 극적으로 좁힐 수 있습니다.</p>
+        <p style="margin-top: 6px;"><strong>💡 핵심 개념:</strong> 기본 정렬 API, 람다 함수(lambda)를 이용한 다중 기준 정렬(Multi-key Sorting).</p>
+        <p style="margin-top: 4px;"><strong>⭐ 대표 문제:</strong> [CodeUp 1420] 3등 찾기</p>
+        <div style="margin-top: 10px;">
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-2);">🐍 Python 예제 코드</h5>
+          <pre style="margin-bottom: 0; font-size: 11.5px; padding: 10px;"><code><span class="cm"># 학생 수 입력</span>
+n = <span class="fn">int</span>(<span class="fn">input</span>())
+students = []
+
+<span class="cm"># 학생 이름과 점수를 순차적으로 입력받기</span>
+<span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(n):
+    name, score = <span class="fn">input</span>().split()
+    students.append((name, <span class="fn">int</span>(score))) <span class="cm"># 튜플 (이름, 점수) 형태로 저장</span>
+
+<span class="cm"># 점수(x[1])를 기준으로 정렬하되, 내림차순(reverse=True)으로 정렬</span>
+<span class="cm"># lambda x: x[1]은 튜플 데이터의 2번째 원소를 정렬 인자로 지정함을 뜻함</span>
+students.sort(key=<span class="kw">lambda</span> x: x[<span class="num-lit">1</span>], reverse=<span class="kw">True</span>)
+
+<span class="cm"># 정렬 결과에 따라 인덱스 2번(3위)에 속하는 학생의 이름(0번째 요소) 출력</span>
+<span class="fn">print</span>(students[<span class="num-lit">2</span>][<span class="num-lit">0</span>])</code></pre>
+        </div>
+      </div>
+
+      <!-- Card 4: 탐색 / 이분 탐색 -->
+      <div class="card">
+        <h4>4. 탐색 및 이분 탐색 (Binary Search) <span class="tag">빈출</span></h4>
+        <p><strong>개념:</strong> 대규모 데이터 그룹에서 특정한 키값을 검색하는 방법입니다. 모든 요소를 처음부터 스캔하는 순차 탐색 대비, 정렬된 대상 내에서 비교할 때마다 남은 검색 공간을 1/2로 반감시켜 나가는 <strong>이분 탐색</strong>은 비교 불가능할 정도로 빠른 효율성을 갖습니다.</p>
+        <p style="margin-top: 6px;"><strong>💡 핵심 개념:</strong> 시간 복잡도 O(log N), 시작점/끝점/중간점 포인터 관리, 결정 조건 수립.</p>
+        <p style="margin-top: 4px;"><strong>⭐ 대표 문제:</strong> [CodeUp 2633] lower_bound (이분 탐색의 변형)</p>
+        <div style="margin-top: 10px;">
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-2);">🐍 Python 예제 코드</h5>
+          <pre style="margin-bottom: 0; font-size: 11.5px; padding: 10px;"><code><span class="cm"># n개의 데이터 개수와 찾고자 하는 경계 기준값 k 입력</span>
+n, k = <span class="fn">map</span>(<span class="fn">int</span>, <span class="fn">input</span>().split())
+arr = <span class="fn">list</span>(<span class="fn">map</span>(<span class="fn">int</span>, <span class="fn">input</span>().split()))
+
+<span class="cm"># 이분 탐색을 위한 시작점과 끝점 인덱스 설정</span>
+start = <span class="num-lit">0</span>
+end = n - <span class="num-lit">1</span>
+result = n + <span class="num-lit">1</span> <span class="cm"># 만족하는 값이 없을 때를 대비한 디폴트 값</span>
+
+<span class="kw">while</span> start &lt;= end:
+    mid = (start + end) // <span class="num-lit">2</span> <span class="cm"># 중간점 계산</span>
+    
+    <span class="cm"># 중간 지점의 값이 찾고자 하는 k보다 크거나 같은 경우</span>
+    <span class="kw">if</span> arr[mid] &gt;= k:
+        result = mid + <span class="num-lit">1</span> <span class="cm"># 1-indexed 문제 조건에 맞추어 보정하여 기록</span>
+        end = mid - <span class="num-lit">1</span>    <span class="cm"># 더 왼쪽에 만족하는 최소 위치가 있는지 범위 좁히기</span>
+    <span class="kw">else</span>:
+        start = mid + <span class="num-lit">1</span>  <span class="cm"># 더 큰 숫자가 밀집된 오른쪽 영역으로 탐색 시작점 이동</span>
+
+<span class="fn">print</span>(result)</code></pre>
+        </div>
+      </div>
+
+      <!-- Card 5: 다이나믹 프로그래밍 -->
+      <div class="card" style="grid-column: span 2;">
+        <h4>5. 다이나믹 프로그래밍 (Dynamic Programming / 동적 계획법) <span class="tag">전략</span></h4>
+        <p><strong>개념:</strong> 복잡하고 큰 문제를 풀기 위해, 우선 작은 단위의 부분 문제들을 풀고 그 해를 캐싱(Memoization)합니다. 이후 동일한 부분 문제의 해가 필요할 때 캐시된 메모리 테이블에서 꺼내어 재사용(O(1))함으로써 연산의 반복을 완전 배제합니다.</p>
+        <p style="margin-top: 6px;"><strong>💡 핵심 개념:</strong> 점화식 도출, 메모이제이션(Memoization) 테이블 구축, Bottom-Up(반복) vs Top-Down(재귀) 접근법.</p>
+        <p style="margin-top: 4px;"><strong>⭐ 대표 문제:</strong> [CodeUp 2601] 피보나치 수열</p>
+        <div style="margin-top: 10px;">
+          <h5 style="margin: 0 0 4px; font-size: 12px; color: var(--accent-2);">🐍 Python 예제 코드</h5>
+          <pre style="margin-bottom: 0; font-size: 11.5px; padding: 10px;"><code><span class="cm"># 구하고자 하는 피보나치 수열의 N번째 항 순서 입력</span>
+n = <span class="fn">int</span>(<span class="fn">input</span>())
+
+<span class="cm"># 계산된 값을 저장해 둘 DP 테이블(리스트) 초기화 (직관적 인덱스를 위해 n+1 크기)</span>
+dp = [<span class="num-lit">0</span>] * (n + <span class="num-lit">1</span>)
+
+<span class="cm"># 기본 초기 값(기저 상태) 설정</span>
+dp[<span class="num-lit">1</span>] = <span class="num-lit">1</span>
+<span class="kw">if</span> n &gt;= <span class="num-lit">2</span>:
+    dp[<span class="num-lit">2</span>] = <span class="num-lit">1</span>
+
+<span class="cm"># Bottom-Up 방식(반복 루프)으로 인덱스 3부터 점화식을 순차 연산</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num-lit">3</span>, n + <span class="num-lit">1</span>):
+    <span class="cm"># 점화식: 현재 항의 값은 직전의 두 항의 합과 동일</span>
+    dp[i] = dp[i-<span class="num-lit">1</span>] + dp[i-<span class="num-lit">2</span>]
+
+<span class="fn">print</span>(dp[n])</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Box -->
+    <div class="callout callout-tip" style="margin-top: 24px;">
+      <span class="label">💡 알고리즘 핵심 요점정리</span>
+      <ul style="margin: 0; padding-left: 20px; font-size: 13.5px; line-height: 1.6;">
+        <li><strong>구현 (Simulation):</strong> 인덱스 범위 초과 에러(<code>IndexError</code>)를 상시 유의하고 경계면 조건 체크를 정확히 설계해야 합니다.</li>
+        <li><strong>재귀 (Recursion):</strong> 반드시 종료가 보장되는 탈출 조건(Base Case)을 구조 상단부에 명시해야 스택 오버플로우가 나지 않습니다.</li>
+        <li><strong>정렬 (Sorting):</strong> 파이썬의 <code>sort(key=lambda x: ...)</code> 구문을 완전히 체득해두면 다차원 데이터 정렬 문제가 극도로 쉬워집니다.</li>
+        <li><strong>이분 탐색 (Binary Search):</strong> 탐색 대상이 반드시 <strong>이미 정렬되어 있을 때만 사용 가능</strong>한 고속 탐색법임을 기억하세요.</li>
+        <li><strong>DP (Dynamic Programming):</strong> 중복 연산을 캐싱 공간에 기억해두는 '메모이제이션'을 통해 불필요한 서브 트리 탐색 비용을 혁신적으로 제거하는 접근법입니다.</li>
       </ul>
     </div>
   </section>
