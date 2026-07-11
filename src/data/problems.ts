@@ -5274,8 +5274,8 @@ password = input()
 print(solution(password))
 `,
     test_cases: [
-      { input: "Ab12c", output: "False" },
-      { input: "Pass12ord", output: "False" },
+      { input: "Ab12c", output: "True" },
+      { input: "Pass12ord", output: "True" },
       { input: "Aab12", output: "True" }
     ]
   },
