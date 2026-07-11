@@ -458,6 +458,30 @@ s1 - s2            <span class="cm"># 차집합</span></code></pre>
       <span class="label">Tip</span>
       재귀 함수를 짤 때는 ① <strong>종료 조건</strong>(언제 멈추는가), ② <strong>더 작은 문제로 줄이는 식</strong>(n → n-1), 이 두 가지만 정확히 정의하면 됩니다. 종료 조건을 빼먹으면 <code>RecursionError</code>가 발생합니다.
     </div>
+
+    <h3>람다(Lambda) 함수 — 한 줄짜리 익명 함수</h3>
+    <p>이름을 지어 정의(<code>def</code>)하지 않고, 필요한 곳에서 한 줄로 즉석 정의해서 쓰는 <strong>익명 함수(Anonymous Function)</strong>입니다.</p>
+    <pre class="terminal"><code><span class="cm"># 문법: lambda 매개변수: 표현식</span>
+<span class="fn">add_lambda</span> = <span class="kw">lambda</span> x, y: x + y
+<span class="fn">print</span>(<span class="fn">add_lambda</span>(<span class="num-lit">3</span>, <span class="num-lit">5</span>))  <span class="cm"># 8</span></code></pre>
+
+    <p>람다 함수는 단독으로 쓰기보다는, 주로 <strong>내장 함수의 기준(key)을 지정할 때</strong>(예: <code>sorted()</code>, <code>min()</code>, <code>max()</code>) 극도로 유용합니다.</p>
+    <pre class="terminal"><code><span class="cm"># 예제 1: 튜플 리스트에서 2번째 값(점수)을 기준으로 오름차순 정렬</span>
+students = [(<span class="str">"철수"</span>, <span class="num-lit">85</span>), (<span class="str">"영희"</span>, <span class="num-lit">92</span>), (<span class="str">"민수"</span>, <span class="num-lit">78</span>)]
+students.sort(key=<span class="kw">lambda</span> x: x[<span class="num-lit">1</span>])
+<span class="fn">print</span>(students)  <span class="cm"># [('민수', 78), ('철수', 85), ('영희', 92)]</span>
+
+<span class="cm"># 예제 2: map()과 조합하여 리스트의 모든 원소 제곱하기</span>
+nums = [<span class="num-lit">1</span>, <span class="num-lit">2</span>, <span class="num-lit">3</span>, <span class="num-lit">4</span>]
+squared = <span class="fn">list</span>(<span class="fn">map</span>(<span class="kw">lambda</span> x: x**<span class="num-lit">2</span>, nums))
+<span class="fn">print</span>(squared)   <span class="cm"># [1, 4, 9, 16]</span></code></pre>
+
+    <div class="callout callout-tip" style="margin-top: 14px;">
+      <span class="label">💡 다중 조건 정렬(Multi-key Sorting) 팁</span>
+      람다에 튜플 <code>(기준1, ... )</code>을 반환하도록 설정하면 1차 기준이 동일할 때 2차 기준으로 정렬할 수 있습니다. 수치형 데이터에 <code>-</code>를 붙이면 내림차순(역순)이 됩니다.
+      <pre style="margin-bottom: 0; font-size: 11.5px; padding: 10px; border: 1px solid var(--line); border-radius: 8px;"><code><span class="cm"># 1차 기준: 점수 내림차순 (-x[1]), 2차 기준: 이름 오름차순 (x[0])</span>
+students.sort(key=<span class="kw">lambda</span> x: (-x[<span class="num-lit">1</span>], x[<span class="num-lit">0</span>]))</code></pre>
+    </div>
   </section>
 
   <!-- 07 -->
