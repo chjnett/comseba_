@@ -5001,6 +5001,495 @@ print(max(arr) - min(arr))
       { input: "2\n100 -100", output: "200" },
       { input: "5\n0 0 0 0 0", output: "0" }
     ]
+  },
+  {
+    id: 126,
+    classLevel: 2,
+    title: "[6차] [문제 1] 기온이 높았던 날 구하기 (한 줄 수정)",
+    type: "code",
+    description: "n일 동안 매일매일의 평균 기온이 순서대로 들어있는 배열이 있습니다. 이때, A 번째 일과 B 번째 일 사이에서 A, B 번째 일보다 기온이 높았던 날은 총 며칠이었는지 구하려 합니다.\n\nn일 동안 매일매일의 평균 기온이 순서대로 들은 배열 temperature, 두 날짜를 나타내는 자연수 A, B가 매개변수로 주어질 때, A 번째 일과 B 번째 일 사이에서 두 날짜보다 기온이 높았던 날은 총 며칠인지 return 하도록 solution 함수를 작성했습니다. 주어진 코드에서 한 줄만 변경해서 모든 입력에 대해 올바르게 동작하도록 수정하세요.",
+    input_desc: "첫째 줄에 온도가 공백으로 구분되어 입력되고, 둘째 줄에 A, 셋째 줄에 B가 입력됩니다.",
+    output_desc: "A번째 일과 B번째 일 사이에 기온이 높았던 날수를 정수로 출력합니다.",
+    examples: [
+      { input: "3 2 1 5 4 3 3 2\n1\n6", output: "2" }
+    ],
+    starter_code: `def solution(temperature, A, B):
+    answer = 0
+    for i in range(0, len(temperature)):
+        if temperature[i] > temperature[A] and temperature[i] > temperature[B]:
+            answer += 1
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+temperature = list(map(int, input().split()))
+A = int(input())
+B = int(input())
+print(solution(temperature, A, B))
+`,
+    solution_code: `def solution(temperature, A, B):
+    answer = 0
+    for i in range(A+1, B):
+        if temperature[i] > temperature[A] and temperature[i] > temperature[B]:
+            answer += 1
+    return answer
+
+temperature = list(map(int, input().split()))
+A = int(input())
+B = int(input())
+print(solution(temperature, A, B))
+`,
+    test_cases: [
+      { input: "3 2 1 5 4 3 3 2\n1\n6", output: "2" },
+      { input: "10 20 30 40 50\n0\n4", output: "3" },
+      { input: "5 10 15 20 25\n1\n3", output: "1" }
+    ]
+  },
+  {
+    id: 127,
+    classLevel: 2,
+    title: "[6차] [문제 2] 종이 나누어주기 (한 줄 수정)",
+    type: "code",
+    description: "한 줄로 서 있는 사람들에게 종이를 다음과 같은 방법으로 나눠주려 합니다.\n\n1. 종이 K 장을 맨 앞사람에게 줍니다.\n2. 맨 앞사람은 자신이 필요한만큼 종이를 챙긴 후, 남은 종이를 뒷사람한테 전달합니다.\n3. 뒷사람 또한 자신이 필요한만큼 종이를 챙긴 후, 남은 종이를 뒷사람에게 전달합니다.\n4. 전달할 종이가 없거나, 모든 사람이 필요한 만큼 종이를 가질 때까지 계속해서 뒷사람에게 남은 종이를 전달합니다.\n\n각자 필요로 하는 종이 수가 순서대로 들어있는 배열 papers, 처음에 맨 앞사람에게 전달한 종이 수 K가 매개변수로 주어질 때, 필요한 만큼의 종이를 받은 사람은 모두 몇 명인지 return 하도록 solution 함수를 작성했습니다. 코드 한 줄만 변경해서 올바르게 동작하도록 수정하세요.",
+    input_desc: "첫째 줄에 필요한 종이 수가 공백으로 구분되어 주어집니다. 둘째 줄에 처음에 전달받은 종이 수 K가 주어집니다.",
+    output_desc: "종이를 정상적으로 분배받은 총인원 수를 출력합니다.",
+    examples: [
+      { input: "2 4 3 2 1\n10", output: "3" }
+    ],
+    starter_code: `def solution(papers, K):
+    length = len(papers)
+    for i, paper in enumerate(papers):
+        K -= paper
+        if K < 0:
+            length = i
+    return length
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+papers = list(map(int, input().split()))
+K = int(input())
+print(solution(papers, K))
+`,
+    solution_code: `def solution(papers, K):
+    length = len(papers)
+    for i, paper in enumerate(papers):
+        K -= paper
+        if K < 0:
+            return i
+    return length
+
+papers = list(map(int, input().split()))
+K = int(input())
+print(solution(papers, K))
+`,
+    test_cases: [
+      { input: "2 4 3 2 1\n10", output: "3" },
+      { input: "2 4 3 2 1\n14", output: "5" },
+      { input: "5 5 5\n4", output: "0" }
+    ]
+  },
+  {
+    id: 128,
+    classLevel: 2,
+    title: "[6차] [문제 3] 단체 유니폼 주문 수량 구하기 (소스코드 작성)",
+    type: "code",
+    description: "단체 유니폼을 주문하려고 합니다. 사람들의 덩치를 수치로 표현할 때 주문해야 하는 유니폼의 사이즈 기준은 다음과 같습니다.\n\n* 95 미만: S\n* 95 이상 100 미만: M\n* 100 이상 105 미만: L\n* 105 이상: XL\n\n사람들의 덩치를 담은 배열 people이 매개변수로 주어질 때, 주문해야 하는 유니폼 사이즈의 수를 [S, M, L, XL] 순으로 배열에 담아 return 하도록 solution 함수를 작성해주세요.",
+    input_desc: "첫째 줄에 사람들의 덩치를 나타내는 수치가 공백으로 구분되어 주어집니다.",
+    output_desc: "[S, M, L, XL] 각 사이즈 유니폼의 수량을 리스트 형식으로 출력합니다.",
+    examples: [
+      { input: "97 102 93 100 107", output: "[1, 1, 2, 1]" }
+    ],
+    starter_code: `def solution(people):
+    # 여기에 코드를 작성하세요.
+    answer = []
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+people = list(map(int, input().split()))
+print(solution(people))
+`,
+    solution_code: `def solution(people):
+    answer = [0 for _ in range(4)]
+    for p in people:
+        if p < 95:
+            answer[0] += 1
+        elif p >= 95 and p < 100:
+            answer[1] += 1
+        elif p >= 100 and p < 105:
+            answer[2] += 1
+        elif p >= 105:
+            answer[3] += 1
+    return answer
+
+people = list(map(int, input().split()))
+print(solution(people))
+`,
+    test_cases: [
+      { input: "97 102 93 100 107", output: "[1, 1, 2, 1]" },
+      { input: "90 94 95 99 100 104 105 110", output: "[2, 2, 2, 2]" },
+      { input: "120 130", output: "[0, 0, 0, 2]" }
+    ]
+  },
+  {
+    id: 129,
+    classLevel: 2,
+    title: "[6차] [문제 4] 카드 게임 점수 계산 (소스코드 작성)",
+    type: "code",
+    description: "카드를 3장 뽑아 점수를 내는 게임을 하려고 합니다. 각 카드는 색이 칠해져 있고, 숫자가 적혀 있습니다.\n\n1. 카드 3장의 색이 모두 같다면 적힌 숫자의 총합에 3을 곱합니다.\n2. 카드 2장의 색이 같고, 1장의 색이 다르다면 적힌 숫자의 총합에 2를 곱합니다.\n3. 카드 3장의 색이 모두 다르다면 적힌 숫자의 총합이 점수입니다.\n\n뽑은 카드의 색과 숫자를 문자열로 담은 2차원 배열 cards가 매개변수로 주어질 때, 획득한 총 점수를 return 하도록 solution 함수를 작성해주세요.",
+    input_desc: "카드 3장의 색과 숫자가 순서대로 주어집니다. 첫째 줄은 1번째 카드(색 숫자), 둘째 줄은 2번째 카드, 셋째 줄은 3번째 카드입니다.",
+    output_desc: "획득한 총 점수를 출력합니다.",
+    examples: [
+      { input: "blue 2\nred 5\nblack 3", output: "10" }
+    ],
+    starter_code: `def solution(cards):
+    # 여기에 코드를 작성하세요.
+    answer = 0
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+cards = []
+for _ in range(3):
+    cards.append(input().split())
+print(solution(cards))
+`,
+    solution_code: `def solution(cards):
+    answer = 0
+    count = [0 for _ in range(3)]
+    for card in cards:
+        if card[0] == 'black':
+            count[0] += 1
+        elif card[0] == 'blue':
+            count[1] += 1
+        elif card[0] == 'red':
+            count[2] += 1
+        answer += int(card[1])
+        
+    if count[0] == 3 or count[1] == 3 or count[2] == 3:
+        answer *= 3
+    elif count[0] == 2 or count[1] == 2 or count[2] == 2:
+        answer *= 2
+    return answer
+
+cards = []
+for _ in range(3):
+    cards.append(input().split())
+print(solution(cards))
+`,
+    test_cases: [
+      { input: "blue 2\nred 5\nblack 3", output: "10" },
+      { input: "blue 2\nblue 5\nblack 3", output: "20" },
+      { input: "red 10\nred 10\nred 10", output: "90" }
+    ]
+  },
+  {
+    id: 130,
+    classLevel: 2,
+    title: "[6차] [문제 5] 빈 병 교환 음료수 개수 구하기 (한 줄 수정)",
+    type: "code",
+    description: "X 마트에서는 빈 병 n개와 음료수 한 병을 교환해줍니다.\n가진 돈 money, 음료수 한 병의 가격 price, 교환에 필요한 빈 병의 수 n이 주어질 때, 마실 수 있는 총 음료수의 수를 return 하도록 solution 함수를 작성했습니다. 코드 일부분이 잘못되어 있으므로 한 줄만 변경하여 수정하세요.",
+    input_desc: "첫째 줄에 가진 돈 money, 둘째 줄에 음료수 가격 price, 셋째 줄에 교환에 필요한 빈 병의 수 n이 정수로 주어집니다.",
+    output_desc: "마실 수 있는 총 음료수 수를 출력합니다.",
+    examples: [
+      { input: "6\n2\n2", output: "5" }
+    ],
+    starter_code: `def solution(money, price, n):
+    answer = 0
+    empty_bottle = answer = money // price
+    while n <= empty_bottle:
+        empty_bottle = empty_bottle + n
+        answer += 1
+        empty_bottle += 1
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+money = int(input())
+price = int(input())
+n = int(input())
+print(solution(money, price, n))
+`,
+    solution_code: `def solution(money, price, n):
+    answer = 0
+    empty_bottle = answer = money // price
+    while n <= empty_bottle:
+        empty_bottle = empty_bottle - n
+        answer += 1
+        empty_bottle += 1
+    return answer
+
+money = int(input())
+price = int(input())
+n = int(input())
+print(solution(money, price, n))
+`,
+    test_cases: [
+      { input: "6\n2\n2", output: "5" },
+      { input: "10\n2\n5", output: "6" },
+      { input: "100\n10\n10", output: "11" }
+    ]
+  },
+  {
+    id: 131,
+    classLevel: 2,
+    title: "[6차] [문제 6] 비밀번호 조건 검사 (빈칸 채우기)",
+    type: "blank",
+    description: "회원가입 비밀번호 규칙은 다음과 같습니다.\n\n1. 한 개 이상의 알파벳 대문자 포함\n2. 두 개 이상의 알파벳 소문자 포함\n3. 두 개 이상의 숫자 포함\n\n비밀번호 password가 주어질 때, 규칙에 맞으면 True, 아니면 False를 return 하도록 빈칸을 채워 코드를 완성하세요.",
+    input_desc: "첫째 줄에 확인할 비밀번호 문자열이 주어집니다.",
+    output_desc: "비밀번호 규칙 준수 여부(True 또는 False)를 출력합니다.",
+    examples: [
+      { input: "Ab12c", output: "False" }
+    ],
+    starter_code: `def solution(password):
+    capital_count, small_count, digit_count = 0, 0, 0
+    for p in password:
+        if p >= 'A' and p <= 'Z':
+            capital_count += 1
+        elif p >= 'a' and p <= 'z':
+            small_count += 1
+        elif p >= '0' and p <= @@@:
+            digit_count += 1
+    if capital_count >= 1 and @@@ and digit_count >= 2:
+        answer = True
+    else:
+        answer = False
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+password = input()
+print(solution(password))
+`,
+    solution_code: `def solution(password):
+    capital_count, small_count, digit_count = 0, 0, 0
+    for p in password:
+        if p >= 'A' and p <= 'Z':
+            capital_count += 1
+        elif p >= 'a' and p <= 'z':
+            small_count += 1
+        elif p >= '0' and p <= '9':
+            digit_count += 1
+    if capital_count >= 1 and small_count >= 2 and digit_count >= 2:
+        answer = True
+    else:
+        answer = False
+    return answer
+
+password = input()
+print(solution(password))
+`,
+    test_cases: [
+      { input: "Ab12c", output: "False" },
+      { input: "Pass12ord", output: "False" },
+      { input: "Aab12", output: "True" }
+    ]
+  },
+  {
+    id: 132,
+    classLevel: 2,
+    title: "[6차] [문제 7] 의자와 책상 가장 비싸게 사기 (빈칸 채우기)",
+    type: "blank",
+    description: "예산 money 내에서 의자 배열 chairs와 책상 배열 desks에서 각각 하나씩 살 때, 가격 합의 최댓값을 구하려고 합니다. 살 수 없는 경우는 0을 반환합니다. 빈칸을 채워 완성하세요.",
+    input_desc: "첫째 줄에 예산 money, 둘째 줄에 의자 가격 리스트가 공백으로 구분되어 주어집니다. 셋째 줄에 책상 가격 리스트가 공백으로 구분되어 주어집니다.",
+    output_desc: "살 수 있는 의자와 책상 조합의 최대 가격 합을 출력합니다. 살 수 있는 조합이 없는 경우 0을 출력합니다.",
+    examples: [
+      { input: "10000\n3000 4000 5000\n4000 5000 6000", output: "10000" }
+    ],
+    starter_code: `def solution(money, chairs, desks):
+    answer = 0
+    for chair in chairs:
+        for desk in desks:
+            price = @@@
+            if answer < price and @@@:
+                answer = price
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+money = int(input())
+chairs = list(map(int, input().split()))
+desks = list(map(int, input().split()))
+print(solution(money, chairs, desks))
+`,
+    solution_code: `def solution(money, chairs, desks):
+    answer = 0
+    for chair in chairs:
+        for desk in desks:
+            price = chair + desk
+            if answer < price and price <= money:
+                answer = price
+    return answer
+
+money = int(input())
+chairs = list(map(int, input().split()))
+desks = list(map(int, input().split()))
+print(solution(money, chairs, desks))
+`,
+    test_cases: [
+      { input: "10000\n3000 4000 5000\n4000 5000 6000", output: "10000" },
+      { input: "5000\n3000 4000\n3000 4000", output: "0" },
+      { input: "20000\n5000 8000\n7000 11000", output: "19000" }
+    ]
+  },
+  {
+    id: 133,
+    classLevel: 2,
+    title: "[6차] [문제 8] 원래 수와 뒤집은 수의 차이 (빈칸 채우기)",
+    type: "blank",
+    description: "주어진 정수를 거꾸로 뒤집은 수와의 차이를 구하려고 합니다. (예: 120 -> 뒤집으면 21, 차이는 99).\nfunc_a(차이 계산), func_b(자릿수 계산), func_c(수 뒤집기) 함수가 주어질 때, solution 함수의 빈칸을 알맞게 채우세요.",
+    input_desc: "첫째 줄에 자연수 number가 주어집니다.",
+    output_desc: "원래 수와 자릿수를 맞춰 뒤집은 수의 양수 차이를 출력합니다.",
+    examples: [
+      { input: "120", output: "99" }
+    ],
+    starter_code: `def func_a(number1, number2):
+    ret = 0
+    if number1 > number2:
+        ret = number1 - number2
+    else:
+        ret = number2 - number1
+    return ret
+
+def func_b(number):
+    ret = 0
+    while number != 0:
+        number = number // 10
+        ret += 1
+    return ret
+
+def func_c(number, digit):
+    ret = 0
+    for i in range(digit):
+        temp = number % 10
+        number = number // 10
+        ret = ret * 10 + temp
+    return ret
+
+def solution(number):
+    answer = 0
+    digit = @@@
+    convert_number = @@@
+    answer = @@@
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+number = int(input())
+print(solution(number))
+`,
+    solution_code: `def func_a(number1, number2):
+    ret = 0
+    if number1 > number2:
+        ret = number1 - number2
+    else:
+        ret = number2 - number1
+    return ret
+
+def func_b(number):
+    ret = 0
+    while number != 0:
+        number = number // 10
+        ret += 1
+    return ret
+
+def func_c(number, digit):
+    ret = 0
+    for i in range(digit):
+        temp = number % 10
+        number = number // 10
+        ret = ret * 10 + temp
+    return ret
+
+def solution(number):
+    answer = 0
+    digit = func_b(number)
+    convert_number = func_c(number, digit)
+    answer = func_a(number, convert_number)
+    return answer
+
+number = int(input())
+print(solution(number))
+`,
+    test_cases: [
+      { input: "120", output: "99" },
+      { input: "123", output: "198" },
+      { input: "400", output: "396" }
+    ]
+  },
+  {
+    id: 134,
+    classLevel: 2,
+    title: "[6차] [문제 9] 같은 색 양말 쌍 맞추기 (한 줄 수정)",
+    type: "code",
+    description: "양말 색이 숫자로 담긴 배열 socks가 주어질 때, 같은 색 양말 2개씩 묶어 총 몇 쌍을 만들 수 있는지 구하는 코드입니다. 코드 한 줄만 변경해서 수정하세요.",
+    input_desc: "첫째 줄에 각 양말의 색상 정보(10 미만의 자연수)가 공백으로 구분되어 주어집니다.",
+    output_desc: "같은 색상의 양말을 두 개씩 묶어 만들 수 있는 쌍의 총개수를 출력합니다.",
+    examples: [
+      { input: "1 2 1 2 1 3 2 1", output: "3" }
+    ],
+    starter_code: `def solution(socks):
+    answer = 0
+    count = [0 for _ in range(10)]
+    for s in socks:
+        count[s] += 1
+    for c in count:
+        answer += (c % 2)
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+socks = list(map(int, input().split()))
+print(solution(socks))
+`,
+    solution_code: `def solution(socks):
+    answer = 0
+    count = [0 for _ in range(10)]
+    for s in socks:
+        count[s] += 1
+    for c in count:
+        answer += (c // 2)
+    return answer
+
+socks = list(map(int, input().split()))
+print(solution(socks))
+`,
+    test_cases: [
+      { input: "1 2 1 2 1 3 2 1", output: "3" },
+      { input: "2 2 2 2", output: "2" },
+      { input: "1 2 3 4 5", output: "0" }
+    ]
+  },
+  {
+    id: 135,
+    classLevel: 2,
+    title: "[6차] [문제 10] 불량 사과 박스 고르기 (빈칸 채우기)",
+    type: "blank",
+    description: "사과 상자의 표준 무게 weight가 주어집니다. 무게 오차가 10% 이내이면 정상품, 오차가 10%를 초과하면 불량품입니다. 사과 상자들의 무게 배열 boxes가 주어질 때 불량품의 개수를 구하도록 빈칸을 채우세요.",
+    input_desc: "첫째 줄에 사과 상자의 표준 무게 weight가 주어집니다. 둘째 줄에 개별 사과 상자들의 무게가 공백으로 구분되어 주어집니다.",
+    output_desc: "표준 무게 대비 오차가 10%를 초과하는 불량 사과 상자의 개수를 출력합니다.",
+    examples: [
+      { input: "100\n90 91 89 110 111", output: "2" }
+    ],
+    starter_code: `def solution(weight, boxes):
+    answer = 0
+    for x in boxes:
+        if @@@:
+            answer += 1
+    return answer
+
+# 아래 코드는 실행을 돕기 위한 입출력 코드입니다. 수정하지 마세요.
+weight = int(input())
+boxes = list(map(int, input().split()))
+print(solution(weight, boxes))
+`,
+    solution_code: `def solution(weight, boxes):
+    answer = 0
+    for x in boxes:
+        if x < weight * 9 / 10 or x > weight * 11 / 10:
+            answer += 1
+    return answer
+
+weight = int(input())
+boxes = list(map(int, input().split()))
+print(solution(weight, boxes))
+`,
+    test_cases: [
+      { input: "100\n90 91 89 110 111", output: "2" },
+      { input: "50\n45 55 44 56", output: "2" },
+      { input: "200\n200 190 210 180 220", output: "2" }
+    ]
   }
 ];
 
