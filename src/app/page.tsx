@@ -1284,14 +1284,40 @@ export default function Home() {
                       <span className="text-[var(--muted-dark)]">코드를 실행하거나 제출하면 여기에 결과가 표시됩니다.</span>
                     ) : (
                       consoleLogs.map((log, idx) => {
+                        if (log.type === "error") {
+                          return (
+                            <div key={idx} className="bg-[var(--accent-2)]/10 border-l-4 border-[var(--accent-2)] text-[var(--accent-2)] font-bold px-3 py-2.5 my-1.5 rounded-r-xl whitespace-pre-wrap font-mono text-xs flex flex-col gap-1 animate-[fadeIn_0.15s_ease-out]">
+                              <div className="flex items-center gap-1.5 text-[9px] uppercase tracking-wider opacity-90 font-bold">
+                                <AlertTriangle size={12} />
+                                Execution Error / Incorrect Answer
+                              </div>
+                              <div className="leading-relaxed">
+                                {log.text}
+                              </div>
+                            </div>
+                          );
+                        }
+
+                        if (log.type === "success") {
+                          return (
+                            <div key={idx} className="bg-[var(--accent)]/10 border-l-4 border-[var(--accent)] text-[var(--accent)] font-bold px-3 py-2.5 my-1.5 rounded-r-xl whitespace-pre-wrap font-mono text-xs flex flex-col gap-1 animate-[fadeIn_0.15s_ease-out]">
+                              <div className="flex items-center gap-1.5 text-[9px] uppercase tracking-wider opacity-90 font-bold">
+                                <CheckCircle2 size={12} />
+                                Success / All Test Cases Passed
+                              </div>
+                              <div className="leading-relaxed">
+                                {log.text}
+                              </div>
+                            </div>
+                          );
+                        }
+
                         let color = "text-[var(--text)]";
-                        if (log.type === "success") color = "text-[var(--accent)] font-bold";
-                        if (log.type === "error") color = "text-[var(--accent-2)]";
                         if (log.type === "info") color = "text-[var(--accent-3)]";
                         if (log.type === "muted") color = "text-[var(--muted-extra)]";
 
                         return (
-                          <div key={idx} className={color + " whitespace-pre"}>
+                          <div key={idx} className={color + " whitespace-pre text-xs py-0.5"}>
                             {log.text}
                           </div>
                         );
