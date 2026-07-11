@@ -3411,11 +3411,11 @@ for i in range(n-1,-1,-1):
     classLevel: 3,
     title: "[5차] [문제 7] 짝수의 합과 평균 (소스코드 작성)",
     type: "code",
-    description: "10개의 수를 입력 받아 첫 줄에는 짝수를, 둘째 줄에는 짝수의 합을, 셋째 줄에는 짝수의 평균을 출력하는 프로그램을 작성하세요. (평균은 소수 셋째 자리에서 반올림하여 둘째 자리까지 출력)",
+    description: "10개의 수를 입력 받아 첫 줄에는 짝수를, 둘째 줄에는 짝수의 합을, 셋째 줄에는 짝수의 평균을 출력하는 프로그램을 작성하세요. (평균은 소수점 첫째 자리까지 출력)",
     input_desc: "표준 입력으로 자연수 10개가 차례대로 한 줄씩 주어집니다.",
     output_desc: "출력의 예와 같이 첫 줄에 짝수 목록, 둘째 줄에 합, 셋째 줄에 평균을 출력하세요.",
     examples: [
-      { input: "2\n8\n10\n3\n2\n7\n4\n51\n12\n6", output: "2 8 10 2 4 12 6 \n44\n6.29" }
+      { input: "2\n8\n10\n3\n2\n7\n4\n51\n12\n18", output: "2 8 10 2 4 12 18 \n56\n8.0" }
     ],
     starter_code: `# 입력받기
 arr = []
@@ -3443,9 +3443,9 @@ print(even_sum)
 
 if len(evens) > 0:
     even_avg = even_sum / len(evens)
-    print(f"{even_avg:.2f}")
+    print(f"{even_avg:.1f}")
 else:
-    print("0.00")
+    print("0.0")
 
 # 풀이 2: 반복문과 조건문을 직접 사용하여 합과 개수를 누적하는 방법
 # arr = []
@@ -3460,11 +3460,11 @@ else:
 #         count += 1
 # print()
 # print(sum_val)
-# print(f"{sum_val / count:.2f}" if count > 0 else "0.00")
+# print(f"{sum_val / count:.1f}" if count > 0 else "0.0")
 `,
     test_cases: [
-      { input: "2\n8\n10\n3\n2\n7\n4\n51\n12\n6", output: "2 8 10 2 4 12 6 \n44\n6.29" },
-      { input: "1\n3\n5\n7\n9\n11\n13\n15\n17\n18", output: "18 \n18\n18.00" }
+      { input: "2\n8\n10\n3\n2\n7\n4\n51\n12\n18", output: "2 8 10 2 4 12 18 \n56\n8.0" },
+      { input: "1\n3\n5\n7\n9\n11\n13\n15\n17\n18", output: "18 \n18\n18.0" }
     ]
   },
   {
