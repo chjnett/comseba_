@@ -205,7 +205,7 @@ export default function Home() {
   const [newTestCases, setNewTestCases] = useState("[\n  {\n    \"input\": \"입력값\",\n    \"output\": \"출력값\"\n  }\n]");
   
   // Category & Learning states
-  const [currentCategory, setCurrentCategory] = useState<'home' | 'oj' | 'concept' | 'python_basic' | 'sql_basic' | 'sql_advanced'>('home');
+  const [currentCategory, setCurrentCategory] = useState<'home' | 'oj' | 'concept' | 'python_basic' | 'sql_basic' | 'sql_advanced' | 'algorithm'>('home');
   const [activeConceptIndex, setActiveConceptIndex] = useState<number>(0);
   const [activeSqlLessonIndex, setActiveSqlLessonIndex] = useState<number>(0);
   const [sqlQuery, setSqlQuery] = useState<string>("");
@@ -215,6 +215,7 @@ export default function Home() {
   
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [algoType, setAlgoType] = useState<'bfs' | 'dfs'>('bfs');
 
   // Resizable panel states
   const [consoleHeight, setConsoleHeight] = useState<number>(256); // default 256px
@@ -879,6 +880,28 @@ export default function Home() {
               <div className="flex items-center justify-between mt-4">
                 <span className="text-xs font-bold text-[#b4befe] bg-[#b4befe]/10 px-3 py-1 rounded-full">집계 및 JOIN 마스터</span>
                 <ChevronRight size={18} className="text-[#b4befe] group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
+
+            {/* Card 5: Algorithm Solving */}
+            <div 
+              onClick={() => {
+                setCurrentCategory('algorithm');
+              }}
+              className="bg-[var(--panel)] border border-[var(--line)] hover:border-[#f38ba8]/50 p-6 rounded-2xl cursor-pointer transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl flex flex-col justify-between group"
+            >
+              <div>
+                <div className="bg-[#f38ba8]/10 text-[#f38ba8] p-4 rounded-xl w-14 h-14 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                  <Sparkles size={28} />
+                </div>
+                <h3 className="text-xl font-bold text-[#f38ba8] mb-2">알고리즘 풀기</h3>
+                <p className="text-sm text-[var(--muted)] leading-relaxed mb-4">
+                  DFS와 BFS를 활용한 시뮬레이션을 통해 복잡한 탐색 알고리즘을 직관적으로 학습합니다.
+                </p>
+              </div>
+              <div className="flex items-center justify-between mt-4">
+                <span className="text-xs font-bold text-[#f38ba8] bg-[#f38ba8]/10 px-3 py-1 rounded-full">탐색 알고리즘 실습</span>
+                <ChevronRight size={18} className="text-[#f38ba8] group-hover:translate-x-1 transition-transform" />
               </div>
             </div>
           </div>
@@ -1698,6 +1721,58 @@ export default function Home() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* ALGORITHM SIMULATION VIEW */}
+      {/* ========================================================================= */}
+      {currentCategory === 'algorithm' && (
+        <div className="flex-1 flex flex-col w-full h-full relative">
+          <header className="border-b border-[var(--line)] bg-[var(--panel-2)] px-6 py-4 flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => setCurrentCategory('home')}
+                className="flex items-center gap-1.5 bg-[var(--line)] border border-[var(--line-hover)] hover:bg-[var(--line-hover)] text-[var(--text)] px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200"
+              >
+                <ArrowLeft size={14} />
+                홈으로
+              </button>
+              <div className="bg-[#f38ba8]/20 p-2 rounded-xl text-[#f38ba8]">
+                <Sparkles size={20} />
+              </div>
+              <div>
+                <h1 className="text-base font-bold tracking-wide text-[#f38ba8] flex items-center gap-2">
+                  알고리즘 시뮬레이션
+                </h1>
+                <p className="text-[10px] text-[var(--muted)]">DFS / BFS 탐색 시뮬레이터</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 bg-[var(--bg)] p-1 rounded-xl border border-[var(--line)]">
+              <button
+                onClick={() => setAlgoType('bfs')}
+                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${algoType === 'bfs' ? 'bg-[#f38ba8] text-[var(--bg)] shadow-sm' : 'text-[var(--muted)] hover:text-[var(--text)]'}`}
+              >
+                BFS 탐색
+              </button>
+              <button
+                onClick={() => setAlgoType('dfs')}
+                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${algoType === 'dfs' ? 'bg-[#f38ba8] text-[var(--bg)] shadow-sm' : 'text-[var(--muted)] hover:text-[var(--text)]'}`}
+              >
+                DFS 탐색
+              </button>
+            </div>
+          </header>
+          
+          <div className="flex-1 bg-[var(--bg)] w-full relative">
+            <iframe
+              key={algoType}
+              src={algoType === 'bfs' ? "/bfs_dfs.html" : "/dfs.html"}
+              className="absolute inset-0 w-full h-full border-none"
+              title="Algorithm Simulation"
+            />
           </div>
         </div>
       )}

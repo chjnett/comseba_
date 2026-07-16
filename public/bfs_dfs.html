@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>호수는 몇 개일까? — BFS 탐사 기록 (CodeUp 4024)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#efeae0;
+    --paper-2:#e6e0d1;
+    --ink:#182623;
+    --ink-soft:#4d5c56;
+    --water:#1f7a8c;
+    --water-deep:#0b4f63;
+    --land-soft:#e4d7a3;
+    --foam:#bfe9e4;
+    --rule:#c9c2b2;
+    --warn:#b8531d;
+    --lake-1:#1f7a8c;
+    --lake-2:#8e44ad;
+    --lake-3:#b8531d;
+    --lake-4:#2e7d32;
+    --mono:'IBM Plex Mono', ui-monospace, monospace;
+    --sans:'IBM Plex Sans KR','IBM Plex Sans', sans-serif;
+    --display:'Space Grotesk', var(--sans);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{ background:var(--paper); color:var(--ink); font-family:var(--sans); line-height:1.6; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--foam); }
+  .wrap{ max-width:940px; margin:0 auto; padding:0 24px; }
+
+  .topbar{ display:flex; justify-content:space-between; align-items:center; padding:18px 24px; border-bottom:1px solid var(--rule);
+    font-family:var(--mono); font-size:12px; letter-spacing:.06em; color:var(--ink-soft); text-transform:uppercase; flex-wrap:wrap; gap:6px; }
+  .topbar strong{ color:var(--ink); }
+  .topbar .dot{ color:var(--water); }
+
+  .hero{ padding:72px 0 40px; }
+  .eyebrow{ font-family:var(--mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--water-deep);
+    display:flex; align-items:center; gap:10px; margin-bottom:18px; }
+  .eyebrow::before{ content:''; width:22px; height:1px; background:var(--water-deep); }
+  h1{ font-family:var(--display); font-weight:600; font-size:clamp(34px,6vw,54px); line-height:1.08; margin:0 0 18px; letter-spacing:-0.01em; }
+  h1 em{ font-style:normal; color:var(--water-deep); }
+  .lede{ font-size:17px; color:var(--ink-soft); max-width:58ch; margin:0 0 6px; }
+  .lede b{ color:var(--ink); font-weight:600; }
+  .source-tag{ display:inline-block; margin-top:18px; font-family:var(--mono); font-size:11.5px; color:var(--ink-soft);
+    border:1px dashed var(--rule); border-radius:999px; padding:4px 12px; }
+
+  .fig{ padding:56px 0; border-top:1px solid var(--rule); }
+  .fig-head{ display:flex; align-items:baseline; gap:14px; margin-bottom:22px; flex-wrap:wrap; }
+  .fig-tag{ font-family:var(--mono); font-size:12px; color:var(--water-deep); border:1px solid var(--water-deep);
+    border-radius:999px; padding:3px 10px; white-space:nowrap; }
+  .fig-title{ font-family:var(--display); font-weight:600; font-size:22px; margin:0; }
+  .fig-note{ color:var(--ink-soft); font-size:15px; max-width:66ch; }
+
+  .callout{ background:#fff3e9; border:1px solid var(--warn); border-left-width:4px; border-radius:6px;
+    padding:14px 18px; font-size:14.5px; color:var(--ink); margin:16px 0; max-width:66ch; }
+  .callout b{ color:var(--warn); }
+
+  .legend{ display:flex; gap:18px; flex-wrap:wrap; font-family:var(--mono); font-size:12.5px; color:var(--ink-soft); margin:16px 0 8px;}
+  .legend span{ display:inline-flex; align-items:center; gap:7px; }
+  .swatch{ width:13px; height:13px; border-radius:3px; display:inline-block; border:1px solid rgba(0,0,0,.15); }
+
+  .board-card{ background:#fff; border:1px solid var(--rule); border-radius:10px; padding:22px;
+    display:flex; flex-direction:column; align-items:center; gap:18px; }
+  .grid{ display:grid; grid-template-columns:repeat(12, minmax(22px,32px)); grid-template-rows:repeat(10, minmax(22px,32px)); gap:2px; }
+  .cell{ border-radius:4px; position:relative; display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-size:9px; color:transparent; transition:background-color .28s ease, box-shadow .28s ease, transform .2s ease; }
+  .cell.land{ background:var(--land-soft); }
+  .cell.water{ background:var(--water); }
+  .cell.queued{ background:var(--foam); box-shadow:inset 0 0 0 2px var(--water-deep); }
+  .cell.current{ box-shadow:0 0 0 3px var(--ink) inset, 0 0 12px rgba(0,0,0,.25); transform:scale(1.12); z-index:2; }
+  .cell.filled-1{ background:var(--lake-1); }
+  .cell.filled-2{ background:var(--lake-2); }
+  .cell.filled-3{ background:var(--lake-3); }
+  .cell.filled-4{ background:var(--lake-4); }
+
+  .queue-panel{ width:100%; }
+  .queue-label{ font-family:var(--mono); font-size:11px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.08em;
+    margin-bottom:8px; display:flex; justify-content:space-between;}
+  .track{ display:flex; align-items:center; gap:8px; min-height:40px; background:var(--paper-2); border-radius:8px;
+    padding:8px 12px; overflow-x:auto; font-family:var(--mono); font-size:12px; }
+  .track .flow-label{ color:var(--ink-soft); font-size:11px; white-space:nowrap; }
+  .chip{ background:#fff; border:1px solid var(--water-deep); color:var(--water-deep); border-radius:999px; padding:4px 10px;
+    white-space:nowrap; flex:0 0 auto; animation:pop .18s ease; }
+  @keyframes pop{ from{ transform:scale(.6); opacity:0;} to{ transform:scale(1); opacity:1;} }
+  .track .empty{ color:var(--ink-soft); font-style:italic; }
+
+  .controls{ display:flex; flex-wrap:wrap; gap:10px; width:100%; }
+  button{ font-family:var(--mono); font-size:12.5px; letter-spacing:.02em; padding:10px 16px; border-radius:7px;
+    border:1px solid var(--ink); background:var(--ink); color:var(--paper); cursor:pointer;
+    transition:opacity .15s ease, transform .1s ease; }
+  button:hover{ opacity:.85; }
+  button:active{ transform:translateY(1px); }
+  button.ghost{ background:transparent; color:var(--ink); }
+  button:disabled{ opacity:.35; cursor:not-allowed; }
+
+  .status-row{ display:flex; gap:22px; flex-wrap:wrap; width:100%; font-family:var(--mono); font-size:12.5px; }
+  .status-item .k{ color:var(--ink-soft); display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; }
+  .status-item .v{ font-size:16px; color:var(--ink); }
+  .status-item .v.accent{ color:var(--water-deep); }
+
+  .log{ width:100%; max-height:170px; overflow-y:auto; background:var(--ink); color:var(--foam); border-radius:8px;
+    padding:12px 14px; font-family:var(--mono); font-size:12px; line-height:1.7; }
+  .log div{ opacity:.55; }
+  .log div:last-child{ opacity:1; color:#fff; }
+  .log .indent{ padding-left:16px; opacity:.8; }
+  .log .diag{ color:#ffd580; }
+
+  .compass3{ display:grid; grid-template-columns:repeat(3, 74px); grid-template-rows:repeat(3, 74px); gap:6px; }
+  .ccell{ background:#fff; border:1px solid var(--rule); border-radius:8px; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:2px; font-family:var(--mono); font-size:11px; color:var(--ink-soft); }
+  .ccell .arrow{ font-size:20px; color:var(--water-deep); line-height:1; }
+  .ccell.center{ background:var(--ink); color:var(--paper); }
+  .ccell.center .arrow{ color:var(--paper); font-size:12px; }
+  .compass-wrap{ display:flex; gap:36px; align-items:flex-start; flex-wrap:wrap; }
+  .compass-legend{ font-family:var(--mono); font-size:13px; color:var(--ink-soft); max-width:40ch; }
+  .compass-legend code{ background:var(--paper-2); padding:2px 6px; border-radius:4px; }
+
+  .code-grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+  .code-block{ font-family:var(--mono); font-size:13px; background:#132321; color:#dce8e4; border-radius:10px;
+    padding:18px 20px; overflow-x:auto; border:1px solid transparent; transition:border-color .3s ease, opacity .3s ease; opacity:.5; }
+  .code-block.active{ border-color:var(--water); opacity:1; box-shadow:0 0 0 1px var(--water) inset; }
+  .code-block .tag{ display:inline-block; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--foam);
+    background:var(--water-deep); padding:2px 8px; border-radius:999px; margin-bottom:10px; }
+  .code-block pre{ margin:0; white-space:pre; }
+  .code-block .kw{ color:#7fc8ff; }
+  .code-block .fn{ color:#ffd580; }
+  .code-block .cm{ color:#7a938d; font-style:italic; }
+  .code-block .num{ color:#f5a97f; }
+
+  .summary-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px; }
+  .summary-card{ background:#fff; border:1px solid var(--rule); border-radius:10px; padding:18px; }
+  .summary-card .k{ font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); }
+  .summary-card .v{ font-family:var(--display); font-size:19px; margin-top:4px; color:var(--ink); }
+
+  footer{ border-top:1px solid var(--rule); padding:32px 0 60px; }
+  .disclaimer{ font-family:var(--mono); font-size:11.5px; color:var(--ink-soft); max-width:70ch; }
+
+  @media (max-width:600px){
+    .hero{ padding:52px 0 32px; }
+    .grid{ grid-template-columns:repeat(12, minmax(16px,24px)); grid-template-rows:repeat(10, minmax(16px,24px)); }
+    .compass3{ grid-template-columns:repeat(3, 58px); grid-template-rows:repeat(3, 58px); }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span><strong>FIELD NOTE</strong> <span class="dot">·</span> CODEUP 4024</span>
+  <span>2008 교원프로그래밍경진대회 · BFS 플러드필</span>
+</div>
+
+<div class="wrap">
+
+  <section class="hero">
+    <div class="eyebrow">그래프 탐색 · 8방향 연결 요소 세기</div>
+    <h1>호수는<br>몇 개일까, <em>대각선까지?</em></h1>
+    <p class="lede">
+      땅과 호수로 이루어진 지도가 있다. 이번엔 상하좌우뿐 아니라 <b>대각선으로 이어진 칸도 같은 호수</b>로 본다.
+      아래는 코드업 4024번의 실제 예제 지도(12×10, 정답 4개)를 그대로 재현해
+      BFS가 어떻게 대각선을 타고 넘어가는지 한 칸씩 보여주는 기록이다.
+    </p>
+    <div class="source-tag">지도 · 정답 4 — 코드업 4024 예제 그대로</div>
+  </section>
+
+  <!-- FIG 01 : PROBLEM -->
+  <section class="fig">
+    <div class="fig-head">
+      <span class="fig-tag">FIG. 01</span>
+      <h2 class="fig-title">지도 읽기</h2>
+    </div>
+    <p class="fig-note">
+      <code>L</code>은 호수, <code>.</code>은 호수가 아닌 칸이다. 입력은 <b>너비 W, 높이 H</b> 순서로 주어지고,
+      각 줄은 공백으로 구분된 문자로 채워진다.
+    </p>
+    <div class="callout">
+      <b>주의:</b> 이 문제는 상하좌우 4방향이 아니라 <b>대각선을 포함한 8방향</b>이 이어져도 같은 호수로 센다.
+      그래서 눈으로 보기엔 뚝뚝 떨어져 보이는 계단 모양 호수도, 대각선으로만 연결돼 있으면 전부 한 호수다.
+    </div>
+    <div class="legend">
+      <span><i class="swatch" style="background:var(--land-soft)"></i>호수 아님 (.)</span>
+      <span><i class="swatch" style="background:var(--water)"></i>미방문 호수 (L)</span>
+      <span><i class="swatch" style="background:var(--lake-1)"></i>호수 1</span>
+      <span><i class="swatch" style="background:var(--lake-2)"></i>호수 2</span>
+      <span><i class="swatch" style="background:var(--lake-3)"></i>호수 3</span>
+      <span><i class="swatch" style="background:var(--lake-4)"></i>호수 4</span>
+    </div>
+  </section>
+
+  <!-- FIG 02 : SIMULATOR -->
+  <section class="fig">
+    <div class="fig-head">
+      <span class="fig-tag">FIG. 02</span>
+      <h2 class="fig-title">BFS 탐사 시뮬레이터</h2>
+    </div>
+    <p class="fig-note">
+      <b>훑기</b>는 지도 왼쪽 위부터 한 칸씩 확인하는 바깥 반복문, <b>꺼내기</b>는 큐에서 칸을 꺼내
+      주변 8칸을 확인하는 BFS 내부 동작이다. 로그에서 <span class="diag" style="background:var(--ink); padding:0 4px; border-radius:3px;">노란 글씨</span>는
+      대각선 방향으로 연결이 발견된 순간이다 — 이 문제의 핵심이니 눈여겨보자.
+    </p>
+
+    <div class="board-card">
+      <div class="grid" id="grid"></div>
+
+      <div class="queue-panel">
+        <div class="queue-label"><span>큐 (대기 중인 호수 칸)</span><span id="queueCount">0개</span></div>
+        <div class="track" id="track"><span class="empty">비어 있음</span></div>
+      </div>
+
+      <div class="status-row">
+        <div class="status-item"><span class="k">현재 동작</span><span class="v accent" id="modeLabel">대기 중</span></div>
+        <div class="status-item"><span class="k">발견된 호수</span><span class="v" id="lakeCountLabel">0</span></div>
+        <div class="status-item"><span class="k">진행 상태</span><span class="v" id="scanLabel">시작 전</span></div>
+      </div>
+
+      <div class="controls">
+        <button id="btnStep">한 칸 진행 →</button>
+        <button id="btnSkip" class="ghost">다음 호수까지 건너뛰기</button>
+        <button id="btnPlay" class="ghost">자동 재생</button>
+        <button id="btnReset" class="ghost">처음부터</button>
+      </div>
+
+      <div class="log" id="log"><div>버튼을 눌러 탐사를 시작해 보자.</div></div>
+    </div>
+  </section>
+
+  <!-- FIG 03 : DIRECTIONS -->
+  <section class="fig">
+    <div class="fig-head">
+      <span class="fig-tag">FIG. 03</span>
+      <h2 class="fig-title">8방향 좌표계 읽는 법</h2>
+    </div>
+    <p class="fig-note">
+      4방향 문제에서 방향이 4개였다면, 대각선까지 포함할 땐 <b>현재 칸을 둘러싼 8칸</b> 전부를 확인해야 단다.
+      아래 3×3 표에서 가운데가 현재 칸 <code>(r, c)</code>, 나머지 8칸이 각각의 <code>(dr, dc)</code> 오프셋이다.
+    </p>
+    <div class="compass-wrap">
+      <div class="compass3">
+        <div class="ccell"><span class="arrow">↖</span>왼쪽위<code>(-1,-1)</code></div>
+        <div class="ccell"><span class="arrow">↑</span>위<code>(-1,0)</code></div>
+        <div class="ccell"><span class="arrow">↗</span>오른쪽위<code>(-1,1)</code></div>
+        <div class="ccell"><span class="arrow">←</span>왼쪽<code>(0,-1)</code></div>
+        <div class="ccell center"><span class="arrow">●</span>현재 칸<code>(r, c)</code></div>
+        <div class="ccell"><span class="arrow">→</span>오른쪽<code>(0,1)</code></div>
+        <div class="ccell"><span class="arrow">↙</span>왼쪽아래<code>(1,-1)</code></div>
+        <div class="ccell"><span class="arrow">↓</span>아래<code>(1,0)</code></div>
+        <div class="ccell"><span class="arrow">↘</span>오른쪽아래<code>(1,1)</code></div>
+      </div>
+      <div class="compass-legend">
+        <p>4방향 문제였다면 이 중 <code>↑↓←→</code> 4칸만 확인했겠지만, 이 문제는 <b>8칸 전부</b>를 확인한다.
+        그래서 방향 배열도 4개가 아니라 8개가 필요하다:</p>
+        <p><code>int dr[8] = {-1,-1,-1, 0,0, 1,1,1};</code><br>
+        <code>int dc[8] = {-1, 0, 1,-1,1,-1,0,1};</code></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FIG 04 : CODE -->
+  <section class="fig">
+    <div class="fig-head">
+      <span class="fig-tag">FIG. 04</span>
+      <h2 class="fig-title">코드로 옮기기</h2>
+    </div>
+    <p class="fig-note">
+      위 시뮬레이터의 두 동작이 실제 코드의 어느 부분과 대응하는지 보자.
+      지금 시뮬레이터가 어느 단계인지에 따라 아래 블록 중 하나가 밝아진다.
+    </p>
+    <div class="code-grid">
+      <div class="code-block" id="codeScan">
+        <span class="tag">훑기 — 다음 호수 칸 찾기</span>
+<pre><span class="kw">int</span> lakeCount = <span class="num">0</span>;
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; h; i++) {
+    <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; w; j++) {
+        <span class="kw">if</span> (board[i][j] == <span class="num">'L'</span> &amp;&amp; !visited[i][j]) {
+            <span class="fn">bfs</span>(i, j);   <span class="cm">// 새 호수 발견, 탐사 시작</span>
+            lakeCount++;
+        }
+    }
+}</pre>
+      </div>
+      <div class="code-block" id="codeBfs">
+        <span class="tag">꺼내기 — BFS로 호수 전체 방문 (8방향)</span>
+<pre><span class="kw">int</span> dr[<span class="num">8</span>] = {-<span class="num">1</span>,-<span class="num">1</span>,-<span class="num">1</span>, <span class="num">0</span>,<span class="num">0</span>, <span class="num">1</span>,<span class="num">1</span>,<span class="num">1</span>};
+<span class="kw">int</span> dc[<span class="num">8</span>] = {-<span class="num">1</span>, <span class="num">0</span>, <span class="num">1</span>,-<span class="num">1</span>,<span class="num">1</span>,-<span class="num">1</span>,<span class="num">0</span>,<span class="num">1</span>};
+
+<span class="kw">void</span> <span class="fn">bfs</span>(<span class="kw">int</span> sr, <span class="kw">int</span> sc) {
+    queue.push({sr, sc});
+    visited[sr][sc] = <span class="kw">true</span>;
+
+    <span class="kw">while</span> (!queue.empty()) {
+        <span class="kw">auto</span> [r, c] = queue.front(); queue.pop();
+
+        <span class="kw">for</span> (<span class="kw">int</span> d = <span class="num">0</span>; d &lt; <span class="num">8</span>; d++) {   <span class="cm">// 4 -> 8</span>
+            <span class="kw">int</span> nr = r + dr[d], nc = c + dc[d];
+            <span class="kw">if</span> (nr&lt;0 || nr&gt;=h || nc&lt;0 || nc&gt;=w) <span class="kw">continue</span>;
+            <span class="kw">if</span> (visited[nr][nc] || board[nr][nc]!=<span class="num">'L'</span>) <span class="kw">continue</span>;
+
+            visited[nr][nc] = <span class="kw">true</span>;
+            queue.push({nr, nc});
+        }
+    }
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUMMARY -->
+  <section class="fig">
+    <div class="fig-head">
+      <span class="fig-tag">FIG. 05</span>
+      <h2 class="fig-title">정리</h2>
+    </div>
+    <div class="summary-grid">
+      <div class="summary-card"><div class="k">방향 개수</div><div class="v">4 → 8 (대각선 포함)</div></div>
+      <div class="summary-card"><div class="k">입력 순서</div><div class="v">W(너비) H(높이)</div></div>
+      <div class="summary-card"><div class="k">문자 읽기</div><div class="v">scanf(" %c", ...)</div></div>
+      <div class="summary-card"><div class="k">시간복잡도</div><div class="v">O(W × H)</div></div>
+    </div>
+  </section>
+
+  <footer>
+    <p class="disclaimer">
+      이 페이지의 지도, 좌표, 정답(4개)은 코드업 4024번 문제의 실제 예제를 그대로 사용했다.
+      단, 시뮬레이터의 로그 문구와 시각화는 이해를 돕기 위한 것이며 실제 채점 코드가 화면에 출력을 하지는 않는다.
+    </p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  const W = 12, H = 10; // 실제 4024 예제: 너비 12, 높이 10
+  // 실제 예제 지도를 그대로 문자 배열로 정의 (row-major, '.'=아님, 'L'=호수)
+  const rows = [
+    "L........L..",
+    ".L.......LL.",
+    "LL........L.",
+    ".L.........L",
+    "..L........L",
+    "......L.....",
+    ".....L.L....",
+    "....L.L.L...",
+    ".....L.L....",
+    "......L....L"
+  ];
+  const grid = rows.map(r => r.split(''));
+
+  // 8방향: 왼쪽위, 위, 오른쪽위, 왼쪽, 오른쪽, 왼쪽아래, 아래, 오른쪽아래
+  const DIRS = [
+    [-1,-1,'왼쪽위', true], [-1,0,'위', false], [-1,1,'오른쪽위', true],
+    [0,-1,'왼쪽', false],                        [0,1,'오른쪽', false],
+    [1,-1,'왼쪽아래', true], [1,0,'아래', false], [1,1,'오른쪽아래', true]
+  ];
+
+  let visited, lakeId, queue, scanR, scanC, mode, current, lakeCount, finished, playTimer;
+
+  const gridEl = document.getElementById('grid');
+  const trackEl = document.getElementById('track');
+  const queueCountEl = document.getElementById('queueCount');
+  const modeLabelEl = document.getElementById('modeLabel');
+  const lakeCountLabelEl = document.getElementById('lakeCountLabel');
+  const scanLabelEl = document.getElementById('scanLabel');
+  const logEl = document.getElementById('log');
+  const codeScan = document.getElementById('codeScan');
+  const codeBfs = document.getElementById('codeBfs');
+
+  const btnStep = document.getElementById('btnStep');
+  const btnSkip = document.getElementById('btnSkip');
+  const btnPlay = document.getElementById('btnPlay');
+  const btnReset = document.getElementById('btnReset');
+
+  const cellEls = [];
+  for (let r = 0; r < H; r++) {
+    const rowEls = [];
+    for (let c = 0; c < W; c++) {
+      const div = document.createElement('div');
+      div.className = 'cell';
+      gridEl.appendChild(div);
+      rowEls.push(div);
+    }
+    cellEls.push(rowEls);
+  }
+
+  function init() {
+    visited = Array.from({length: H}, () => Array(W).fill(false));
+    lakeId  = Array.from({length: H}, () => Array(W).fill(0));
+    queue = [];
+    scanR = 0; scanC = -1;
+    mode = 'scan';
+    current = null;
+    lakeCount = 0;
+    finished = false;
+    clearInterval(playTimer);
+    playTimer = null;
+    btnPlay.textContent = '자동 재생';
+    logEl.innerHTML = '<div>버튼을 눌러 탐사를 시작해 보자.</div>';
+    render();
+  }
+
+  function log(msg, indent, diag) {
+    const div = document.createElement('div');
+    if (indent) div.className = 'indent' + (diag ? ' diag' : '');
+    else if (diag) div.className = 'diag';
+    div.textContent = msg;
+    logEl.appendChild(div);
+    logEl.scrollTop = logEl.scrollHeight;
+    while (logEl.children.length > 50) logEl.removeChild(logEl.firstChild);
+  }
+
+  function advanceScanPointer() {
+    scanC++;
+    if (scanC >= W) { scanC = 0; scanR++; }
+  }
+
+  function step() {
+    if (finished) return;
+
+    if (mode === 'scan') {
+      advanceScanPointer();
+      if (scanR >= H) {
+        finished = true;
+        current = null;
+        log(`탐사 완료 — 호수 ${lakeCount}개 발견`);
+        render();
+        return;
+      }
+      if (grid[scanR][scanC] === 'L' && !visited[scanR][scanC]) {
+        lakeCount++;
+        visited[scanR][scanC] = true;
+        lakeId[scanR][scanC] = lakeCount;
+        queue.push([scanR, scanC]);
+        current = [scanR, scanC];
+        log(`(${scanR + 1}행, ${scanC + 1}열) 호수 발견 → 호수 #${lakeCount} 시작`);
+        mode = 'dequeue';
+      } else {
+        current = [scanR, scanC];
+      }
+    } else if (mode === 'dequeue') {
+      if (queue.length === 0) {
+        mode = 'scan';
+        current = null;
+        render();
+        return;
+      }
+      const [r, c] = queue.shift();
+      current = [r, c];
+      log(`(${r + 1}행, ${c + 1}열) 꺼냄 → 주변 8칸 확인`);
+      for (const [dr, dc, name, isDiag] of DIRS) {
+        const nr = r + dr, nc = c + dc;
+        if (nr < 0 || nr >= H || nc < 0 || nc >= W) continue;
+        if (visited[nr][nc]) continue;
+        if (grid[nr][nc] !== 'L') continue;
+        visited[nr][nc] = true;
+        lakeId[nr][nc] = lakeCount;
+        queue.push([nr, nc]);
+        log(`→ ${name}${isDiag ? ' (대각선!)' : ''} (${nr + 1}행, ${nc + 1}열) 발견, 큐에 추가`, true, isDiag);
+      }
+    }
+    render();
+  }
+
+  function skipToNextLake() {
+    let guard = W * H + 5;
+    while (mode === 'scan' && !finished && guard-- > 0) {
+      step();
+      if (mode !== 'scan' || finished) break;
+    }
+  }
+
+  function render() {
+    for (let r = 0; r < H; r++) {
+      for (let c = 0; c < W; c++) {
+        const el = cellEls[r][c];
+        el.className = 'cell';
+        if (grid[r][c] === '.') {
+          el.classList.add('land');
+        } else {
+          if (lakeId[r][c] > 0) {
+            const idx = ((lakeId[r][c] - 1) % 4) + 1;
+            el.classList.add('filled-' + idx);
+          } else {
+            el.classList.add('water');
+          }
+        }
+        if (queue.some(q => q[0] === r && q[1] === c)) el.classList.add('queued');
+        if (current && current[0] === r && current[1] === c) el.classList.add('current');
+      }
+    }
+
+    if (queue.length === 0) {
+      trackEl.innerHTML = '<span class="empty">비어 있음</span>';
+    } else {
+      trackEl.innerHTML = '<span class="flow-label">먼저 나감</span>' +
+        queue.map(q => `<span class="chip">(${q[0]+1}, ${q[1]+1})</span>`).join('') +
+        '<span class="flow-label">← 나중에 들어옴</span>';
+    }
+    queueCountEl.textContent = queue.length + '개';
+
+    modeLabelEl.textContent = finished ? '탐사 완료' : (mode === 'scan' ? '훑기 (다음 호수 탐색)' : '꺼내기 (8방향 확인)');
+    lakeCountLabelEl.textContent = lakeCount;
+    scanLabelEl.textContent = finished ? '전체 완료' : `${scanR + 1}행 / ${H}행 확인 중`;
+
+    codeScan.classList.toggle('active', mode === 'scan' && !finished);
+    codeBfs.classList.toggle('active', mode === 'dequeue' && !finished);
+
+    btnStep.disabled = finished;
+    btnSkip.disabled = finished;
+    btnPlay.disabled = finished;
+  }
+
+  btnStep.addEventListener('click', step);
+  btnSkip.addEventListener('click', skipToNextLake);
+  btnReset.addEventListener('click', init);
+  btnPlay.addEventListener('click', () => {
+    if (playTimer) {
+      clearInterval(playTimer);
+      playTimer = null;
+      btnPlay.textContent = '자동 재생';
+      return;
+    }
+    btnPlay.textContent = '일시 정지';
+    playTimer = setInterval(() => {
+      if (finished) { clearInterval(playTimer); playTimer = null; btnPlay.textContent = '자동 재생'; return; }
+      step();
+    }, 500);
+  });
+
+  init();
+})();
+</script>
+
+</body>
+</html>
