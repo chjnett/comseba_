@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>지뢰는 왜 이렇게 퍼질까? — BFS 탐사 기록 (CodeUp 3500)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#efeae0;
+    --paper-2:#e6e0d1;
+    --ink:#182623;
+    --ink-soft:#4d5c56;
+    --water:#1f7a8c;
+    --water-deep:#0b4f63;
+    --land-soft:#e4d7a3;
+    --foam:#bfe9e4;
+    --rule:#c9c2b2;
+    --warn:#b8531d;
+    --opened:#fbfaf4;
+    --mine-bg:#7a2b20;
+    --num-1:#0b4f63;
+    --num-2:#2e7d32;
+    --num-3:#b8531d;
+    --num-4:#5b3a8e;
+    --num-5:#7a3b2e;
+    --num-6:#147a6c;
+    --num-7:#182623;
+    --num-8:#4d5c56;
+    --mono:'IBM Plex Mono', ui-monospace, monospace;
+    --sans:'IBM Plex Sans KR','IBM Plex Sans', sans-serif;
+    --display:'Space Grotesk', var(--sans);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{ background:var(--paper); color:var(--ink); font-family:var(--sans); line-height:1.6; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--foam); }
+  .wrap{ max-width:940px; margin:0 auto; padding:0 24px; }
+
+  .topbar{ display:flex; justify-content:space-between; align-items:center; padding:18px 24px; border-bottom:1px solid var(--rule);
+    font-family:var(--mono); font-size:12px; letter-spacing:.06em; color:var(--ink-soft); text-transform:uppercase; flex-wrap:wrap; gap:6px; }
+  .topbar strong{ color:var(--ink); }
+  .topbar .dot{ color:var(--water); }
+
+  .hero{ padding:72px 0 40px; }
+  .eyebrow{ font-family:var(--mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--water-deep);
+    display:flex; align-items:center; gap:10px; margin-bottom:18px; }
+  .eyebrow::before{ content:''; width:22px; height:1px; background:var(--water-deep); }
+  h1{ font-family:var(--display); font-weight:600; font-size:clamp(34px,6vw,54px); line-height:1.08; margin:0 0 18px; letter-spacing:-0.01em; }
+  h1 em{ font-style:normal; color:var(--water-deep); }
+  .lede{ font-size:17px; color:var(--ink-soft); max-width:58ch; margin:0 0 6px; }
+  .lede b{ color:var(--ink); font-weight:600; }
+  .source-tag{ display:inline-block; margin-top:18px; font-family:var(--mono); font-size:11.5px; color:var(--ink-soft);
+    border:1px dashed var(--rule); border-radius:999px; padding:4px 12px; }
+
+  .fig{ padding:56px 0; border-top:1px solid var(--rule); }
+  .fig-head{ display:flex; align-items:baseline; gap:14px; margin-bottom:22px; flex-wrap:wrap; }
+  .fig-tag{ font-family:var(--mono); font-size:12px; color:var(--water-deep); border:1px solid var(--water-deep);
+    border-radius:999px; padding:3px 10px; white-space:nowrap; }
+  .fig-title{ font-family:var(--display); font-weight:600; font-size:22px; margin:0; }
+  .fig-note{ color:var(--ink-soft); font-size:15px; max-width:66ch; }
+
+  .callout{ background:#fff3e9; border:1px solid var(--warn); border-left-width:4px; border-radius:6px;
+    padding:14px 18px; font-size:14.5px; color:var(--ink); margin:16px 0; max-width:66ch; }
+  .callout b{ color:var(--warn); }
+
+  .legend{ display:flex; gap:18px; flex-wrap:wrap; font-family:var(--mono); font-size:12.5px; color:var(--ink-soft); margin:16px 0 8px;}
+  .legend span{ display:inline-flex; align-items:center; gap:7px; }
+  .swatch{ width:13px; height:13px; border-radius:3px; display:inline-block; border:1px solid rgba(0,0,0,.15); }
+
+  .board-card{ background:#fff; border:1px solid var(--rule); border-radius:10px; padding:22px;
+    display:flex; flex-direction:column; align-items:center; gap:18px; }
+  .grid{ display:grid; grid-template-columns:repeat(9, minmax(28px,38px)); grid-template-rows:repeat(9, minmax(28px,38px)); gap:2px; }
+  .cell{ border-radius:4px; position:relative; display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-weight:600; font-size:14px; transition:background-color .28s ease, box-shadow .28s ease, transform .2s ease; }
+  .cell.hidden{ background:var(--land-soft); color:transparent; }
+  .cell.open0{ background:var(--opened); border:1px solid var(--rule); color:transparent; }
+  .cell.mine{ background:var(--mine-bg); color:#fff; }
+  .cell.num-1{ background:var(--opened); border:1px solid var(--rule); color:var(--num-1); }
+  .cell.num-2{ background:var(--opened); border:1px solid var(--rule); color:var(--num-2); }
+  .cell.num-3{ background:var(--opened); border:1px solid var(--rule); color:var(--num-3); }
+  .cell.num-4{ background:var(--opened); border:1px solid var(--rule); color:var(--num-4); }
+  .cell.num-5{ background:var(--opened); border:1px solid var(--rule); color:var(--num-5); }
+  .cell.num-6{ background:var(--opened); border:1px solid var(--rule); color:var(--num-6); }
+  .cell.num-7{ background:var(--opened); border:1px solid var(--rule); color:var(--num-7); }
+  .cell.num-8{ background:var(--opened); border:1px solid var(--rule); color:var(--num-8); }
+  .cell.queued{ box-shadow:inset 0 0 0 2px var(--water-deep); }
+  .cell.current{ box-shadow:0 0 0 3px var(--ink) inset, 0 0 12px rgba(0,0,0,.25); transform:scale(1.12); z-index:2; }
+  .cell.start-marker::after{ content:'★'; position:absolute; top:-6px; right:-6px; font-size:10px; color:var(--warn); }
+
+  .queue-panel{ width:100%; }
+  .queue-label{ font-family:var(--mono); font-size:11px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.08em;
+    margin-bottom:8px; display:flex; justify-content:space-between;}
+  .track{ display:flex; align-items:center; gap:8px; min-height:40px; background:var(--paper-2); border-radius:8px;
+    padding:8px 12px; overflow-x:auto; font-family:var(--mono); font-size:12px; }
+  .track .flow-label{ color:var(--ink-soft); font-size:11px; white-space:nowrap; }
+  .chip{ background:#fff; border:1px solid var(--water-deep); color:var(--water-deep); border-radius:999px; padding:4px 10px;
+    white-space:nowrap; flex:0 0 auto; animation:pop .18s ease; }
+  @keyframes pop{ from{ transform:scale(.6); opacity:0;} to{ transform:scale(1); opacity:1;} }
+  .track .empty{ color:var(--ink-soft); font-style:italic; }
+
+  .controls{ display:flex; flex-wrap:wrap; gap:10px; width:100%; }
+  button{ font-family:var(--mono); font-size:12.5px; letter-spacing:.02em; padding:10px 16px; border-radius:7px;
+    border:1px solid var(--ink); background:var(--ink); color:var(--paper); cursor:pointer;
+    transition:opacity .15s ease, transform .1s ease; }
+  button:hover{ opacity:.85; }
+  button:active{ transform:translateY(1px); }
+  button.ghost{ background:transparent; color:var(--ink); }
+  button:disabled{ opacity:.35; cursor:not-allowed; }
+
+  .status-row{ display:flex; gap:22px; flex-wrap:wrap; width:100%; font-family:var(--mono); font-size:12.5px; }
+  .status-item .k{ color:var(--ink-soft); display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; }
+  .status-item .v{ font-size:16px; color:var(--ink); }
+  .status-item .v.accent{ color:var(--water-deep); }
+  .status-item .v.danger{ color:var(--warn); }
+
+  .log{ width:100%; max-height:170px; overflow-y:auto; background:var(--ink); color:var(--foam); border-radius:8px;
+    padding:12px 14px; font-family:var(--mono); font-size:12px; line-height:1.7; }
+  .log div{ opacity:.55; }
+  .log div:last-child{ opacity:1; color:#fff; }
+  .log .indent{ padding-left:16px; opacity:.8; }
+  .log .stop{ color:#ffb199; }
+  .log .go{ color:#a9e5c9; }
+
+  .flow{ display:flex; flex-direction:column; align-items:center; gap:6px; max-width:520px; margin:0 auto; }
+  .flow-box{ background:#fff; border:1px solid var(--rule); border-radius:8px; padding:12px 18px; text-align:center;
+    font-family:var(--mono); font-size:13px; width:100%; }
+  .flow-arrow{ font-family:var(--mono); color:var(--ink-soft); font-size:16px; }
+  .flow-branch{ display:flex; gap:18px; width:100%; }
+  .flow-branch .col{ flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .flow-box.cond{ border-color:var(--water-deep); color:var(--water-deep); font-weight:600; }
+  .flow-box.go{ border-color:var(--num-2); color:var(--num-2); }
+  .flow-box.stop{ border-color:var(--warn); color:var(--warn); }
+
+  .code-grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+  .code-block{ font-family:var(--mono); font-size:13px; background:#132321; color:#dce8e4; border-radius:10px;
+    padding:18px 20px; overflow-x:auto; border:1px solid transparent; transition:border-color .3s ease, opacity .3s ease; opacity:.5; }
+  .code-block.active{ border-color:var(--water); opacity:1; box-shadow:0 0 0 1px var(--water) inset; }
+  .code-block .tag{ display:inline-block; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--foam);
+    background:var(--water-deep); padding:2px 8px; border-radius:999px; margin-bottom:10px; }
+  .code-block pre{ margin:0; white-space:pre; }
+  .code-block .kw{ color:#7fc8ff; }
+  .code-block .fn{ color:#ffd580; }
+  .code-block .cm{ color:#7a938d; font-style:italic; }
+  .code-block .num{ color:#f5a97f; }
+
+  .summary-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px; }
+  .summary-card{ background:#fff; border:1px solid var(--rule); border-radius:10px; padding:18px; }
+  .summary-card .k{ font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); }
+  .summary-card .v{ font-family:var(--display); font-size:19px; margin-top:4px; color:var(--ink); }
+
+  footer{ border-top:1px solid var(--rule); padding:32px 0 60px; }
+  .disclaimer{ font-family:var(--mono); font-size:11.5px; color:var(--ink-soft); max-width:70ch; }
+
+  @media (max-width:600px){
+    .hero{ padding:52px 0 32px; }
+    .grid{ grid-template-columns:repeat(9, minmax(22px,30px)); grid-template-rows:repeat(9, minmax(22px,30px)); }
+    .flow-branch{ flex-direction:column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span><strong>FIELD NOTE</strong> <span class="dot">·</span> CODEUP 3500</span>
+  <span>지뢰 찾기 2 · BFS 확산 탐사기</span>
+</div>
+
+<div class="wrap">
+
+  <section class="hero">
+    <div class="eyebrow">그래프 탐색 · 조건부 확산 (flood fill)</div>
+    <h1>지뢰는 왜<br>이렇게 <em>퍼질까?</em></h1>
+    <p class="lede">
+      지뢰찾기에서 빈 칸을 클릭하면, 그 칸 하나만 열리는 게 아니라 <b>안전한 영역 전체가 한 번에 열린다.</b>
+      대체 어디까지 퍼지고, 어디서 멈추는 걸까? 코드업 3500번의 실제 예제(9×9, 정답 그대로)를 한 칸씩 따라가며
+      BFS가 언제 계속 나아가고, 언제 멈추는지 살펴보는 기록이다.
+    </p>
+    <div class="source-tag">지도 · (2,2) 클릭 — 코드업 3500 예제 그대로</div>
+  </section>
+
+  <!-- FIG 01 : PROBLEM -->
+  <section class="fig">
+    <div class="fig-head">
+      <span class="fig-tag">FIG. 01</span>
+      <h2 class="fig-title">지도 읽기</h2>
+    </div>
+    <p class="fig-note">
+      <code>1</code>은 지뢰, <code>0</code>은 빈 칸이다. 아직 열지 않은 칸은 화면에 <code>_</code>로 표시된다.
+      (r, c) 좌표를 하나 클릭했을 때, 화면에 어디까지 열리는지를 구하는 문제다.
+    </p>
+    <div class="callout">
+      <b>4024(호수 세기)와 다른 점:</b> 이번엔 칸이 처음부터 "물"인지 알 수 없다. <b>칸을 열어봐야만</b> 그 칸 주변에
+      지뢰가 몇 개인지 알 수 있고, 그 결과(0인지 아닌지)에 따라 계속 퍼질지 멈출지가 결정된다.
+    </div>
+    <div class="legend">
+      <span><i class="swatch" style="background:var(--land-soft)"></i>안 연 칸 (_)</span>
+      <span><i class="swatch" style="background:var(--opened)"></i>연 칸 (0 또는 숫자)</span>
+      <span><i class="swatch" style="background:var(--mine-bg)"></i>지뢰 클릭 (-1)</span>
+    </div>
+  </section>
+
+  <!-- FIG 02 : SIMULATOR -->
+  <section class="fig">
+    <div class="fig-head">
+      <span class="fig-tag">FIG. 02</span>
+      <h2 class="fig-title">BFS 확산 시뮬레이터</h2>
+    </div>
+    <p class="fig-note">
+      노란 별(★)이 클릭한 칸이다. 각 칸을 열어볼 때마다 로그에 <span class="go" style="background:var(--ink); padding:0 4px; border-radius:3px;">계속 확산</span>인지
+      <span class="stop" style="background:var(--ink); padding:0 4px; border-radius:3px;">여기서 멈춤</span>인지가 표시된다.
+    </p>
+
+    <div class="board-card">
+      <div class="grid" id="grid"></div>
+
+      <div class="queue-panel">
+        <div class="queue-label"><span>큐 (열어볼 칸)</span><span id="queueCount">0개</span></div>
+        <div class="track" id="track"><span class="empty">비어 있음</span></div>
+      </div>
+
+      <div class="status-row">
+        <div class="status-item"><span class="k">현재 동작</span><span class="v accent" id="modeLabel">대기 중</span></div>
+        <div class="status-item"><span class="k">연 칸 수</span><span class="v" id="openCountLabel">0</span></div>
+        <div class="status-item"><span class="k">결과</span><span class="v" id="resultLabel">진행 중</span></div>
+      </div>
+
+      <div class="controls">
+        <button id="btnStep">한 칸 진행 →</button>
+        <button id="btnSkip" class="ghost">끝까지 한 번에 보기</button>
+        <button id="btnPlay" class="ghost">자동 재생</button>
+        <button id="btnReset" class="ghost">처음부터</button>
+      </div>
+
+      <div class="log" id="log"><div>버튼을 눌러 (2, 2)를 클릭해 보자.</div></div>
+    </div>
+  </section>
+
+  <!-- FIG 03 : DECISION FLOW -->
+  <section class="fig">
+    <div class="fig-head">
+      <span class="fig-tag">FIG. 03</span>
+      <h2 class="fig-title">언제 퍼지고, 언제 멈추는가</h2>
+    </div>
+    <p class="fig-note">
+      방향 배열은 4024와 똑같이 8방향을 쓴다. 다른 건 <b>"방문 조건"이 아니라 "멈추는 조건"</b>이다 —
+      칸이 물인지 아닌지가 아니라, <b>열어본 결과 값이 0인지 아닌지</b>로 계속할지를 정한다.
+    </p>
+    <div class="flow">
+      <div class="flow-box">칸을 큐에서 꺼내 연다</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-box cond">주변 8칸의 지뢰 개수를 센다</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-branch">
+        <div class="col">
+          <div class="flow-box go">개수 = 0</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-box go">안 연 이웃 8칸을<br>모두 큐에 추가</div>
+        </div>
+        <div class="col">
+          <div class="flow-box stop">개수 &gt; 0</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-box stop">숫자만 적고<br>여기서 멈춤</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FIG 04 : CODE -->
+  <section class="fig">
+    <div class="fig-head">
+      <span class="fig-tag">FIG. 04</span>
+      <h2 class="fig-title">코드로 옮기기</h2>
+    </div>
+    <p class="fig-note">
+      지금 시뮬레이터가 어느 단계인지에 따라 아래 블록 중 하나가 밝아진다.
+      맨 처음 클릭 판정과, 그 이후 반복되는 확산 로직이 나뉘어 있다.
+    </p>
+    <div class="code-grid">
+      <div class="code-block" id="codeStart">
+        <span class="tag">시작 — 클릭한 칸이 지뢰인지 확인</span>
+<pre><span class="kw">if</span> (mapv[r][c] == <span class="num">1</span>) {
+    shown[r][c] = <span class="kw">true</span>;
+    value[r][c] = -<span class="num">1</span>;       <span class="cm">// 지뢰 클릭 → 여기서 끝</span>
+} <span class="kw">else</span> {
+    queue.push({r, c});
+    shown[r][c] = <span class="kw">true</span>;       <span class="cm">// 안전 → 확산 시작</span>
+}</pre>
+      </div>
+      <div class="code-block" id="codeBfs">
+        <span class="tag">확산 — 값이 0일 때만 계속 퍼짐</span>
+<pre><span class="kw">while</span> (!queue.empty()) {
+    <span class="kw">auto</span> [r, c] = queue.front(); queue.pop();
+
+    <span class="kw">int</span> cnt = <span class="fn">countMines</span>(r, c);   <span class="cm">// 주변 8칸 지뢰 수</span>
+    value[r][c] = cnt;
+
+    <span class="kw">if</span> (cnt == <span class="num">0</span>) {                <span class="cm">// 0이면: 계속 퍼짐</span>
+        <span class="kw">for</span> (<span class="kw">int</span> d = <span class="num">0</span>; d &lt; <span class="num">8</span>; d++) {
+            <span class="kw">int</span> nr = r + dr[d], nc = c + dc[d];
+            <span class="kw">if</span> (nr&lt;0||nr&gt;=<span class="num">9</span>||nc&lt;0||nc&gt;=<span class="num">9</span>) <span class="kw">continue</span>;
+            <span class="kw">if</span> (shown[nr][nc]) <span class="kw">continue</span>;
+            shown[nr][nc] = <span class="kw">true</span>;
+            queue.push({nr, nc});
+        }
+    }
+    <span class="cm">// cnt > 0 이면: 아무것도 안 하고 넘어감 (멈춤)</span>
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUMMARY -->
+  <section class="fig">
+    <div class="fig-head">
+      <span class="fig-tag">FIG. 05</span>
+      <h2 class="fig-title">정리 — 4024와 3500 비교</h2>
+    </div>
+    <div class="summary-grid">
+      <div class="summary-card"><div class="k">방향</div><div class="v">8방향 (동일)</div></div>
+      <div class="summary-card"><div class="k">멈추는 조건</div><div class="v">값 ≠ 0 이면 정지</div></div>
+      <div class="summary-card"><div class="k">4024와 차이</div><div class="v">색이 아니라 계산값으로 판단</div></div>
+      <div class="summary-card"><div class="k">출력</div><div class="v">지도 전체 (개수 아님)</div></div>
+    </div>
+  </section>
+
+  <footer>
+    <p class="disclaimer">
+      이 페이지의 지도, 좌표 (2,2), 결과 화면은 코드업 3500번 문제의 실제 예제를 그대로 사용했다.
+      시뮬레이터의 로그 문구는 이해를 돕기 위한 것이며, 실제 채점 코드가 이런 로그를 출력하지는 않는다.
+    </p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  const N = 9;
+  // 실제 3500번 예제 지도 그대로
+  const mapv = [
+    [0,0,0,0,0,0,0,0,1],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,1,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,1,0,0,0],
+    [0,0,0,0,0,1,0,0,1],
+    [0,0,1,0,1,1,0,0,0],
+    [0,0,0,0,1,0,0,1,0],
+    [0,0,0,0,0,0,0,0,0]
+  ];
+  const startR = 1, startC = 1; // (2,2) 1-indexed -> 0-indexed
+
+  const DIRS = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
+
+  let shown, value, queue, mode, current, finished, playTimer, mineHit;
+
+  const gridEl = document.getElementById('grid');
+  const trackEl = document.getElementById('track');
+  const queueCountEl = document.getElementById('queueCount');
+  const modeLabelEl = document.getElementById('modeLabel');
+  const openCountLabelEl = document.getElementById('openCountLabel');
+  const resultLabelEl = document.getElementById('resultLabel');
+  const logEl = document.getElementById('log');
+  const codeStart = document.getElementById('codeStart');
+  const codeBfs = document.getElementById('codeBfs');
+
+  const btnStep = document.getElementById('btnStep');
+  const btnSkip = document.getElementById('btnSkip');
+  const btnPlay = document.getElementById('btnPlay');
+  const btnReset = document.getElementById('btnReset');
+
+  const cellEls = [];
+  for (let r = 0; r < N; r++) {
+    const rowEls = [];
+    for (let c = 0; c < N; c++) {
+      const div = document.createElement('div');
+      div.className = 'cell hidden';
+      gridEl.appendChild(div);
+      rowEls.push(div);
+    }
+    cellEls.push(rowEls);
+  }
+
+  function countMines(r, c) {
+    let cnt = 0;
+    for (const [dr, dc] of DIRS) {
+      const nr = r + dr, nc = c + dc;
+      if (nr < 0 || nr >= N || nc < 0 || nc >= N) continue;
+      if (mapv[nr][nc] === 1) cnt++;
+    }
+    return cnt;
+  }
+
+  function init() {
+    shown = Array.from({length: N}, () => Array(N).fill(false));
+    value = Array.from({length: N}, () => Array(N).fill(0));
+    queue = [];
+    mode = 'notStarted';
+    current = null;
+    finished = false;
+    mineHit = false;
+    clearInterval(playTimer);
+    playTimer = null;
+    btnPlay.textContent = '자동 재생';
+    logEl.innerHTML = '<div>버튼을 눌러 (2, 2)를 클릭해 보자.</div>';
+    render();
+  }
+
+  function log(msg, indent, kind) {
+    const div = document.createElement('div');
+    let cls = '';
+    if (indent) cls += 'indent ';
+    if (kind === 'go') cls += 'go';
+    if (kind === 'stop') cls += 'stop';
+    if (cls) div.className = cls.trim();
+    div.textContent = msg;
+    logEl.appendChild(div);
+    logEl.scrollTop = logEl.scrollHeight;
+    while (logEl.children.length > 60) logEl.removeChild(logEl.firstChild);
+  }
+
+  function step() {
+    if (finished) return;
+
+    if (mode === 'notStarted') {
+      current = [startR, startC];
+      if (mapv[startR][startC] === 1) {
+        shown[startR][startC] = true;
+        value[startR][startC] = -1;
+        mineHit = true;
+        finished = true;
+        mode = 'done';
+        log(`(${startR+1}, ${startC+1}) 지뢰였다! 게임 종료`, false, 'stop');
+      } else {
+        shown[startR][startC] = true;
+        queue.push([startR, startC]);
+        mode = 'bfs';
+        log(`(${startR+1}, ${startC+1}) 지뢰 아님 → 확산 시작`);
+      }
+    } else if (mode === 'bfs') {
+      if (queue.length === 0) {
+        finished = true;
+        mode = 'done';
+        current = null;
+        log(`확산 종료 — 총 ${countOpen()}칸 열림`);
+        render();
+        return;
+      }
+      const [r, c] = queue.shift();
+      current = [r, c];
+      const cnt = countMines(r, c);
+      value[r][c] = cnt;
+      log(`(${r + 1}, ${c + 1}) 열어봄 → 주변 지뢰 ${cnt}개`);
+
+      if (cnt === 0) {
+        log(`→ 0개라서 계속 확산`, true, 'go');
+        for (const [dr, dc] of DIRS) {
+          const nr = r + dr, nc = c + dc;
+          if (nr < 0 || nr >= N || nc < 0 || nc >= N) continue;
+          if (shown[nr][nc]) continue;
+          shown[nr][nc] = true;
+          queue.push([nr, nc]);
+        }
+      } else {
+        log(`→ 0이 아니라서 여기서 멈춤`, true, 'stop');
+      }
+    }
+    render();
+  }
+
+  function countOpen(){
+    let c = 0;
+    for (let i=0;i<N;i++) for (let j=0;j<N;j++) if (shown[i][j]) c++;
+    return c;
+  }
+
+  function skipToEnd() {
+    let guard = N * N + 5;
+    while (!finished && guard-- > 0) step();
+  }
+
+  function render() {
+    for (let r = 0; r < N; r++) {
+      for (let c = 0; c < N; c++) {
+        const el = cellEls[r][c];
+        el.className = 'cell';
+        el.textContent = '';
+
+        if (!shown[r][c]) {
+          el.classList.add('hidden');
+        } else if (value[r][c] === -1) {
+          el.classList.add('mine');
+          el.textContent = '✱';
+        } else if (value[r][c] === 0) {
+          el.classList.add('open0');
+        } else {
+          el.classList.add('num-' + value[r][c]);
+          el.textContent = value[r][c];
+        }
+
+        if (r === startR && c === startC) el.classList.add('start-marker');
+        if (queue.some(q => q[0] === r && q[1] === c)) el.classList.add('queued');
+        if (current && current[0] === r && current[1] === c) el.classList.add('current');
+      }
+    }
+
+    if (queue.length === 0) {
+      trackEl.innerHTML = '<span class="empty">비어 있음</span>';
+    } else {
+      trackEl.innerHTML = '<span class="flow-label">먼저 나감</span>' +
+        queue.map(q => `<span class="chip">(${q[0]+1}, ${q[1]+1})</span>`).join('') +
+        '<span class="flow-label">← 나중에 들어옴</span>';
+    }
+    queueCountEl.textContent = queue.length + '개';
+
+    modeLabelEl.textContent = finished ? '완료' : (mode === 'notStarted' ? '클릭 판정' : '확산 중 (8방향 확인)');
+    openCountLabelEl.textContent = countOpen();
+    if (mineHit) {
+      resultLabelEl.textContent = '지뢰 클릭 (-1)';
+      resultLabelEl.className = 'v danger';
+    } else if (finished) {
+      resultLabelEl.textContent = '안전 — 확산 완료';
+      resultLabelEl.className = 'v accent';
+    } else {
+      resultLabelEl.textContent = '진행 중';
+      resultLabelEl.className = 'v';
+    }
+
+    codeStart.classList.toggle('active', mode === 'notStarted' && !finished);
+    codeBfs.classList.toggle('active', mode === 'bfs' && !finished);
+
+    btnStep.disabled = finished;
+    btnSkip.disabled = finished;
+    btnPlay.disabled = finished;
+  }
+
+  btnStep.addEventListener('click', step);
+  btnSkip.addEventListener('click', skipToEnd);
+  btnReset.addEventListener('click', init);
+  btnPlay.addEventListener('click', () => {
+    if (playTimer) {
+      clearInterval(playTimer);
+      playTimer = null;
+      btnPlay.textContent = '자동 재생';
+      return;
+    }
+    btnPlay.textContent = '일시 정지';
+    playTimer = setInterval(() => {
+      if (finished) { clearInterval(playTimer); playTimer = null; btnPlay.textContent = '자동 재생'; return; }
+      step();
+    }, 420);
+  });
+
+  init();
+})();
+</script>
+
+</body>
+</html>

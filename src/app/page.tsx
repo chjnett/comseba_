@@ -215,7 +215,7 @@ export default function Home() {
   
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [algoType, setAlgoType] = useState<'bfs' | 'dfs'>('bfs');
+  const [algoType, setAlgoType] = useState<'bfs' | 'dfs' | 'minesweeper'>('bfs');
 
   // Resizable panel states
   const [consoleHeight, setConsoleHeight] = useState<number>(256); // default 256px
@@ -1750,18 +1750,24 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 bg-[var(--bg)] p-1 rounded-xl border border-[var(--line)]">
+            <div className="flex items-center gap-2 bg-[var(--bg)] p-1 rounded-xl border border-[var(--line)] overflow-x-auto">
               <button
                 onClick={() => setAlgoType('bfs')}
-                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${algoType === 'bfs' ? 'bg-[#f38ba8] text-[var(--bg)] shadow-sm' : 'text-[var(--muted)] hover:text-[var(--text)]'}`}
+                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 whitespace-nowrap ${algoType === 'bfs' ? 'bg-[#f38ba8] text-[var(--bg)] shadow-sm' : 'text-[var(--muted)] hover:text-[var(--text)]'}`}
               >
                 BFS 탐색
               </button>
               <button
                 onClick={() => setAlgoType('dfs')}
-                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${algoType === 'dfs' ? 'bg-[#f38ba8] text-[var(--bg)] shadow-sm' : 'text-[var(--muted)] hover:text-[var(--text)]'}`}
+                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 whitespace-nowrap ${algoType === 'dfs' ? 'bg-[#f38ba8] text-[var(--bg)] shadow-sm' : 'text-[var(--muted)] hover:text-[var(--text)]'}`}
               >
                 DFS 탐색
+              </button>
+              <button
+                onClick={() => setAlgoType('minesweeper')}
+                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 whitespace-nowrap ${algoType === 'minesweeper' ? 'bg-[#f38ba8] text-[var(--bg)] shadow-sm' : 'text-[var(--muted)] hover:text-[var(--text)]'}`}
+              >
+                지뢰찾기 확산
               </button>
             </div>
           </header>
@@ -1769,7 +1775,7 @@ export default function Home() {
           <div className="flex-1 bg-[var(--bg)] w-full relative">
             <iframe
               key={algoType}
-              src={algoType === 'bfs' ? "/bfs_dfs.html" : "/dfs.html"}
+              src={algoType === 'bfs' ? "/bfs_dfs.html" : algoType === 'dfs' ? "/dfs.html" : "/minesweeper.html"}
               className="absolute inset-0 w-full h-full border-none"
               title="Algorithm Simulation"
             />
