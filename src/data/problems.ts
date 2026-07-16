@@ -5040,7 +5040,7 @@ print(solution(temperature, A, B))
 `,
     test_cases: [
       { input: "3 2 1 5 4 3 3 2\n1\n6", output: "2" },
-      { input: "10 20 30 40 50\n0\n4", output: "3" },
+      { input: "10 50 40 30 20\n0\n4", output: "3" },
       { input: "5 10 15 20 25\n1\n3", output: "1" }
     ]
   },
@@ -5274,8 +5274,8 @@ password = input()
 print(solution(password))
 `,
     test_cases: [
-      { input: "Ab12c", output: "False" },
-      { input: "Pass12ord", output: "False" },
+      { input: "Ab12", output: "False" },
+      { input: "Pass1ord", output: "False" },
       { input: "Aab12", output: "True" }
     ]
   },
@@ -5488,7 +5488,7 @@ print(solution(weight, boxes))
     test_cases: [
       { input: "100\n90 91 89 110 111", output: "2" },
       { input: "50\n45 55 44 56", output: "2" },
-      { input: "200\n200 190 210 180 220", output: "2" }
+      { input: "200\n200 190 210 179 221", output: "2" }
     ]
   }
 ];
