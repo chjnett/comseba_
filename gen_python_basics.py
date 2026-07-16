@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+html_content = """<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -369,7 +369,7 @@ print("--- 1. for문 ---")
 for i in range(5):
     print(i, "번째 반복입니다.")
 
-print("\n--- 2. while문 ---")
+print("\\n--- 2. while문 ---")
 count = 3
 while count > 0:
     print("카운트다운:", count)
@@ -416,7 +416,7 @@ fruits.append("포도")
 print("추가 후 목록:", fruits)
 
 # for문과 찰떡궁합!
-print("\n--- 장바구니 내용 ---")
+print("\\n--- 장바구니 내용 ---")
 for f in fruits:
     print("- " + f)
 </textarea>
@@ -532,7 +532,7 @@ print("100 + 250 =", sum_val)
     // We capture stdout to the specific output element
     pyodideInstance.setStdout({
       batched: (msg) => {
-        outEl.textContent += msg + "\n";
+        outEl.textContent += msg + "\\n";
       }
     });
     
@@ -561,4 +561,9 @@ print("100 + 250 =", sum_val)
 </script>
 
 </body>
-</html>
+</html>"""
+
+with open('/Users/cheonhyeonjun/com_gui/public/python_basic_reference.html', 'w', encoding='utf-8') as f:
+    f.write(html_content)
+
+print("Generated python_basic_reference.html")
