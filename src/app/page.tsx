@@ -216,6 +216,7 @@ export default function Home() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [algoType, setAlgoType] = useState<'bfs' | 'dfs' | 'minesweeper'>('bfs');
+  const [pythonViewType, setPythonViewType] = useState<'basic' | 'playground'>('basic');
 
   // Resizable panel states
   const [consoleHeight, setConsoleHeight] = useState<number>(256); // default 256px
@@ -1427,6 +1428,20 @@ export default function Home() {
             </div>
 
             <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 bg-[var(--bg)] p-1 rounded-xl border border-[var(--line)] overflow-x-auto">
+                <button
+                  onClick={() => setPythonViewType('basic')}
+                  className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 whitespace-nowrap ${pythonViewType === 'basic' ? 'bg-[var(--accent-3)] text-[var(--bg)] shadow-sm' : 'text-[var(--muted)] hover:text-[var(--text)]'}`}
+                >
+                  기초 문법
+                </button>
+                <button
+                  onClick={() => setPythonViewType('playground')}
+                  className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 whitespace-nowrap ${pythonViewType === 'playground' ? 'bg-[var(--accent-3)] text-[var(--bg)] shadow-sm' : 'text-[var(--muted)] hover:text-[var(--text)]'}`}
+                >
+                  놀이터
+                </button>
+              </div>
               <button 
                 onClick={toggleTheme}
                 className="flex items-center justify-center bg-[var(--line)] border border-[var(--line-hover)] hover:bg-[var(--line-hover)] text-[var(--text)] p-2 rounded-xl transition-all duration-200"
@@ -1438,7 +1453,8 @@ export default function Home() {
           </header>
 
           <iframe 
-            src={`/python_basic_reference.html?theme=${theme}`} 
+            key={pythonViewType}
+            src={pythonViewType === 'basic' ? `/python_basic_reference.html?theme=${theme}` : `/python_playground.html?theme=${theme}`} 
             className="w-full flex-1 border-0 bg-[var(--bg)]" 
           />
         </div>
