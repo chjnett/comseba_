@@ -216,7 +216,7 @@ export default function Home() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [algoType, setAlgoType] = useState<'bfs' | 'dfs' | 'minesweeper'>('bfs');
-  const [pythonViewType, setPythonViewType] = useState<'basic' | 'playground'>('basic');
+  const [pythonViewType, setPythonViewType] = useState<'basic' | 'playground' | 'turtle'>('basic');
 
   // Resizable panel states
   const [consoleHeight, setConsoleHeight] = useState<number>(256); // default 256px
@@ -1441,6 +1441,12 @@ export default function Home() {
                 >
                   놀이터
                 </button>
+                <button
+                  onClick={() => setPythonViewType('turtle')}
+                  className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 whitespace-nowrap ${pythonViewType === 'turtle' ? 'bg-[var(--accent-3)] text-[var(--bg)] shadow-sm' : 'text-[var(--muted)] hover:text-[var(--text)]'}`}
+                >
+                  거북이 교실
+                </button>
               </div>
               <button 
                 onClick={toggleTheme}
@@ -1454,7 +1460,7 @@ export default function Home() {
 
           <iframe 
             key={pythonViewType}
-            src={pythonViewType === 'basic' ? `/python_basic_reference.html?theme=${theme}` : `/python_playground.html?theme=${theme}`} 
+            src={pythonViewType === 'basic' ? `/python_basic_reference.html?theme=${theme}` : pythonViewType === 'playground' ? `/python_playground.html?theme=${theme}` : `/python_turtle.html?theme=${theme}`} 
             className="w-full flex-1 border-0 bg-[var(--bg)]" 
           />
         </div>
