@@ -216,7 +216,7 @@ export default function Home() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [algoType, setAlgoType] = useState<'bfs' | 'dfs' | 'minesweeper'>('bfs');
-  const [pythonViewType, setPythonViewType] = useState<'basic' | 'playground' | 'turtle'>('basic');
+  const [pythonViewType, setPythonViewType] = useState<'basic' | 'playground' | 'turtle' | 'turtle_adv'>('basic');
 
   // Resizable panel states
   const [consoleHeight, setConsoleHeight] = useState<number>(256); // default 256px
@@ -1447,6 +1447,12 @@ export default function Home() {
                 >
                   거북이 교실
                 </button>
+                <button
+                  onClick={() => setPythonViewType('turtle_adv')}
+                  className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 whitespace-nowrap ${pythonViewType === 'turtle_adv' ? 'bg-[var(--accent-3)] text-[var(--bg)] shadow-sm' : 'text-[var(--muted)] hover:text-[var(--text)]'}`}
+                >
+                  심화 아트
+                </button>
               </div>
               <button 
                 onClick={toggleTheme}
@@ -1460,7 +1466,7 @@ export default function Home() {
 
           <iframe 
             key={pythonViewType}
-            src={pythonViewType === 'basic' ? `/python_basic_reference.html?theme=${theme}` : pythonViewType === 'playground' ? `/python_playground.html?theme=${theme}` : `/python_turtle.html?theme=${theme}`} 
+            src={pythonViewType === 'basic' ? `/python_basic_reference.html?theme=${theme}` : pythonViewType === 'playground' ? `/python_playground.html?theme=${theme}` : pythonViewType === 'turtle' ? `/python_turtle.html?theme=${theme}` : `/python_turtle_adv.html?theme=${theme}`} 
             className="w-full flex-1 border-0 bg-[var(--bg)]" 
           />
         </div>
