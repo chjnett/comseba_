@@ -92,252 +92,310 @@ html_content = """<!DOCTYPE html>
 
 <div class="topbar">
   <span><strong>🐢 TURTLE GRAPHICS</strong></span>
-  <span>그림을 그리며 배우는 파이썬 기초 문법</span>
+  <span>기초 문법 프리뷰 & 신나는 거북이 그림 교실</span>
 </div>
 
 <div class="wrap">
 
   <section class="hero">
     <div class="eyebrow">부모님과 함께해요</div>
-    <h1>거북이 친구와 함께<br><em>파이썬 문법 배우기!</em> 🐢</h1>
+    <h1>문법을 쏙쏙! <br><em>거북이 그림 놀이!</em> 🐢</h1>
     <p class="lede">
-      파이썬의 어려운 문법을 거북이에게 내리는 명령을 통해 자연스럽게 배워요.
-      아이는 <b>"거북이 조종사"</b>, 어른은 <b>"타이핑 조수"</b> 역할을 맡아서 하나씩 실행해 보세요!
+      코딩의 뼈대가 되는 '기초 문법'을 먼저 가볍게 살펴본 다음,
+      거북이에게 명령을 내리면서 배운 문법을 눈으로 직접 확인해봐요!
+      아이는 <b>"결정하는 사람"</b>, 어른은 <b>"타이핑 조수"</b> 역할을 맡아주세요.
     </p>
   </section>
 
-  <!-- 0. 준비물 -->
+  <!-- 1. 준비물 및 환경설정 -->
   <section class="fig" style="--accent:var(--c-var)">
     <div class="fig-head">
       <div class="fig-emoji">🎒</div>
-      <h2 class="fig-title">0. 준비물</h2>
+      <h2 class="fig-title">1. 코딩할 준비를 해요</h2>
     </div>
     <div class="board-card">
-      <ul>
-        <li><b>컴퓨터</b> (Windows 또는 Mac)</li>
-        <li><b>인터넷 연결</b> (설치할 때만 필요)</li>
-        <li><b>30분 정도의 시간</b> (설치는 어른이 미리 해두는 걸 추천해요!)</li>
-      </ul>
+      <h3>💻 파이썬 & VS Code 설치</h3>
+      <ol>
+        <li><b>python.org</b>에서 파이썬을 설치해요. (Windows는 <b>"Add python.exe to PATH"</b> 꼭 체크!)</li>
+        <li><b>code.visualstudio.com</b>에서 편집기(VS Code)를 설치해요.</li>
+        <li>VS Code를 열고 왼쪽 블록 아이콘(Extensions)에서 <b>Python</b>을 검색해서 설치해요.</li>
+        <li>바탕화면에 새 폴더를 만들고 VS Code로 열어주세요.</li>
+      </ol>
+
+      <h3 style="margin-top:24px;">🚀 첫 번째 코드 실행해보기</h3>
+      <ol>
+        <li>VS Code에서 <code>hello.py</code>라는 새 파일을 만들어요.</li>
+        <li>아래 코드를 입력하세요.</li>
+      </ol>
+      <div class="code-block" style="margin:8px 0;">
+<pre><span class="fn">print</span>(<span class="str">"안녕! 나는 파이썬이야!"</span>)</pre>
+      </div>
+      <ol start="3">
+        <li>화면 오른쪽 위의 <b>▶ (실행)</b> 버튼을 누르면 아래쪽 터미널에 글자가 뿅! 하고 나와요.</li>
+      </ol>
+      <div class="callout" style="background:#eaf5ec; border-color:var(--c-loop);">
+        <b style="color:var(--c-loop);">💡 아이에게:</b> <i>"우리가 쓴 글자가 진짜로 화면에 나왔어! 컴퓨터랑 처음으로 대화한 거야!"</i> 라고 알려주세요.
+      </div>
     </div>
   </section>
 
-  <!-- 1. 파이썬 설치하기 -->
-  <section class="fig" style="--accent:var(--c-loop)">
+  <!-- 2. 파이썬 기초 문법 맛보기 (프리뷰) -->
+  <section class="fig" style="--accent:var(--c-print)">
     <div class="fig-head">
-      <div class="fig-emoji">⚙️</div>
-      <h2 class="fig-title">1. 코딩 준비하기 (파이썬 & VS Code)</h2>
+      <div class="fig-emoji">🔍</div>
+      <h2 class="fig-title">2. 파이썬 기초 문법 맛보기 (프리뷰)</h2>
     </div>
-    <div class="board-card">
-      <h3>💻 파이썬 설치</h3>
-      <ol>
-        <li><b>python.org</b> 접속 → <b>Downloads</b> 클릭</li>
-        <li>최신 버전 다운로드 및 실행</li>
-        <li>⚠️ <span style="color:var(--warn); font-weight:bold;">중요(Windows)</span>: 설치 창 맨 아래 <b>"Add python.exe to PATH"</b> 체크박스를 꼭 체크하고 <b>Install Now</b> 클릭</li>
-        <li>(Mac은 계속 <b>Continue → Install</b> 클릭)</li>
-      </ol>
+    <p class="fig-note">거북이를 만나기 전에, 파이썬이 어떤 규칙으로 움직이는지 미리 살짝 살펴볼까요?</p>
 
-      <h3 style="margin-top:24px;">📝 VS Code (코드 편집기) 설치</h3>
-      <ol>
-        <li><b>code.visualstudio.com</b> 접속 후 다운로드 및 설치</li>
-        <li>설치 완료 후 VS Code 왼쪽 네모 모양 아이콘(Extensions) 클릭</li>
-        <li>검색창에 <b>"Python"</b> 입력 후 설치</li>
-      </ol>
-      <p style="margin-top:14px; text-align:center; font-weight:bold;">이제 진짜 준비 끝! 코딩을 시작해봐요! 🎈</p>
+    <div class="board-card">
+      <h3>📦 변수 (Variable): "이름표가 붙은 상자"</h3>
+      <p>값을 담아두고 언제든 꺼내 쓸 수 있는 상자예요.</p>
+      <div class="code-block">
+<pre><span class="cm"># '민준'이라는 글자를 name 상자에 담기</span>
+name = <span class="str">"민준"</span>
+<span class="fn">print</span>(name)</pre>
+      </div>
+
+      <h3 style="margin-top:24px;">🅰️ 숫자와 글자 (Data Types): "따옴표의 마법"</h3>
+      <p>컴퓨터는 숫자는 계산할 수 있지만, 글자는 그냥 모양으로만 봐요. 그래서 <b>글자에는 꼭 따옴표(" ")</b> 옷을 입혀야 해요.</p>
+      <div class="code-block">
+<pre><span class="fn">print</span>(<span class="num">3</span> + <span class="num">5</span>)       <span class="cm"># 숫자 계산! (결과: 8)</span>
+<span class="fn">print</span>(<span class="str">"안녕 파이썬"</span>) <span class="cm"># 글자 출력!</span></pre>
+      </div>
+
+      <h3 style="margin-top:24px;">🎒 리스트 (List): "한 상자에 여러 개 담기"</h3>
+      <p>여러 가지 물건을 한꺼번에 보관하는 가방(배열)이에요.</p>
+      <div class="code-block">
+<pre>colors = [<span class="str">"red"</span>, <span class="str">"blue"</span>, <span class="str">"yellow"</span>]
+<span class="fn">print</span>(colors[<span class="num">0</span>])   <span class="cm"># 컴퓨터는 0번부터 세어요! (결과: red)</span></pre>
+      </div>
+
+      <h3 style="margin-top:24px;">🔁 반복문 (for loop): "똑같은 일 쉽게 하기"</h3>
+      <p>같은 행동을 여러 번 할 때 쓰는 <b>마법 주문</b>이에요. 파이썬은 묶음을 표현할 때 <b>들여쓰기(띄어쓰기 4칸)</b>를 꼭 해야 해요.</p>
+      <div class="code-block">
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+    <span class="fn">print</span>(<span class="str">"야호!"</span>)   <span class="cm"># 4칸 띄어쓰기를 한 이 문장이 3번 반복돼요.</span></pre>
+      </div>
     </div>
   </section>
 
-  <!-- 2. 기본 문법과 거북이 -->
-  <section class="fig" style="--accent:var(--c-if)">
+  <!-- 3. 거북이 설명 -->
+  <section class="fig" style="--accent:var(--water)">
     <div class="fig-head">
       <div class="fig-emoji">🐢</div>
-      <h2 class="fig-title">2. 거북이와 함께 기초 문법 탐험</h2>
+      <h2 class="fig-title">3. 자, 이제 거북이와 그림을 그려볼까요?</h2>
     </div>
     <p class="fig-note">
-      파이썬의 가장 중요한 규칙들을 거북이와 함께 놀면서 알아봐요!
-      모든 거북이 프로그램은 거북이를 불러오는 이 코드로 시작해요.
+      터틀(turtle)은 화면 위를 기어다니며 그림을 그리는 파이썬 거북이 친구예요.<br>
+      방금 배운 기초 문법들을 거북이에게 쓰면 거북이가 어떻게 움직일까요?
     </p>
-    
+
     <div class="board-card">
-      <div class="code-block">
+      <div class="callout" style="margin-top:0; border-left-color:var(--water); background:#eff8f9;">
+        거북이를 불러오는 모든 예제는 <b>항상 아래 3줄로 시작</b>해요! 
+      </div>
+      <div class="code-block" style="margin-top:8px;">
 <pre><span class="kw">import</span> turtle
-t = turtle.<span class="fn">Turtle</span>()
+t = turtle.<span class="fn">Turtle</span>()  <span class="cm"># 방금 배운 '변수' t에 거북이를 담았어요!</span>
 <span class="cm"># ... 여기에 거북이 명령을 적어요 ...</span>
-turtle.<span class="fn">done</span>()  <span class="cm"># 맨 마지막에는 꼭 이 코드를 넣어요!</span></pre>
+turtle.<span class="fn">done</span>()        <span class="cm"># 맨 마지막 줄에 이걸 꼭 적어주세요!</span></pre>
       </div>
-      
-      <h3 style="margin-top:24px;">📦 2-1. 변수 (Variable): "이름표가 붙은 상자"</h3>
-      <div class="grammar-badge">핵심 문법: 변수 할당 연산자 (=)</div>
-      <p>방금 쓴 <code>t = turtle.Turtle()</code>에서 <code>t</code>는 뭘까요? <b>거북이를 담아둔 상자의 이름표</b>예요.</p>
-      <ul>
-        <li>파이썬에서는 <code>=</code> 기호로 <b>오른쪽에 있는 것</b>(새 거북이)을 <b>왼쪽 상자</b>(<code>t</code>)에 넣어요.</li>
-        <li>그래서 앞으로는 "어이, 거북아!" 라고 부르지 않고, 짧게 <b>"t야!"</b> 라고 부르면 된답니다.</li>
-      </ul>
 
-      <h3 style="margin-top:24px;">🚶 2-2. 함수 (Function): "거북이에게 내리는 명령"</h3>
-      <div class="grammar-badge">핵심 문법: 메서드 호출과 매개변수</div>
-      <p>상자 안에 있는 <code>t</code> 거북이에게 움직이라고 <b>명령(함수)</b>을 내릴 때는 <b>점(.)</b>을 찍고 괄호 <code>()</code>를 써요.</p>
-      <div class="code-block" style="margin:10px 0;">
-<pre>t.<span class="fn">forward</span>(<span class="num">100</span>)  <span class="cm"># 앞으로 100만큼 가!</span>
-t.<span class="fn">left</span>(<span class="num">90</span>)      <span class="cm"># 왼쪽으로 90도 돌아!</span></pre>
-      </div>
-      <ul>
-        <li><code>t.forward()</code>는 "t야, 앞으로 가!"라는 뜻이에요.</li>
-        <li>괄호 <code>(100)</code> 안의 숫자는 <b>얼마나 많이 갈지</b> 알려주는 중요한 쪽지(매개변수)랍니다.</li>
-      </ul>
+      <h3 style="margin-top:24px;">🚶 3-1. 거북이 움직이기 (순차 명령)</h3>
+      <table>
+        <tr><th>명령어</th><th>뜻</th><th>비유</th></tr>
+        <tr><td><code>t.forward(100)</code></td><td>100만큼 앞으로 걷기</td><td>"앞으로 100걸음!" (숫자를 줬죠?)</td></tr>
+        <tr><td><code>t.backward(50)</code></td><td>뒤로 걷기</td><td>"뒤로 뒷걸음질!"</td></tr>
+        <tr><td><code>t.left(90)</code></td><td>왼쪽으로 90도 돌기</td><td>"왼쪽으로 빙글!"</td></tr>
+        <tr><td><code>t.right(90)</code></td><td>오른쪽으로 90도 돌기</td><td>"오른쪽으로 빙글!"</td></tr>
+      </table>
 
-      <h3 style="margin-top:24px;">🅰️ 2-3. 자료형 (Data Type): "숫자와 글자의 차이"</h3>
-      <div class="grammar-badge">핵심 문법: 정수(int)와 문자열(str)</div>
-      <p>컴퓨터는 숫자와 글자를 다르게 취급해요. 거북이에게 숫자를 줄 때와 글자를 줄 때의 차이를 보세요!</p>
-      <div class="code-block" style="margin:10px 0;">
-<pre>t.<span class="fn">forward</span>(<span class="num">100</span>)         <span class="cm"># 숫자: 따옴표 없이 그냥 써요.</span>
-t.<span class="fn">write</span>(<span class="str">"안녕 파이썬!"</span>) <span class="cm"># 글자: 반드시 따옴표(" ")를 입혀줘야 해요!</span></pre>
+      <h3 style="margin-top:24px;">🎨 3-2. 색깔과 굵기 (글자와 숫자)</h3>
+      <div class="code-block">
+<pre>t.<span class="fn">color</span>(<span class="str">"red"</span>)       <span class="cm"># 색깔 이름은 '글자'니까 따옴표 옷을!</span>
+t.<span class="fn">pensize</span>(<span class="num">5</span>)         <span class="cm"># 굵기는 '숫자'니까 그냥 써요!</span></pre>
       </div>
-      <ul>
-        <li><b>숫자</b>(100)는 계산할 수 있어서 따옴표 없이 써요.</li>
-        <li><b>글자</b>("안녕 파이썬!")는 컴퓨터가 "이건 그냥 읽는 글자구나" 하고 알 수 있게 꼭 <b>따옴표 옷</b>을 입혀줘야 한답니다!</li>
-      </ul>
-    </div>
-  </section>
 
-  <!-- 3. 반복문과 리스트 -->
-  <section class="fig" style="--accent:var(--c-loop)">
-    <div class="fig-head">
-      <div class="fig-emoji">🔁</div>
-      <h2 class="fig-title">3. 더 똑똑하게 명령하기: 반복과 리스트</h2>
-    </div>
-    
-    <div class="board-card">
-      <h3>🪄 3-1. 반복문 (for): "얍얍얍 마법 주문"</h3>
-      <div class="grammar-badge">핵심 문법: for 반복문과 들여쓰기(Indentation)</div>
-      <p>같은 동작을 여러 번 하고 싶을 때, 파이썬은 <b>들여쓰기(띄어쓰기 4칸)</b>로 묶어서 마법 주문을 만들어요.</p>
-      <div class="code-block" style="margin:10px 0;">
-<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">4</span>):    <span class="cm"># 4번 반복해! (여기 끝에 콜론(:) 꼭 쓰기)</span>
-    t.<span class="fn">forward</span>(<span class="num">100</span>)    <span class="cm"># 꼭 띄어쓰기 4칸!</span>
-    t.<span class="fn">right</span>(<span class="num">90</span>)       <span class="cm"># 꼭 띄어쓰기 4칸!</span></pre>
+      <h3 style="margin-top:24px;">🪄 3-3. 반복문으로 거북이 춤추게 하기</h3>
+      <p>방금 프리뷰에서 배운 <b>마법 주문(들여쓰기 4칸)</b>을 거북이에게 써봐요.</p>
+      <div class="code-block">
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">4</span>):
+    t.<span class="fn">forward</span>(<span class="num">100</span>)   <span class="cm"># 들여쓰기 4칸!</span>
+    t.<span class="fn">right</span>(<span class="num">90</span>)      <span class="cm"># 들여쓰기 4칸!</span></pre>
       </div>
-      <ul>
-        <li><code>for i in range(4):</code> 는 "자, 지금부터 4번 반복한다!" 라는 주문이에요.</li>
-        <li>파이썬에서는 이 주문의 영향을 받는 명령들을 <b>꼭 띄어쓰기 4칸</b>을 해서 묶어줘야 해요. 안 그러면 컴퓨터가 헷갈려요! (이걸 들여쓰기라고 불러요)</li>
-      </ul>
+      <p style="color:var(--ink-soft); font-size:15px;">→ <i>"얍! 하고 4번 외치면 거북이가 4번 앞으로 가고 4번 돌아!"</i></p>
 
-      <h3 style="margin-top:24px;">🎒 3-2. 리스트 (List): "한 상자에 여러 개 담기"</h3>
-      <div class="grammar-badge">핵심 문법: 리스트(List)와 인덱스</div>
-      <p>여러 가지 색깔 크레파스를 한 상자에 모아두려면 <b>대괄호 [ ]</b> 를 써요.</p>
-      <div class="code-block" style="margin:10px 0;">
-<pre>colors = [<span class="str">"red"</span>, <span class="str">"yellow"</span>, <span class="str">"blue"</span>]
-t.<span class="fn">color</span>(colors[<span class="num">0</span>])  <span class="cm"># 빨간색을 꺼내요!</span></pre>
+      <h3 style="margin-top:24px;">✏️ 3-4. 이름표 쓰기 — <code>write()</code></h3>
+      <div class="code-block">
+<pre>t.<span class="fn">write</span>(<span class="str">"민준"</span>)        <span class="cm"># 거북이가 화면에 글자를 써줘요. 따옴표 필수!</span></pre>
       </div>
-      <ul>
-        <li><code>colors</code>라는 상자에는 3가지 색이 들어있어요.</li>
-        <li>재밌는 건, 컴퓨터는 숫자를 <b>0번부터 센다는 사실!</b> 그래서 0번을 꺼내면 첫 번째인 "red"가 나와요.</li>
-      </ul>
     </div>
   </section>
 
   <!-- 4. 프로젝트 -->
-  <section class="fig" style="--accent:var(--water)">
+  <section class="fig" style="--accent:var(--c-loop)">
     <div class="fig-head">
       <div class="fig-emoji">⭐</div>
-      <h2 class="fig-title">4. 거북이 그래픽 프로젝트 (놀면서 배우기)</h2>
+      <h2 class="fig-title">4. 단계별 프로젝트 (쉬운 것 → 신나는 것)</h2>
     </div>
-    <p class="fig-note">지금까지 배운 <b>변수, 자료형(숫자와 글자), 반복문</b>을 사용해서 멋진 그림을 그려봐요!<br>각 프로젝트는 새 <code>.py</code> 파일로 만들어서 <b>▶ (실행)</b> 버튼을 누르면 화면에 그림 창이 뜹니다.</p>
+    <p class="fig-note">
+      각 프로젝트는 새 <code>.py</code> 파일로 만들어서 실행 버튼(▶)을 누르면 바로 창이 뜨며 결과가 보여요.
+    </p>
 
     <div class="board-card">
-      <h3>🟢 프로젝트 1. 네모 그리기 (기본 명령 반복하기)</h3>
-      <div class="code-block">
-<pre><span class="kw">import</span> turtle
-t = turtle.<span class="fn">Turtle</span>()     <span class="cm"># 변수 t에 거북이 담기</span>
-
-t.<span class="fn">forward</span>(<span class="num">100</span>)          <span class="cm"># 숫자(int)로 길이 명령</span>
-t.<span class="fn">right</span>(<span class="num">90</span>)
-t.<span class="fn">forward</span>(<span class="num">100</span>)
-t.<span class="fn">right</span>(<span class="num">90</span>)
-t.<span class="fn">forward</span>(<span class="num">100</span>)
-t.<span class="fn">right</span>(<span class="num">90</span>)
-t.<span class="fn">forward</span>(<span class="num">100</span>)
-t.<span class="fn">right</span>(<span class="num">90</span>)
-
-turtle.<span class="fn">done</span>()</pre>
-      </div>
-      <p style="color:var(--ink-soft); font-size:15px; margin-top:8px;">→ <i>"똑같은 코드가 너무 길지? 바로 이럴 때 마법 주문(반복문)이 필요해!"</i></p>
-
-      <h3 style="margin-top:32px;">🟡 프로젝트 2. 반복문으로 네모 그리기 (for문 활용)</h3>
+      <h3>🟢 프로젝트 1. 선 하나 긋기 (첫 그림!)</h3>
       <div class="code-block">
 <pre><span class="kw">import</span> turtle
 t = turtle.<span class="fn">Turtle</span>()
-t.<span class="fn">color</span>(<span class="str">"blue"</span>)         <span class="cm"># 글자(문자열)로 색깔 지정! 꼭 따옴표 쓰기</span>
-t.<span class="fn">pensize</span>(<span class="num">3</span>)
 
-<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">4</span>):      <span class="cm"># 4번 반복하는 마법 주문</span>
-    t.<span class="fn">forward</span>(<span class="num">100</span>)      <span class="cm"># 띄어쓰기 4칸!</span>
-    t.<span class="fn">right</span>(<span class="num">90</span>)         <span class="cm"># 띄어쓰기 4칸!</span>
+t.<span class="fn">forward</span>(<span class="num">150</span>)
 
 turtle.<span class="fn">done</span>()</pre>
       </div>
-      <p style="color:var(--ink-soft); font-size:15px; margin-top:8px;">→ 코드가 훨씬 짧아졌죠? 아이에게 <code>range(4)</code>를 <code>range(5)</code>로, <code>right(90)</code>을 <code>right(144)</code>로 숫자만 직접 바꿔보게 하세요. (그러면 별이 그려져요!)</p>
 
-      <h3 style="margin-top:32px;">🟠 프로젝트 3. 무지개 나선 그리기 (리스트 활용)</h3>
+      <h3 style="margin-top:24px;">🟢 프로젝트 2. 네모 그리기 (하나하나 명령)</h3>
+      <div class="code-block">
+<pre><span class="kw">import</span> turtle
+t = turtle.<span class="fn">Turtle</span>()
+
+t.<span class="fn">forward</span>(<span class="num">100</span>)
+t.<span class="fn">right</span>(<span class="num">90</span>)
+t.<span class="fn">forward</span>(<span class="num">100</span>)
+t.<span class="fn">right</span>(<span class="num">90</span>)
+t.<span class="fn">forward</span>(<span class="num">100</span>)
+t.<span class="fn">right</span>(<span class="num">90</span>)
+t.<span class="fn">forward</span>(<span class="num">100</span>)
+t.<span class="fn">right</span>(<span class="num">90</span>)
+
+turtle.<span class="fn">done</span>()</pre>
+      </div>
+      <p style="color:var(--ink-soft); font-size:15px; margin-top:8px;">→ <i>"똑같은 걸 4번 썼지? 배운 대로 마법 주문으로 줄여보자!"</i></p>
+
+      <h3 style="margin-top:24px;">🟡 프로젝트 3. 마법 주문으로 네모 그리기</h3>
+      <div class="code-block">
+<pre><span class="kw">import</span> turtle
+t = turtle.<span class="fn">Turtle</span>()
+t.<span class="fn">color</span>(<span class="str">"blue"</span>)
+t.<span class="fn">pensize</span>(<span class="num">3</span>)
+
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">4</span>):
+    t.<span class="fn">forward</span>(<span class="num">100</span>)
+    t.<span class="fn">right</span>(<span class="num">90</span>)
+
+turtle.<span class="fn">done</span>()</pre>
+      </div>
+
+      <h3 style="margin-top:24px;">🟡 프로젝트 4. 반짝반짝 별 그리기</h3>
+      <div class="code-block">
+<pre><span class="kw">import</span> turtle
+t = turtle.<span class="fn">Turtle</span>()
+t.<span class="fn">color</span>(<span class="str">"gold"</span>)
+t.<span class="fn">pensize</span>(<span class="num">3</span>)
+
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    t.<span class="fn">forward</span>(<span class="num">150</span>)
+    t.<span class="fn">right</span>(<span class="num">144</span>)
+
+turtle.<span class="fn">done</span>()</pre>
+      </div>
+      <p style="color:var(--ink-soft); font-size:15px; margin-top:8px;">→ 각도만 바꿨는데 완전히 다른 모양! <i>"144도로 돌면 별이 돼요!"</i></p>
+
+      <h3 style="margin-top:24px;">🟠 프로젝트 5. 무지개 나선 그리기 (리스트 활용!)</h3>
+      <p>아까 배운 '리스트(상자 묶음)'를 여기서 진짜로 써봐요!</p>
       <div class="code-block">
 <pre><span class="kw">import</span> turtle
 t = turtle.<span class="fn">Turtle</span>()
 t.<span class="fn">speed</span>(<span class="num">0</span>)
 t.<span class="fn">pensize</span>(<span class="num">3</span>)
 
-<span class="cm"># 리스트(상자 묶음)에 여러 글자(색깔) 담기</span>
+<span class="cm"># 6가지 색깔이 담긴 리스트 가방</span>
 colors = [<span class="str">"red"</span>, <span class="str">"orange"</span>, <span class="str">"yellow"</span>, <span class="str">"green"</span>, <span class="str">"blue"</span>, <span class="str">"purple"</span>]
 
-<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">60</span>):       <span class="cm"># 무려 60번이나 반복!</span>
-    t.<span class="fn">color</span>(colors[i % <span class="num">6</span>])  <span class="cm"># 리스트 안의 색을 순서대로 꺼내 써요</span>
-    t.<span class="fn">forward</span>(i * <span class="num">3</span>)        <span class="cm"># 갈수록 길이가 길어져요!</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">60</span>):
+    t.<span class="fn">color</span>(colors[i % <span class="num">6</span>])  <span class="cm"># 가방에서 하나씩 꺼내 써요</span>
+    t.<span class="fn">forward</span>(i * <span class="num">3</span>)
     t.<span class="fn">right</span>(<span class="num">59</span>)
 
 turtle.<span class="fn">done</span>()</pre>
       </div>
-      <p style="color:var(--ink-soft); font-size:15px; margin-top:8px;">→ 알록달록 소용돌이가 그려져서 아이들이 제일 좋아하는 프로젝트예요. 리스트 <code>colors</code>에 원하는 다른 영어 색깔을 추가해 보세요.</p>
 
-      <h3 style="margin-top:32px;">🎁 프로젝트 4. 완성작 — 나만의 이름 그림 (문자열 출력)</h3>
+      <h3 style="margin-top:24px;">🔴 프로젝트 6. 꽃 그리기 (동그라미 반복)</h3>
+      <div class="code-block">
+<pre><span class="kw">import</span> turtle
+t = turtle.<span class="fn">Turtle</span>()
+t.<span class="fn">speed</span>(<span class="num">0</span>)
+t.<span class="fn">color</span>(<span class="str">"hotpink"</span>)
+t.<span class="fn">pensize</span>(<span class="num">2</span>)
+
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">36</span>):
+    t.<span class="fn">circle</span>(<span class="num">50</span>)
+    t.<span class="fn">left</span>(<span class="num">10</span>)
+
+turtle.<span class="fn">done</span>()</pre>
+      </div>
+
+      <h3 style="margin-top:24px;">🎁 프로젝트 7. 완성작 — 나만의 이름 그림</h3>
       <div class="code-block">
 <pre><span class="kw">import</span> turtle
 t = turtle.<span class="fn">Turtle</span>()
 t.<span class="fn">speed</span>(<span class="num">0</span>)
 
-<span class="cm"># 배경에 금색 별 그리기</span>
+<span class="cm"># 배경에 별 그리기</span>
 t.<span class="fn">color</span>(<span class="str">"gold"</span>)
 <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
     t.<span class="fn">forward</span>(<span class="num">100</span>)
     t.<span class="fn">right</span>(<span class="num">144</span>)
 
-<span class="cm"># 가운데로 이동해서 문자열 쓰기</span>
+<span class="cm"># 글자(문자열)를 화면에 쓰기</span>
 t.<span class="fn">penup</span>()
 t.<span class="fn">goto</span>(-<span class="num">100</span>, -<span class="num">20</span>)
 t.<span class="fn">pendown</span>()
 t.<span class="fn">color</span>(<span class="str">"purple"</span>)
-
-<span class="cm"># "민준이의 그림" 이라는 '글자(문자열)'를 적어요</span>
 t.<span class="fn">write</span>(<span class="str">"민준이의 그림"</span>, font=(<span class="str">"Arial"</span>, <span class="num">24</span>, <span class="str">"bold"</span>))
 
 turtle.<span class="fn">done</span>()</pre>
       </div>
-      <p style="color:var(--ink-soft); font-size:15px; margin-top:8px;">→ 이 코드를 열어서 "민준이의 그림" 부분을 <b>아이의 이름</b>으로 바꾸게 해주세요. 글자니까 <b>따옴표("")</b>를 실수로 지우지 않게 조심하세요!</p>
+      <p style="color:var(--ink-soft); font-size:15px; margin-top:8px;">→ 아이가 직접 이름 부분만 자기 이름으로 바꾸고 ▶ 버튼을 누르게 해주세요!</p>
     </div>
   </section>
 
-  <!-- 5. 에러 해결 -->
+  <!-- 5. 에러 대처법 -->
   <section class="fig" style="--accent:var(--c-print)">
     <div class="fig-head">
       <div class="fig-emoji">💡</div>
-      <h2 class="fig-title">5. 에러 대처법 (컴퓨터의 말 알아듣기)</h2>
+      <h2 class="fig-title">5. 에러 대처법 (흔한 실수들)</h2>
     </div>
     <div class="board-card">
-      <p>컴퓨터는 규칙을 아주 꼼꼼하게 따져서, 하나라도 틀리면 빨간 글씨(에러)로 알려줘요. 이건 실패가 아니라 "여기를 고쳐줘!"라는 뜻이에요.</p>
       <table>
-        <tr><th>에러 메시지</th><th>어떤 문법을 틀렸을까?</th><th>해결 방법</th></tr>
-        <tr><td><code>NameError</code></td><td><b>변수</b>나 함수 이름을 잘못 부름 (오타)</td><td>철자를 다시 확인하세요 (예: <code>turtel</code> → <code>turtle</code>)</td></tr>
-        <tr><td><code>SyntaxError</code></td><td><b>문자열</b>의 따옴표나 괄호를 빼먹음</td><td>글자 양쪽에 <code>" "</code>가 잘 있는지 확인하세요.</td></tr>
-        <tr><td><code>IndentationError</code></td><td><b>반복문(for)</b>의 들여쓰기가 틀림</td><td><code>for</code> 문 아래 줄의 명령어들이 <b>4칸 띄어쓰기</b>가 잘 되었는지 확인하세요.</td></tr>
+        <tr><th>에러 메시지</th><th>원인</th><th>해결 방법</th></tr>
+        <tr><td><code>NameError</code></td><td>오타 (예: <code>Turtel</code>)</td><td>철자 다시 확인하기</td></tr>
+        <tr><td><code>SyntaxError</code></td><td>글자(문자열)인데 <code>" "</code>를 빼먹음</td><td>글자 양쪽에 따옴표를 잘 썼나 확인하기</td></tr>
+        <tr><td><code>IndentationError</code></td><td>들여쓰기(공백) 안 맞음</td><td><code>for</code> 문 안쪽 줄은 꼭 <b>4칸 띄우기</b></td></tr>
+        <tr><td>창이 바로 사라짐</td><td>맨 끝에 <code>turtle.done()</code> 빠짐</td><td>마지막 줄에 추가하기</td></tr>
       </table>
       <div class="callout" style="margin-top:16px;">
         <b style="color:var(--c-var);">💡 부모님 팁:</b> <i>"컴퓨터가 들여쓰기를 빼먹어서 삐졌나 봐! 우리 띄어쓰기 4칸이 잘 되었는지 탐정처럼 찾아볼까?"</i> 라고 놀이처럼 접근해주세요.
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 다음 단계 -->
+  <section class="fig" style="--accent:var(--warn)">
+    <div class="fig-head">
+      <div class="fig-emoji">🚀</div>
+      <h2 class="fig-title">6. 다음 단계로 넘어가고 싶다면</h2>
+    </div>
+    <div class="board-card">
+      <ul>
+        <li><code>t.circle()</code>, <code>t.dot()</code> 등 다른 도형 명령어 탐험하기</li>
+        <li>조건문(<code>if</code>)으로 "특정 색이면 다르게 그리기" 도전</li>
+        <li><code>turtle.bgcolor("skyblue")</code> 로 배경색 바꾸기</li>
+        <li>여러 마리 거북이(<code>turtle.Turtle()</code> 여러 개)로 그림 대결하기</li>
+      </ul>
+      <div class="callout" style="margin-top:20px; background:#f9f9f9; border-color:var(--c-math);">
+        <b style="color:var(--c-math);">👩‍🏫 진행 팁</b><br>
+        한 프로젝트당 10~15분, 프로젝트 하나 끝날 때마다 화면 캡처해서 모아두면 나중에 성장 앨범이 돼요.<br>
+        아이가 직접 <b>숫자(각도, 길이, 색깔 이름)</b>만 바꿔보게 하는 것만으로도 "내가 만들었다"는 성취감을 크게 느껴요.
       </div>
     </div>
   </section>
