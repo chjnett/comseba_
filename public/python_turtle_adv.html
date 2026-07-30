@@ -313,22 +313,35 @@ t.<span class="fn">speed</span>(<span class="num">0</span>)         <span class=
 <span class="kw">def</span> <span class="fn">clear_screen</span>(x, y):
     t.<span class="fn">clear</span>()
 
-<span class="cm"># 5. 키보드를 눌러 색상 바꾸기 함수</span>
-<span class="kw">def</span> <span class="fn">color_red</span>(): t.<span class="fn">color</span>(<span class="str">"red"</span>)
-<span class="kw">def</span> <span class="fn">color_blue</span>(): t.<span class="fn">color</span>(<span class="str">"blue"</span>)
-<span class="kw">def</span> <span class="fn">color_green</span>(): t.<span class="fn">color</span>(<span class="str">"green"</span>)
-<span class="kw">def</span> <span class="fn">color_white</span>(): t.<span class="fn">color</span>(<span class="str">"white"</span>)
+<span class="cm"># 5. 화면 위에 색깔 버튼(거북이) 만들기</span>
+<span class="kw">def</span> <span class="fn">make_button</span>(color_name, x):
+    btn = turtle.<span class="fn">Turtle</span>()
+    btn.<span class="fn">shape</span>(<span class="str">"square"</span>)
+    btn.<span class="fn">color</span>(color_name)
+    btn.<span class="fn">penup</span>()
+    btn.<span class="fn">goto</span>(x, <span class="num">250</span>)   <span class="cm"># 화면 위쪽에 배치</span>
+    <span class="kw">return</span> btn
 
-<span class="cm"># 6. 마우스 및 키보드 이벤트 연결</span>
-screen.<span class="fn">onscreenclick</span>(move_to, <span class="num">1</span>)  <span class="cm"># 왼쪽 클릭(1): 해당 위치로 이동</span>
-t.<span class="fn">ondrag</span>(draw)                    <span class="cm"># 터틀 드래그: 선 그리기</span>
-screen.<span class="fn">onscreenclick</span>(clear_screen, <span class="num">3</span>) <span class="cm"># 오른쪽 클릭(3): 화면 지우기</span>
+btn_red = <span class="fn">make_button</span>(<span class="str">"red"</span>, -<span class="num">60</span>)
+btn_blue = <span class="fn">make_button</span>(<span class="str">"blue"</span>, -<span class="num">20</span>)
+btn_green = <span class="fn">make_button</span>(<span class="str">"green"</span>, <span class="num">20</span>)
+btn_white = <span class="fn">make_button</span>(<span class="str">"white"</span>, <span class="num">60</span>)
 
-screen.<span class="fn">onkeypress</span>(color_red, <span class="str">"r"</span>)     <span class="cm"># 'r' 누르면 빨간색</span>
-screen.<span class="fn">onkeypress</span>(color_blue, <span class="str">"b"</span>)    <span class="cm"># 'b' 누르면 파란색</span>
-screen.<span class="fn">onkeypress</span>(color_green, <span class="str">"g"</span>)   <span class="cm"># 'g' 누르면 초록색</span>
-screen.<span class="fn">onkeypress</span>(color_white, <span class="str">"w"</span>)   <span class="cm"># 'w' 누르면 흰색</span>
-screen.<span class="fn">listen</span>()                       <span class="cm"># 키보드 활성화 (반드시 필요!)</span>
+<span class="cm"># 6. 버튼을 클릭하면 펜 색상 바꾸기</span>
+<span class="kw">def</span> <span class="fn">set_red</span>(x, y): t.<span class="fn">color</span>(<span class="str">"red"</span>)
+<span class="kw">def</span> <span class="fn">set_blue</span>(x, y): t.<span class="fn">color</span>(<span class="str">"blue"</span>)
+<span class="kw">def</span> <span class="fn">set_green</span>(x, y): t.<span class="fn">color</span>(<span class="str">"green"</span>)
+<span class="kw">def</span> <span class="fn">set_white</span>(x, y): t.<span class="fn">color</span>(<span class="str">"white"</span>)
+
+btn_red.<span class="fn">onclick</span>(set_red)
+btn_blue.<span class="fn">onclick</span>(set_blue)
+btn_green.<span class="fn">onclick</span>(set_green)
+btn_white.<span class="fn">onclick</span>(set_white)
+
+<span class="cm"># 7. 마우스 그림 그리기 이벤트 연결</span>
+screen.<span class="fn">onscreenclick</span>(move_to, <span class="num">1</span>)  <span class="cm"># 배경을 왼쪽 클릭하면 이동</span>
+t.<span class="fn">ondrag</span>(draw)                    <span class="cm"># 드래그하면 선 그리기</span>
+screen.<span class="fn">onscreenclick</span>(clear_screen, <span class="num">3</span>) <span class="cm"># 오른쪽 클릭하면 화면 지우기</span>
 
 <span class="cm"># 프로그램 유지</span>
 screen.<span class="fn">mainloop</span>()</pre>
