@@ -64,6 +64,8 @@ html_content = """<!DOCTYPE html>
   .code-block .str{ color:#f1fa8c; }
   .code-block .num{ color:#bd93f9; }
   .code-block .cm{ color:#6272a4; font-style:italic; }
+  .copy-btn { position:absolute; top:12px; right:12px; background:var(--paper-2); color:var(--ink-soft); border:1px solid var(--rule); border-radius:6px; padding:4px 10px; font-size:11px; font-family:var(--sans); cursor:pointer; transition:all 0.2s; z-index:10;}
+  .copy-btn:hover { background:var(--rule); color:#fff; }
 
   .grammar-badge { display:inline-block; font-family:var(--mono); font-size:11px; padding:4px 8px; border-radius:4px; background:#12121a; color:var(--ink-soft); margin-bottom:6px; letter-spacing:0.04em; border: 1px solid var(--rule); }
 
@@ -92,6 +94,22 @@ html_content = """<!DOCTYPE html>
     </p>
   </section>
 
+  <!-- 0. 설치 -->
+  <section class="fig" style="--accent:var(--water)">
+    <div class="fig-head">
+      <div class="fig-emoji">📦</div>
+      <h2 class="fig-title">0. 게임 만들기 준비물 (Pygame 설치)</h2>
+    </div>
+    <div class="board-card">
+      <p>Pygame은 파이썬에 기본으로 들어있지 않아서 한 번만 따로 설치해줘야 해요. VS Code 하단의 <b>터미널(Terminal)</b> 창을 열고 아래 명령어를 입력해 주세요.</p>
+      <div class="code-block" style="position:relative;">
+        <button class="copy-btn" onclick="copyCode(this)">복사 📋</button>
+<pre>pip install pygame</pre>
+      </div>
+      <p style="color:var(--ink-soft); font-size:14px; margin-top:0;">* <b>맥(Mac)</b> 사용자는 <code>pip3 install pygame</code>이라고 입력해야 할 수도 있어요!</p>
+    </div>
+  </section>
+
   <!-- 1. 파이게임의 심장 -->
   <section class="fig" style="--accent:var(--c-var)">
     <div class="fig-head">
@@ -102,7 +120,8 @@ html_content = """<!DOCTYPE html>
       <div class="grammar-badge">핵심 개념: pygame.init(), while 루프, Event</div>
       <p>모든 게임은 "화면 지우기 👉 그림 그리기 👉 키보드 입력 받기"를 1초에 60번씩 엄청나게 빠르게 반복합니다. 이것을 <b>게임 루프(Game Loop)</b>라고 불러요!</p>
       
-      <div class="code-block">
+      <div class="code-block" style="position:relative;">
+        <button class="copy-btn" onclick="copyCode(this)">복사 📋</button>
 <pre><span class="kw">import</span> pygame
 <span class="kw">import</span> sys
 
@@ -143,7 +162,8 @@ clock = pygame.time.<span class="fn">Clock</span>()  <span class="cm"># 시간 �
       <div class="grammar-badge">핵심 개념: pygame.draw, RGB 색상상</div>
       <p>아무것도 없는 까만 창에 멋진 형광색 우주선(동그라미)을 그려볼까요? 화면을 채우고(`fill`) 업데이트(`update`) 하는 사이에 코드를 넣어야 해요!</p>
 
-      <div class="code-block">
+      <div class="code-block" style="position:relative;">
+        <button class="copy-btn" onclick="copyCode(this)">복사 📋</button>
 <pre>    <span class="cm"># ... 위 코드의 (2) 화면 그리기 부분 ...</span>
     screen.<span class="fn">fill</span>((<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>)) <span class="cm"># 배경을 먼저 칠하고</span>
 
@@ -172,7 +192,8 @@ clock = pygame.time.<span class="fn">Clock</span>()  <span class="cm"># 시간 �
       <div class="grammar-badge">핵심 개념: 변수 활용, pygame.key.get_pressed()</div>
       <p>도형이 멈춰있으면 재미가 없죠! 플레이어의 `x` 좌표, `y` 좌표를 <b>변수</b>로 만들고, 방향키를 누를 때마다 이 좌표를 5씩 바꿔주면 캐릭터가 움직입니다.</p>
 
-      <div class="code-block">
+      <div class="code-block" style="position:relative;">
+        <button class="copy-btn" onclick="copyCode(this)">복사 📋</button>
 <pre><span class="cm"># (게임 루프 밖) 캐릭터의 시작 위치</span>
 player_x = <span class="num">400</span>
 player_y = <span class="num">300</span>
@@ -212,7 +233,8 @@ player_speed = <span class="num">5</span>
     
     <div class="board-card">
       <p>드디어 완성된 하나의 게임입니다! 좌우 방향키로 플레이어(초록색 네모)를 움직여 하늘에서 떨어지는 별(노란색 네모)을 잡으세요. 10점을 모으면 승리!</p>
-      <div class="code-block">
+      <div class="code-block" style="position:relative;">
+        <button class="copy-btn" onclick="copyCode(this)">복사 📋</button>
 <pre><span class="kw">import</span> pygame, sys, random
 
 pygame.<span class="fn">init</span>()
@@ -277,6 +299,16 @@ star_y = -<span class="num">50</span>
 
 </div>
 
+<script>
+function copyCode(btn) {
+  const code = btn.nextElementSibling.innerText;
+  navigator.clipboard.writeText(code).then(() => {
+    const originalText = btn.innerText;
+    btn.innerText = "복사 완료! ✅";
+    setTimeout(() => btn.innerText = originalText, 2000);
+  });
+}
+</script>
 </body>
 </html>
 """
