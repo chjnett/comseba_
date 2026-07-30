@@ -313,10 +313,22 @@ t.<span class="fn">speed</span>(<span class="num">0</span>)         <span class=
 <span class="kw">def</span> <span class="fn">clear_screen</span>(x, y):
     t.<span class="fn">clear</span>()
 
-<span class="cm"># 5. 마우스 이벤트 연결</span>
+<span class="cm"># 5. 키보드를 눌러 색상 바꾸기 함수</span>
+<span class="kw">def</span> <span class="fn">color_red</span>(): t.<span class="fn">color</span>(<span class="str">"red"</span>)
+<span class="kw">def</span> <span class="fn">color_blue</span>(): t.<span class="fn">color</span>(<span class="str">"blue"</span>)
+<span class="kw">def</span> <span class="fn">color_green</span>(): t.<span class="fn">color</span>(<span class="str">"green"</span>)
+<span class="kw">def</span> <span class="fn">color_white</span>(): t.<span class="fn">color</span>(<span class="str">"white"</span>)
+
+<span class="cm"># 6. 마우스 및 키보드 이벤트 연결</span>
 screen.<span class="fn">onscreenclick</span>(move_to, <span class="num">1</span>)  <span class="cm"># 왼쪽 클릭(1): 해당 위치로 이동</span>
 t.<span class="fn">ondrag</span>(draw)                    <span class="cm"># 터틀 드래그: 선 그리기</span>
 screen.<span class="fn">onscreenclick</span>(clear_screen, <span class="num">3</span>) <span class="cm"># 오른쪽 클릭(3): 화면 지우기</span>
+
+screen.<span class="fn">onkeypress</span>(color_red, <span class="str">"r"</span>)     <span class="cm"># 'r' 누르면 빨간색</span>
+screen.<span class="fn">onkeypress</span>(color_blue, <span class="str">"b"</span>)    <span class="cm"># 'b' 누르면 파란색</span>
+screen.<span class="fn">onkeypress</span>(color_green, <span class="str">"g"</span>)   <span class="cm"># 'g' 누르면 초록색</span>
+screen.<span class="fn">onkeypress</span>(color_white, <span class="str">"w"</span>)   <span class="cm"># 'w' 누르면 흰색</span>
+screen.<span class="fn">listen</span>()                       <span class="cm"># 키보드 활성화 (반드시 필요!)</span>
 
 <span class="cm"># 프로그램 유지</span>
 screen.<span class="fn">mainloop</span>()</pre>
