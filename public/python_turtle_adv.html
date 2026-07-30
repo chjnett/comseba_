@@ -284,6 +284,43 @@ t.<span class="fn">left</span>(<span class="num">90</span>)
 t.<span class="fn">hideturtle</span>()
 turtle.<span class="fn">done</span>()</pre>
       </div>
+
+      <h3 style="margin-top:40px;">🎨 프로젝트 3: 나만의 거북이 그림판</h3>
+      <p>마우스를 드래그해서 자유롭게 그림을 그려봐요! 파이썬 터틀을 진짜 마우스 그림판처럼 사용할 수 있습니다.</p>
+      <div class="code-block">
+<pre><span class="kw">import</span> turtle
+
+<span class="cm"># 1. 화면 및 터틀 기본 설정</span>
+screen = turtle.<span class="fn">Screen</span>()
+screen.<span class="fn">title</span>(<span class="str">"마우스 따라 그리기"</span>)
+
+t = turtle.<span class="fn">Turtle</span>()
+t.<span class="fn">shape</span>(<span class="str">"circle"</span>)  <span class="cm"># 마우스 포인터 모양</span>
+t.<span class="fn">pensize</span>(<span class="num">3</span>)       <span class="cm"># 선 굵기</span>
+t.<span class="fn">speed</span>(<span class="num">0</span>)         <span class="cm"># 그리기 속도 (0은 최고 속도)</span>
+
+<span class="cm"># 2. 화면의 빈 곳을 클릭했을 때 실행할 함수 (펜을 들고 이동)</span>
+<span class="kw">def</span> <span class="fn">move_to</span>(x, y):
+    t.<span class="fn">penup</span>()      <span class="cm"># 선이 그려지지 않게 펜 들기</span>
+    t.<span class="fn">goto</span>(x, y)   <span class="cm"># 클릭한 좌표로 이동</span>
+    t.<span class="fn">pendown</span>()    <span class="cm"># 펜 내리기</span>
+
+<span class="cm"># 3. 마우스를 드래그할 때 실행할 함수 (선을 그리며 이동)</span>
+<span class="kw">def</span> <span class="fn">draw</span>(x, y):
+    t.<span class="fn">goto</span>(x, y)   <span class="cm"># 마우스가 움직이는 좌표로 터틀 이동</span>
+
+<span class="cm"># 4. 오른쪽 클릭 시 화면을 지우는 함수</span>
+<span class="kw">def</span> <span class="fn">clear_screen</span>(x, y):
+    t.<span class="fn">clear</span>()
+
+<span class="cm"># 5. 마우스 이벤트 연결</span>
+screen.<span class="fn">onscreenclick</span>(move_to, <span class="num">1</span>)  <span class="cm"># 왼쪽 클릭(1): 해당 위치로 이동</span>
+t.<span class="fn">ondrag</span>(draw)                    <span class="cm"># 터틀 드래그: 선 그리기</span>
+screen.<span class="fn">onscreenclick</span>(clear_screen, <span class="num">3</span>) <span class="cm"># 오른쪽 클릭(3): 화면 지우기</span>
+
+<span class="cm"># 프로그램 유지</span>
+screen.<span class="fn">mainloop</span>()</pre>
+      </div>
     </div>
   </section>
 
