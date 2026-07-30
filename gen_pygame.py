@@ -248,7 +248,7 @@ player_speed = <span class="num">5</span>
     </div>
     
     <div class="board-card">
-      <p>드디어 완성된 하나의 게임입니다! 좌우 방향키로 플레이어(초록색 네모)를 움직여 하늘에서 떨어지는 별(노란색 네모)을 잡으세요. 10점을 모으면 승리!</p>
+      <p>드디어 완성된 하나의 게임입니다! 좌우 방향키로 플레이어(초록색 네모)를 움직여 하늘에서 떨어지는 진짜 별(⭐) 모양을 잡으세요. 10점을 모으면 승리!</p>
       <div class="code-block" style="position:relative;">
         <button class="copy-btn" onclick="copyCode(this)">복사 📋</button>
 <pre><span class="kw">import</span> pygame, sys, random
@@ -257,6 +257,16 @@ pygame.<span class="fn">init</span>()
 screen = pygame.<span class="fn">display</span>.<span class="fn">set_mode</span>((<span class="num">600</span>, <span class="num">800</span>))
 clock = pygame.time.<span class="fn">Clock</span>()
 font = pygame.font.<span class="fn">SysFont</span>(<span class="str">"malgungothic"</span>, <span class="num">36</span>) <span class="cm"># 글꼴 설정</span>
+
+<span class="cm"># 별(⭐)을 예쁘게 그리는 마법 함수</span>
+<span class="kw">def</span> <span class="fn">draw_star</span>(surface, x, y):
+    <span class="cm"># 꼭짓점 10개의 좌표 계산</span>
+    points = [
+        (x+<span class="num">25</span>, y), (x+<span class="num">33</span>, y+<span class="num">17</span>), (x+<span class="num">50</span>, y+<span class="num">17</span>),
+        (x+<span class="num">35</span>, y+<span class="num">30</span>), (x+<span class="num">40</span>, y+<span class="num">50</span>), (x+<span class="num">25</span>, y+<span class="num">37</span>),
+        (x+<span class="num">10</span>, y+<span class="num">50</span>), (x+<span class="num">15</span>, y+<span class="num">30</span>), (x, y+<span class="num">17</span>), (x+<span class="num">17</span>, y+<span class="num">17</span>)
+    ]
+    pygame.draw.<span class="fn">polygon</span>(surface, (<span class="num">255</span>, <span class="num">255</span>, <span class="num">0</span>), points)
 
 <span class="cm"># 플레이어(바구니) 설정</span>
 player_x = <span class="num">250</span>
@@ -294,9 +304,9 @@ star_y = -<span class="num">50</span>
     <span class="cm"># 4. 화면 그리기</span>
     screen.<span class="fn">fill</span>((<span class="num">20</span>, <span class="num">20</span>, <span class="num">40</span>)) <span class="cm"># 남색 밤하늘</span>
     
-    <span class="cm"># 플레이어(초록 네모)와 별(노랑 네모) 그리기</span>
+    <span class="cm"># 플레이어(초록 네모)와 별(⭐) 그리기</span>
     pygame.draw.<span class="fn">rect</span>(screen, (<span class="num">0</span>, <span class="num">255</span>, <span class="num">100</span>), [player_x, player_y, <span class="num">100</span>, <span class="num">20</span>])
-    pygame.draw.<span class="fn">rect</span>(screen, (<span class="num">255</span>, <span class="num">255</span>, <span class="num">0</span>), [star_x, star_y, <span class="num">50</span>, <span class="num">50</span>])
+    <span class="fn">draw_star</span>(screen, star_x, star_y)
     
     <span class="cm"># 점수 텍스트 표시</span>
     score_text = font.<span class="fn">render</span>(<span class="str">f"점수: {score}"</span>, <span class="kw">True</span>, (<span class="num">255</span>, <span class="num">255</span>, <span class="num">255</span>))
