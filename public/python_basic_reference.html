@@ -155,6 +155,17 @@
 
   footer{ border-top:1px solid var(--rule); padding:32px 0 60px; }
   .disclaimer{ font-family:var(--mono); font-size:11.5px; color:var(--ink-soft); max-width:70ch; }
+  
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .setup-card { background: #ffffff; border: 1px solid var(--rule); border-radius: 10px; padding: 22px; }
+  .setup-card h4 { margin: 0 0 12px; font-size: 16px; color: var(--water-deep); display: flex; align-items: center; gap: 8px; font-family: var(--display); font-weight: 600; }
+  .setup-card ol { margin: 6px 0 0 20px; padding: 0; }
+  .setup-card li { margin-bottom: 8px; font-size: 13.5px; color: var(--ink-soft); }
+  .setup-card li b, .setup-card li strong { color: var(--ink); }
+  
+  @media (max-width:768px) {
+    .grid2 { grid-template-columns: 1fr; }
+  }
 
   @media (max-width:600px){
     .hero{ padding:52px 0 32px; }
@@ -183,6 +194,85 @@
       웹 브라우저 안에서 진짜 파이썬이 돌아가고 있습니다.
     </p>
     <div class="source-tag">직접 수정하고 실행해보는 7단계 코스</div>
+  </section>
+
+  <!-- SETUP GUIDE -->
+  <section class="fig">
+    <div class="fig-head">
+      <span class="fig-tag" style="background: var(--water-deep); color: #fff;">SETUP GUIDE</span>
+      <h2 class="fig-title">파이썬 & VS Code 설치 방법 (Windows / Mac)</h2>
+    </div>
+    <p class="fig-note">
+      개인 컴퓨터에서 직접 파이썬 코드를 작성하고 실행할 수 있도록 개발 환경을 구성해 봅시다. 가장 인기 있는 코드 에디터인 <b>VS Code (Visual Studio Code)</b>와 <b>파이썬(Python)</b>의 OS별 설치 가이드입니다.
+    </p>
+
+    <div class="grid2">
+      <!-- Windows Setup -->
+      <div class="setup-card">
+        <h4>🪟 Windows (윈도우) 개발 환경 구성</h4>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div>
+            <span style="font-weight: 700; font-size: 14px; color: var(--ink);">1단계. 파이썬 설치</span>
+            <ol>
+              <li>공식 웹사이트 (<a href="https://www.python.org" target="_blank" style="color: var(--water); font-weight: bold; text-decoration: none;">python.org</a>)의 Downloads 페이지로 접속합니다.</li>
+              <li>노란색 <b>Download Python 3.x.x</b> 버튼을 눌러 설치 프로그램을 받습니다.</li>
+              <li>다운로드한 <code>.exe</code> 파일을 실행합니다.</li>
+              <li style="color: var(--warn); font-weight: bold;">⚠️ 필독: 설치 창 아래쪽의 "Add python.exe to PATH" 체크박스를 반드시 체크해야 합니다. (체크하지 않으면 명령 프롬프트에서 파이썬 명령어를 인식하지 못합니다.)</li>
+              <li><b>Install Now</b>를 클릭해 설치를 진행합니다.</li>
+            </ol>
+          </div>
+          <div>
+            <span style="font-weight: 700; font-size: 14px; color: var(--ink);">2단계. VS Code 설치</span>
+            <ol>
+              <li>공식 웹사이트 (<a href="https://code.visualstudio.com" target="_blank" style="color: var(--water); font-weight: bold; text-decoration: none;">code.visualstudio.com</a>)로 접속합니다.</li>
+              <li><b>Download for Windows</b>를 눌러 인스톨러를 다운로드한 후 실행합니다.</li>
+              <li>설치 도중 추가 작업 선택 항목에서 <b>"PATH에 추가"</b>가 체크되어 있는지 확인하고 완료합니다.</li>
+            </ol>
+          </div>
+          <div>
+            <span style="font-weight: 700; font-size: 14px; color: var(--ink);">3단계. 확장 프로그램 설치 및 확인</span>
+            <ol>
+              <li>VS Code를 열고 왼쪽 탭의 블록 모양 아이콘(Extensions, 단축키 <code>Ctrl+Shift+X</code>)을 클릭합니다.</li>
+              <li>검색창에 <b>Python</b>을 입력하여 Microsoft에서 제공하는 공식 플러그인을 설치(Install)합니다.</li>
+              <li>새 파일(<code>hello.py</code>)을 만들고 <code>print("hello")</code> 작성 후 우측 상단의 <b>▶ (Run File)</b>을 눌러 실행 결과를 확인합니다.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- macOS Setup -->
+      <div class="setup-card">
+        <h4>🍎 macOS (맥) 개발 환경 구성</h4>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div>
+            <span style="font-weight: 700; font-size: 14px; color: var(--ink);">1단계. 파이썬 설치</span>
+            <ol>
+              <li>공식 웹사이트 (<a href="https://www.python.org" target="_blank" style="color: var(--water); font-weight: bold; text-decoration: none;">python.org</a>)의 Downloads - macOS 페이지로 접속합니다.</li>
+              <li>최신 Stable 버전의 <b>macOS 64-bit universal2 installer</b> 패키지(<code>.pkg</code>)를 다운로드해 실행합니다.</li>
+              <li>설치 단계에 따라 패스워드를 입력하여 완료합니다.</li>
+              <li>설치 완료 후 생성되는 폴더 내 <b>"Install Certificates.command"</b> 파일을 꼭 더블클릭해 실행해주세요. (SSL 인증서 패치로 라이브러리 설치 실패를 예방합니다.)</li>
+            </ol>
+          </div>
+          <div>
+            <span style="font-weight: 700; font-size: 14px; color: var(--ink);">2단계. VS Code 설치</span>
+            <ol>
+              <li>공식 웹사이트 (<a href="https://code.visualstudio.com" target="_blank" style="color: var(--water); font-weight: bold; text-decoration: none;">code.visualstudio.com</a>)로 접속합니다.</li>
+              <li><b>Download for Mac</b>을 눌러 ZIP 압축 파일을 다운로드합니다.</li>
+              <li>다운로드된 ZIP 파일의 압축을 해제한 후, 생성된 <code>Visual Studio Code.app</code> 파일을 <b>응용 프로그램 (Applications)</b> 폴더로 직접 드래그앤드롭하여 이동합니다.</li>
+            </ol>
+          </div>
+          <div>
+            <span style="font-weight: 700; font-size: 14px; color: var(--ink);">3단계. 터미널 환경 설정 및 연동</span>
+            <ol>
+              <li>VS Code를 열고 단축키 <code>Cmd+Shift+P</code>를 눌러 명령 팔레트를 엽니다.</li>
+              <li><code>shell command</code> 입력 후 <b>"Shell Command: Install 'code' command in PATH"</b>를 선택해 설치합니다.</li>
+              <li>왼쪽 Extensions 탭(<code>Cmd+Shift+X</code>)에서 Microsoft의 공식 <b>Python</b> 플러그인을 설치합니다.</li>
+              <li>이제 터미널에서 <code>code .</code> 명령으로 에디터를 실행하거나, VS Code 우측 상단 <b>▶</b> 재생 버튼으로 파이썬 코드를 실행할 수 있습니다.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- 01 -->
