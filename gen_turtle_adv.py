@@ -322,21 +322,24 @@ t.<span class="fn">speed</span>(<span class="num">0</span>)         <span class=
     btn.<span class="fn">goto</span>(x, <span class="num">250</span>)   <span class="cm"># 화면 위쪽에 배치</span>
     <span class="kw">return</span> btn
 
-btn_red = <span class="fn">make_button</span>(<span class="str">"red"</span>, -<span class="num">60</span>)
-btn_blue = <span class="fn">make_button</span>(<span class="str">"blue"</span>, -<span class="num">20</span>)
-btn_green = <span class="fn">make_button</span>(<span class="str">"green"</span>, <span class="num">20</span>)
-btn_white = <span class="fn">make_button</span>(<span class="str">"white"</span>, <span class="num">60</span>)
+btn_red = <span class="fn">make_button</span>(<span class="str">"red"</span>, -<span class="num">80</span>)
+btn_blue = <span class="fn">make_button</span>(<span class="str">"blue"</span>, -<span class="num">40</span>)
+btn_green = <span class="fn">make_button</span>(<span class="str">"green"</span>, <span class="num">0</span>)
+btn_white = <span class="fn">make_button</span>(<span class="str">"white"</span>, <span class="num">40</span>)
+btn_black = <span class="fn">make_button</span>(<span class="str">"black"</span>, <span class="num">80</span>)
 
 <span class="cm"># 6. 버튼을 클릭하면 펜 색상 바꾸기</span>
 <span class="kw">def</span> <span class="fn">set_red</span>(x, y): t.<span class="fn">color</span>(<span class="str">"red"</span>)
 <span class="kw">def</span> <span class="fn">set_blue</span>(x, y): t.<span class="fn">color</span>(<span class="str">"blue"</span>)
 <span class="kw">def</span> <span class="fn">set_green</span>(x, y): t.<span class="fn">color</span>(<span class="str">"green"</span>)
 <span class="kw">def</span> <span class="fn">set_white</span>(x, y): t.<span class="fn">color</span>(<span class="str">"white"</span>)
+<span class="kw">def</span> <span class="fn">set_black</span>(x, y): t.<span class="fn">color</span>(<span class="str">"black"</span>)
 
 btn_red.<span class="fn">onclick</span>(set_red)
 btn_blue.<span class="fn">onclick</span>(set_blue)
 btn_green.<span class="fn">onclick</span>(set_green)
 btn_white.<span class="fn">onclick</span>(set_white)
+btn_black.<span class="fn">onclick</span>(set_black)
 
 <span class="cm"># 7. 마우스 그림 그리기 이벤트 연결</span>
 screen.<span class="fn">onscreenclick</span>(move_to, <span class="num">1</span>)  <span class="cm"># 배경을 왼쪽 클릭하면 이동</span>
