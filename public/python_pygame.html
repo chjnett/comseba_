@@ -318,6 +318,142 @@ star_y = -<span class="num">50</span>
     </div>
   </section>
 
+  <!-- 5. 프로젝트: 점핑 버드 -->
+  <section class="fig" style="--accent:var(--c-var)">
+    <div class="fig-head">
+      <div class="fig-emoji">🦅</div>
+      <h2 class="fig-title">5. 프로젝트: 점핑 버드 (중력과 점프)</h2>
+    </div>
+    
+    <div class="board-card">
+      <p>스페이스바를 누르면 새(플레이어)가 위로 점프하고, 가만히 있으면 중력 때문에 아래로 떨어집니다. 오른쪽에서 다가오는 기둥을 피하며 최대한 오래 살아남아 보세요!</p>
+      <div class="code-block" style="position:relative;">
+        <button class="copy-btn" onclick="copyCode(this)">복사 📋</button>
+<pre><span class="kw">import</span> pygame, sys, random
+pygame.<span class="fn">init</span>()
+screen = pygame.<span class="fn">display</span>.<span class="fn">set_mode</span>((<span class="num">800</span>, <span class="num">600</span>))
+clock = pygame.time.<span class="fn">Clock</span>()
+font = pygame.font.<span class="fn">SysFont</span>(<span class="str">"malgungothic"</span>, <span class="num">36</span>)
+
+<span class="cm"># 플레이어(새) 설정</span>
+player_x = <span class="num">100</span>
+player_y = <span class="num">300</span>
+player_velocity = <span class="num">0</span>    <span class="cm"># 현재 떨어지는 속도</span>
+gravity = <span class="num">0.5</span>          <span class="cm"># 중력 (계속 아래로 당기는 힘)</span>
+
+<span class="cm"># 장애물(기둥) 설정</span>
+pipe_x = <span class="num">800</span>
+pipe_gap = <span class="num">150</span>         <span class="cm"># 기둥 사이의 빈 공간 크기</span>
+pipe_top_height = random.<span class="fn">randint</span>(<span class="num">100</span>, <span class="num">350</span>)
+score = <span class="num">0</span>
+
+<span class="kw">while True</span>:
+    <span class="kw">for</span> event <span class="kw">in</span> pygame.event.<span class="fn">get</span>():
+        <span class="kw">if</span> event.type == pygame.<span class="fn">QUIT</span>:
+            pygame.<span class="fn">quit</span>(); sys.<span class="fn">exit</span>()
+        <span class="kw">if</span> event.type == pygame.<span class="fn">KEYDOWN</span>:
+            <span class="kw">if</span> event.key == pygame.<span class="fn">K_SPACE</span>: <span class="cm"># 스페이스바를 누르면</span>
+                player_velocity = -<span class="num">8</span>       <span class="cm"># 위로 점프! (y가 줄어들면 위로 감)</span>
+
+    <span class="cm"># 1. 중력 적용 및 새 이동</span>
+    player_velocity += gravity
+    player_y += player_velocity
+
+    <span class="cm"># 2. 기둥 이동</span>
+    pipe_x -= <span class="num">5</span>
+    <span class="kw">if</span> pipe_x &lt; -<span class="num">50</span>:  <span class="cm"># 기둥이 화면 왼쪽 밖으로 나가면 다시 오른쪽에서 등장</span>
+        pipe_x = <span class="num">800</span>
+        pipe_top_height = random.<span class="fn">randint</span>(<span class="num">100</span>, <span class="num">350</span>)
+        score += <span class="num">1</span>
+
+    <span class="cm"># 3. 충돌 검사 (바닥에 닿거나 기둥에 부딪히면 끝!)</span>
+    <span class="kw">if</span> player_y &gt; <span class="num">600</span> <span class="kw">or</span> player_y &lt; <span class="num">0</span>:
+        score = <span class="num">0</span>; player_y = <span class="num">300</span>; pipe_x = <span class="num">800</span> <span class="cm"># 리셋</span>
+    
+    <span class="cm"># 윗 기둥과 충돌</span>
+    <span class="kw">if</span> pipe_x &lt; player_x + <span class="num">30</span> <span class="kw">and</span> pipe_x + <span class="num">50</span> &gt; player_x <span class="kw">and</span> player_y &lt; pipe_top_height:
+        score = <span class="num">0</span>; player_y = <span class="num">300</span>; pipe_x = <span class="num">800</span>
+    <span class="cm"># 아래 기둥과 충돌</span>
+    <span class="kw">if</span> pipe_x &lt; player_x + <span class="num">30</span> <span class="kw">and</span> pipe_x + <span class="num">50</span> &gt; player_x <span class="kw">and</span> player_y + <span class="num">30</span> &gt; pipe_top_height + pipe_gap:
+        score = <span class="num">0</span>; player_y = <span class="num">300</span>; pipe_x = <span class="num">800</span>
+
+    <span class="cm"># 4. 화면 그리기</span>
+    screen.<span class="fn">fill</span>((<span class="num">135</span>, <span class="num">206</span>, <span class="num">235</span>)) <span class="cm"># 하늘색 배경</span>
+    
+    <span class="cm"># 플레이어(새) 그리기</span>
+    pygame.draw.<span class="fn">rect</span>(screen, (<span class="num">255</span>, <span class="num">200</span>, <span class="num">0</span>), [player_x, player_y, <span class="num">30</span>, <span class="num">30</span>])
+    <span class="cm"># 기둥 그리기 (위, 아래)</span>
+    pygame.draw.<span class="fn">rect</span>(screen, (<span class="num">34</span>, <span class="num">139</span>, <span class="num">34</span>), [pipe_x, <span class="num">0</span>, <span class="num">50</span>, pipe_top_height])
+    pygame.draw.<span class="fn">rect</span>(screen, (<span class="num">34</span>, <span class="num">139</span>, <span class="num">34</span>), [pipe_x, pipe_top_height + pipe_gap, <span class="num">50</span>, <span class="num">600</span>])
+    
+    screen.<span class="fn">blit</span>(font.<span class="fn">render</span>(<span class="str">f"점수: {score}"</span>, <span class="kw">True</span>, (<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>)), (<span class="num">10</span>, <span class="num">10</span>))
+    pygame.<span class="fn">display</span>.<span class="fn">update</span>()
+    clock.<span class="fn">tick</span>(<span class="num">60</span>)</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 프로젝트: 마우스 핑퐁 -->
+  <section class="fig" style="--accent:var(--water-deep)">
+    <div class="fig-head">
+      <div class="fig-emoji">🏓</div>
+      <h2 class="fig-title">6. 프로젝트: 마우스 핑퐁 (반사각과 마우스)</h2>
+    </div>
+    
+    <div class="board-card">
+      <p>키보드 대신 <b>마우스</b>로 패들(막대기)을 움직여 튕겨 다니는 공을 살려내는 게임입니다. 공이 벽이나 막대기에 부딪히면 반대로 튕겨 나가는 수학 로직이 핵심입니다!</p>
+      <div class="code-block" style="position:relative;">
+        <button class="copy-btn" onclick="copyCode(this)">복사 📋</button>
+<pre><span class="kw">import</span> pygame, sys
+pygame.<span class="fn">init</span>()
+screen = pygame.<span class="fn">display</span>.<span class="fn">set_mode</span>((<span class="num">800</span>, <span class="num">600</span>))
+clock = pygame.time.<span class="fn">Clock</span>()
+pygame.mouse.<span class="fn">set_visible</span>(<span class="kw">False</span>) <span class="cm"># 진짜 마우스 커서 숨기기</span>
+
+<span class="cm"># 공 설정</span>
+ball_x = <span class="num">400</span>; ball_y = <span class="num">300</span>
+ball_dx = <span class="num">5</span>;  ball_dy = -<span class="num">5</span>    <span class="cm"># 공이 이동하는 방향과 속도</span>
+
+<span class="kw">while True</span>:
+    <span class="kw">for</span> event <span class="kw">in</span> pygame.event.<span class="fn">get</span>():
+        <span class="kw">if</span> event.type == pygame.<span class="fn">QUIT</span>:
+            pygame.<span class="fn">quit</span>(); sys.<span class="fn">exit</span>()
+
+    <span class="cm"># 1. 마우스 위치 가져와서 패들 움직이기</span>
+    mouse_x, mouse_y = pygame.mouse.<span class="fn">get_pos</span>()
+    paddle_x = mouse_x - <span class="num">50</span> <span class="cm"># 마우스가 패들의 중앙에 오게 조정</span>
+
+    <span class="cm"># 2. 공 움직이기</span>
+    ball_x += ball_dx
+    ball_y += ball_dy
+
+    <span class="cm"># 3. 벽에 부딪히면 튕기기 (방향 반전)</span>
+    <span class="kw">if</span> ball_x &lt;= <span class="num">0</span> <span class="kw">or</span> ball_x &gt;= <span class="num">780</span>: <span class="cm"># 왼쪽/오른쪽 벽</span>
+        ball_dx = -ball_dx
+    <span class="kw">if</span> ball_y &lt;= <span class="num">0</span>:                  <span class="cm"># 천장</span>
+        ball_dy = -ball_dy
+    <span class="kw">if</span> ball_y &gt;= <span class="num">600</span>:                <span class="cm"># 바닥에 떨어지면 게임 오버(초기화)</span>
+        ball_x = <span class="num">400</span>; ball_y = <span class="num">300</span>
+        ball_dy = -<span class="num">5</span>
+        pygame.time.<span class="fn">delay</span>(<span class="num">1000</span>)      <span class="cm"># 1초 쉬고 시작</span>
+
+    <span class="cm"># 4. 패들(막대기)에 공이 닿으면 튕기기</span>
+    <span class="kw">if</span> ball_y + <span class="num">20</span> &gt;= <span class="num">550</span> <span class="kw">and</span> paddle_x &lt; ball_x + <span class="num">20</span> <span class="kw">and</span> paddle_x + <span class="num">100</span> &gt; ball_x:
+        ball_dy = -ball_dy           <span class="cm"># 위로 튕겨내기!</span>
+
+    <span class="cm"># 5. 화면 그리기</span>
+    screen.<span class="fn">fill</span>((<span class="num">30</span>, <span class="num">30</span>, <span class="num">30</span>)) <span class="cm"># 어두운 배경</span>
+    
+    <span class="cm"># 패들(하늘색)과 공(빨간색) 그리기</span>
+    pygame.draw.<span class="fn">rect</span>(screen, (<span class="num">0</span>, <span class="num">200</span>, <span class="num">255</span>), [paddle_x, <span class="num">550</span>, <span class="num">100</span>, <span class="num">20</span>], border_radius=<span class="num">10</span>)
+    pygame.draw.<span class="fn">ellipse</span>(screen, (<span class="num">255</span>, <span class="num">50</span>, <span class="num">50</span>), [ball_x, ball_y, <span class="num">20</span>, <span class="num">20</span>])
+
+    pygame.<span class="fn">display</span>.<span class="fn">update</span>()
+    clock.<span class="fn">tick</span>(<span class="num">60</span>)</pre>
+      </div>
+    </div>
+  </section>
+
   <footer>
     <div class="footer-title">👾 훌륭한 게임 개발자가 되셨어요!</div>
     <p style="color:var(--ink-soft);">이제 직접 코드를 수정해서 속도를 높이거나, 장애물을 추가해 보세요.</p>
