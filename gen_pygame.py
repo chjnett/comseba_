@@ -164,20 +164,29 @@ clock = pygame.time.<span class="fn">Clock</span>()  <span class="cm"># 시간 �
 
       <div class="code-block" style="position:relative;">
         <button class="copy-btn" onclick="copyCode(this)">복사 📋</button>
-<pre>    <span class="cm"># ... 위 코드의 (2) 화면 그리기 부분 ...</span>
-    screen.<span class="fn">fill</span>((<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>)) <span class="cm"># 배경을 먼저 칠하고</span>
+<pre><span class="kw">import</span> pygame, sys
+pygame.<span class="fn">init</span>()
+screen = pygame.<span class="fn">display</span>.<span class="fn">set_mode</span>((<span class="num">800</span>, <span class="num">600</span>))
+clock = pygame.time.<span class="fn">Clock</span>()
 
-    <span class="cm"># 형광 청록색 원 그리기!</span>
+<span class="kw">while True</span>:
+    <span class="kw">for</span> event <span class="kw">in</span> pygame.event.<span class="fn">get</span>():
+        <span class="kw">if</span> event.type == pygame.<span class="fn">QUIT</span>:
+            pygame.<span class="fn">quit</span>(); sys.<span class="fn">exit</span>()
+
+    <span class="cm"># 1. 배경을 먼저 까맣게 칠하기</span>
+    screen.<span class="fn">fill</span>((<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>))
+
+    <span class="cm"># 2. 형광 청록색 원 그리기!</span>
     <span class="cm"># pygame.draw.circle(어디에, 무슨색, (x, y 좌표), 크기)</span>
-    my_color = (<span class="num">0</span>, <span class="num">255</span>, <span class="num">204</span>)
-    pygame.draw.<span class="fn">circle</span>(screen, my_color, (<span class="num">400</span>, <span class="num">300</span>), <span class="num">50</span>)
+    pygame.draw.<span class="fn">circle</span>(screen, (<span class="num">0</span>, <span class="num">255</span>, <span class="num">204</span>), (<span class="num">400</span>, <span class="num">300</span>), <span class="num">50</span>)
     
-    <span class="cm"># 빨간색 네모 그리기!</span>
+    <span class="cm"># 3. 빨간색 네모 그리기!</span>
     <span class="cm"># pygame.draw.rect(어디에, 무슨색, [x, y, 가로, 세로])</span>
-    enemy_color = (<span class="num">255</span>, <span class="num">50</span>, <span class="num">50</span>)
-    pygame.draw.<span class="fn">rect</span>(screen, enemy_color, [<span class="num">100</span>, <span class="num">100</span>, <span class="num">40</span>, <span class="num">40</span>])
+    pygame.draw.<span class="fn">rect</span>(screen, (<span class="num">255</span>, <span class="num">50</span>, <span class="num">50</span>), [<span class="num">100</span>, <span class="num">100</span>, <span class="num">40</span>, <span class="num">40</span>])
 
-    <span class="cm"># ... (3) 화면 업데이트 ...</span></pre>
+    pygame.<span class="fn">display</span>.<span class="fn">update</span>()
+    clock.<span class="fn">tick</span>(<span class="num">60</span>)</pre>
       </div>
     </div>
   </section>
@@ -194,13 +203,20 @@ clock = pygame.time.<span class="fn">Clock</span>()  <span class="cm"># 시간 �
 
       <div class="code-block" style="position:relative;">
         <button class="copy-btn" onclick="copyCode(this)">복사 📋</button>
-<pre><span class="cm"># (게임 루프 밖) 캐릭터의 시작 위치</span>
+<pre><span class="kw">import</span> pygame, sys
+pygame.<span class="fn">init</span>()
+screen = pygame.<span class="fn">display</span>.<span class="fn">set_mode</span>((<span class="num">800</span>, <span class="num">600</span>))
+clock = pygame.time.<span class="fn">Clock</span>()
+
+<span class="cm"># (게임 루프 밖) 캐릭터의 시작 위치 변수</span>
 player_x = <span class="num">400</span>
 player_y = <span class="num">300</span>
 player_speed = <span class="num">5</span>
 
 <span class="kw">while True</span>:
-    <span class="cm"># ... 이벤트 처리 부분 ...</span>
+    <span class="kw">for</span> event <span class="kw">in</span> pygame.event.<span class="fn">get</span>():
+        <span class="kw">if</span> event.type == pygame.<span class="fn">QUIT</span>:
+            pygame.<span class="fn">quit</span>(); sys.<span class="fn">exit</span>()
 
     <span class="cm"># ★ 키보드 눌림 확인하기 ★</span>
     keys = pygame.key.<span class="fn">get_pressed</span>()
@@ -215,7 +231,7 @@ player_speed = <span class="num">5</span>
 
     screen.<span class="fn">fill</span>((<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>))
     
-    <span class="cm"># 변수 player_x, player_y를 위치로 사용!</span>
+    <span class="cm"># 변수 player_x, player_y를 위치로 사용해 그리기!</span>
     pygame.draw.<span class="fn">circle</span>(screen, (<span class="num">0</span>, <span class="num">255</span>, <span class="num">204</span>), (player_x, player_y), <span class="num">30</span>)
     
     pygame.<span class="fn">display</span>.<span class="fn">update</span>()
