@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+import os
+
+html_content = """<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -721,3 +723,9 @@
 
 </body>
 </html>
+"""
+
+with open('/Users/cheonhyeonjun/com_gui/public/python_playground.html', 'w', encoding='utf-8') as f:
+    f.write(html_content)
+
+print("Generated new python_playground.html")
