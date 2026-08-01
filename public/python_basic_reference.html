@@ -560,88 +560,76 @@ const LESSONS = [
     ]
 },
   {
-    type:'quiz', emoji:'📏', title:'리스트 길이 재기', tag:'퀴즈 · 새 개념(len) · 보통',
-    scenario:'<code>len()</code>은 리스트나 문자열 안에 몇 개가 들어있는지 세어주는 함수예요.<br>다음 코드의 출력 결과는 무엇일까요?',
-    code:'fruits = ["사과", "바나나", "포도"]\nprint(len(fruits))',
-    choices:[
-      {text:'3', correct:true, feedback:'✅ 맞아요! len(fruits)는 리스트 안에 값이 몇 개 있는지 세어줘요. 사과, 바나나, 포도 = 3개!'},
-      {text:'"사과"', correct:false, feedback:'🤔 len()은 첫 번째 값을 꺼내는 게 아니라 개수를 세는 함수예요.'},
-      {text:'포도', correct:false, feedback:'🤔 len()은 마지막 값을 꺼내는 게 아니라 개수를 세는 함수예요.'},
-      {text:'0', correct:false, feedback:'🤔 리스트 안에 값이 분명히 3개 들어있어요. 다시 세어보세요.'}
+    id:7, emoji:'🧰', name:'함수 행성', desc:'def로 나만의 명령어 만들기',
+    explain:`<b>함수</b>는 자주 쓰는 명령들을 이름 붙여서 저장해두는 상자예요.<br>
+    <code>def</code>로 만들고, <code>함수이름()</code>으로 언제든지 다시 불러 쓸 수 있어요.`,
+    code:[
+      {t:'kw',v:'def'},{t:'p',v:' '},{t:'fn',v:'greet'},{t:'p',v:'():'},{t:'nl'},
+      {t:'p',v:'    '},{t:'kw',v:'print'},{t:'p',v:'('},{t:'str',v:'"안녕! 반가워!"'},{t:'p',v:')'},{t:'nl'},{t:'nl'},
+      {t:'fn',v:'greet'},{t:'p',v:'()'},{t:'nl'},
+      {t:'fn',v:'greet'},{t:'p',v:'()'}
+    ],
+    output:'안녕! 반가워!\n안녕! 반가워!',
+    mission:{
+      goal:'실행하면 "잘가!"를 출력하는 올바른 함수 코드는?',
+      choices:[
+        {code:'def bye():\n    print("잘가!")\n\nbye()', correct:true, out:'잘가!'},
+        {code:'def bye():\nprint("잘가!")\n\nbye()', correct:false, hint:'함수 안의 코드도 들여쓰기(공백 4칸)가 필요해요!'},
+        {code:'def bye()\n    print("잘가!")\n\nbye()', correct:false, hint:'def 뒤에도 콜론(:)이 꼭 필요해요!'}
+      ]
+    },
+    quiz:[
+      {q:'함수를 만들 때 사용하는 키워드는?', choices:['def','for','if','list'], answer:0},
+      {q:'만들어 둔 함수를 실행(호출)하려면 어떻게 해야 할까요?', choices:['함수이름() 을 쓴다','def를 또 쓴다','print만 쓰면 된다','아무것도 안 해도 자동 실행된다'], answer:0}
     ]
   },
   {
-    type:'quiz', emoji:'🔤', title:'글자 하나 꺼내기', tag:'퀴즈 · 새 개념(인덱싱) · 보통',
-    scenario:'문자열도 리스트처럼 <b>순서(인덱스)</b>가 있어요. <code>word[0]</code>은 문자열의 몇 번째 글자를 가져올까요?',
-    code:'word = "파이썬"\nprint(word[0])',
-    choices:[
-      {text:'파', correct:true, feedback:'✅ 정답! 파이썬은 0부터 세니까 word[0]은 첫 번째 글자 "파"예요.'},
-      {text:'이', correct:false, feedback:'🤔 "이"는 word[1]이에요. 파이썬은 0부터 순서를 센다는 걸 기억하세요!'},
-      {text:'썬', correct:false, feedback:'🤔 "썬"은 마지막 글자예요. word[0]은 첫 번째 글자를 가리켜요.'}
+    id:8, emoji:'♾️', name:'무한도전 행성', desc:'while 반복문',
+    explain:`<code>while</code>은 "조건이 참인 동안 계속 반복해라"는 뜻이에요.<br>
+    <code>for</code>와 달리 반복 횟수가 정해져 있지 않고, 조건이 <b>거짓</b>이 될 때까지 계속돼요. 무한반복 되지 않게 조심!`,
+    code:[
+      {t:'fn',v:'count'},{t:'p',v:' = '},{t:'num',v:'0'},{t:'nl'},
+      {t:'kw',v:'while'},{t:'p',v:' count < '},{t:'num',v:'3'},{t:'p',v:':'},{t:'nl'},
+      {t:'p',v:'    '},{t:'kw',v:'print'},{t:'p',v:'('},{t:'str',v:'"점프!"'},{t:'p',v:')'},{t:'nl'},
+      {t:'p',v:'    '},{t:'fn',v:'count'},{t:'p',v:' = count + '},{t:'num',v:'1'}
+    ],
+    output:'점프!\n점프!\n점프!',
+    mission:{
+      goal:'"안녕"을 정확히 2번만 출력하는 올바른 코드는?',
+      choices:[
+        {code:'i = 0\nwhile i < 2:\n    print("안녕")\n    i = i + 1', correct:true, out:'안녕\n안녕'},
+        {code:'i = 0\nwhile i < 2:\n    print("안녕")', correct:false, hint:'i 값을 늘려주지 않으면 무한 반복돼요! i = i + 1을 꼭 넣어주세요.'},
+        {code:'i = 0\nwhile i > 2:\n    print("안녕")\n    i = i + 1', correct:false, hint:'조건이 i > 2 이면 처음부터 거짓이라 한 번도 실행되지 않아요!'}
+      ]
+    },
+    quiz:[
+      {q:'while 반복문은 언제까지 반복할까요?', choices:['조건이 거짓이 될 때까지','딱 3번만','1번만','무조건 10번'], answer:0},
+      {q:'while문에서 무한 반복에 빠지지 않으려면 무엇이 중요할까요?', choices:['조건이 언젠가 거짓이 되도록 값을 바꿔줘야 한다','아무것도 안 해도 된다','print를 여러 번 써야 한다','else를 꼭 써야 한다'], answer:0}
     ]
   },
   {
-    type:'quiz', emoji:'🔗', title:'두 조건 모두 참일까?', tag:'퀴즈 · 새 개념(and) · 어려움',
-    scenario:'<code>and</code>는 "그리고"라는 뜻으로, <b>두 조건이 모두 참</b>일 때만 참이 돼요. 다음 코드의 출력 결과는?',
-    code:'if 10 > 5 and 3 > 1:\n    print("참")\nelse:\n    print("거짓")',
-    choices:[
-      {text:'참', correct:true, feedback:'✅ 맞아요! 10 > 5도 참이고, 3 > 1도 참이라서 and로 연결된 조건 전체가 참이 돼요.'},
-      {text:'거짓', correct:false, feedback:'🤔 두 조건을 각각 확인해보세요. 10 > 5 도 맞고, 3 > 1 도 맞아요!'},
-      {text:'아무것도 출력되지 않는다', correct:false, feedback:'🤔 if나 else 둘 중 하나는 반드시 실행돼요.'}
+    id:9, emoji:'🧩', name:'종합응용 행성', desc:'if + for + 리스트 합체!',
+    explain:`지금까지 배운 것들을 <b>합쳐서</b> 진짜 프로그램처럼 만들어볼까요?<br>
+    리스트를 반복하면서 조건에 맞는 것만 골라내는 것, 이게 진짜 코딩의 재미예요! <code>%</code>는 나눈 <b>나머지</b>를 구하는 기호예요.`,
+    code:[
+      {t:'fn',v:'numbers'},{t:'p',v:' = '},{t:'p',v:'['},{t:'num',v:'1'},{t:'p',v:', '},{t:'num',v:'2'},{t:'p',v:', '},{t:'num',v:'3'},{t:'p',v:', '},{t:'num',v:'4'},{t:'p',v:', '},{t:'num',v:'5'},{t:'p',v:', '},{t:'num',v:'6'},{t:'p',v:']'},{t:'nl'},
+      {t:'kw',v:'for'},{t:'p',v:' n in '},{t:'fn',v:'numbers'},{t:'p',v:':'},{t:'nl'},
+      {t:'p',v:'    '},{t:'kw',v:'if'},{t:'p',v:' n % '},{t:'num',v:'2'},{t:'p',v:' == '},{t:'num',v:'0'},{t:'p',v:':'},{t:'nl'},
+      {t:'p',v:'        '},{t:'kw',v:'print'},{t:'p',v:'(n)'}
+    ],
+    output:'2\n4\n6',
+    mission:{
+      goal:'리스트 [1,3,5,2,8] 에서 3보다 큰 수만 출력하는 올바른 코드는?',
+      choices:[
+        {code:'for n in [1,3,5,2,8]:\n    if n > 3:\n        print(n)', correct:true, out:'5\n8'},
+        {code:'for n in [1,3,5,2,8]:\n    if n > 3\n        print(n)', correct:false, hint:'if 조건 뒤에도 콜론(:)이 필요해요!'},
+        {code:'for n in [1,3,5,2,8]:\nif n > 3:\n    print(n)', correct:false, hint:'if문도 for문 안쪽에 있으려면 들여쓰기가 필요해요!'}
+      ]
+    },
+    quiz:[
+      {q:'<b>n % 2 == 0</b> 은 무슨 뜻일까요?', choices:['n이 짝수다','n이 홀수다','n이 0이다','n이 음수다'], answer:0},
+      {q:'for문과 if문을 함께 쓰면 무엇을 할 수 있나요?', choices:['리스트에서 원하는 조건의 값만 골라낼 수 있다','아무 의미 없다','변수를 지울 수 있다','화면을 지울 수 있다'], answer:0}
     ]
-  },
-  {
-    type:'write', emoji:'✍️', title:'직접 써보기: 인사 문장 출력', tag:'직접 작성 · 쉬움',
-    scenario:'아래 문장을 <b>정확히 그대로</b> 화면에 출력하는 코드를 직접 작성해보세요.',
-    targetLabel:'나는 파이썬을 배우고 있어요',
-    placeholder:'print("여기에 문장을 넣어보세요")',
-    hint:'💡 print( ) 괄호 안에 따옴표로 문장을 감싸서 써보세요.',
-    sampleAnswer:'print("나는 파이썬을 배우고 있어요")',
-    validate:(code)=>{
-      const norm = code.replace(/[’‘]/g,"'").trim();
-      const m = norm.match(/^print\(\s*["'](.+?)["']\s*\)$/);
-      return !!(m && m[1].trim() === '나는 파이썬을 배우고 있어요');
-    }
-  },
-  {
-    type:'write', emoji:'✍️', title:'직접 써보기: 변수와 출력', tag:'직접 작성 · 보통',
-    scenario:'변수 <code>age</code>에 <b>13</b>을 저장하고, 그 값을 출력하는 코드를 <b>두 줄</b>로 작성해보세요.',
-    targetLabel:'13',
-    placeholder:'age = ?\nprint(age)',
-    hint:'💡 1번째 줄: age = 13 처럼 값을 저장하고, 2번째 줄: print(age)로 꺼내보세요.',
-    sampleAnswer:'age = 13\nprint(age)',
-    validate:(code)=>{
-      const lines = code.split('\n').map(l=>l.trim()).filter(Boolean);
-      return lines.length>=2 && /^age\s*=\s*13$/.test(lines[0]) && /^print\(\s*age\s*\)$/.test(lines[1]);
-    }
-  },
-  {
-    type:'write', emoji:'✍️', title:'직접 써보기: 짝수/홀수 판별', tag:'직접 작성 · 어려움',
-    scenario:'변수 <code>num = 8</code> 이 이미 정해져 있다고 가정해요.<br>num이 짝수면 <b>"짝수"</b>를, 홀수면 <b>"홀수"</b>를 출력하는 if / else 코드를 작성해보세요.',
-    targetLabel:'짝수',
-    placeholder:'if num % 2 == 0:\n    print(?)\nelse:\n    print(?)',
-    hint:'💡 나머지 연산 % 를 사용해서 num % 2 == 0 이면 짝수예요. print("짝수")와 print("홀수")를 각각 넣어보세요.',
-    sampleAnswer:'if num % 2 == 0:\n    print("짝수")\nelse:\n    print("홀수")',
-    validate:(code)=>{
-      const hasIf = /if\s+num\s*%\s*2\s*==\s*0\s*:/.test(code);
-      const hasEven = /print\(\s*["']짝수["']\s*\)/.test(code);
-      const hasElse = /else\s*:/.test(code);
-      const hasOdd = /print\(\s*["']홀수["']\s*\)/.test(code);
-      return hasIf && hasEven && hasElse && hasOdd;
-    }
-  },
-  {
-    type:'write', emoji:'✍️', title:'직접 써보기: 1부터 5까지 출력', tag:'직접 작성 · 보통',
-    scenario:'<code>for</code>와 <code>range()</code>를 사용해서 1부터 5까지 순서대로 출력하는 코드를 작성해보세요.',
-    targetLabel:'1\n2\n3\n4\n5',
-    placeholder:'for i in range(?, ?):\n    print(i)',
-    hint:'💡 range(1, 6)은 1부터 5까지 반복해요(6은 포함되지 않아요!).',
-    sampleAnswer:'for i in range(1, 6):\n    print(i)',
-    validate:(code)=>{
-      const hasFor = /for\s+\w+\s+in\s+range\(\s*1\s*,\s*6\s*\)\s*:/.test(code);
-      const hasPrint = /print\(\s*\w+\s*\)/.test(code);
-      return hasFor && hasPrint;
-    }
   }
 ];
 
