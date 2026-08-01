@@ -115,6 +115,42 @@
     background:rgba(75,139,255,.08); border:1px solid rgba(75,139,255,.25);
     border-radius:12px; padding:12px 16px; color:#BFD6FF;
   }
+  .problem-body .explain-box.wrong-tone{
+    background:rgba(255,107,107,.08); border-color:rgba(255,107,107,.3); color:#FFC2C2;
+  }
+  .problem-body .explain-box.correct-tone{
+    background:rgba(67,229,180,.08); border-color:rgba(67,229,180,.3); color:#B9FBE3;
+  }
+  .target-output{
+    margin-top:2px; margin-bottom:12px; font-size:13px; color:var(--text-muted);
+  }
+  .target-output b{color:var(--accent-gold); font-family:'JetBrains Mono',monospace; font-weight:400;}
+  .code-input{
+    width:100%; min-height:96px; resize:vertical;
+    background:#0D1428; border:1px solid var(--border-soft); border-radius:12px;
+    color:var(--text-light); font-family:'JetBrains Mono',monospace; font-size:13.5px;
+    padding:14px 16px; line-height:1.7; outline:none;
+  }
+  .code-input:focus{border-color:var(--accent-blue);}
+  .write-actions{display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;}
+  .check-btn{
+    background:var(--accent-blue); color:#fff; border:none; padding:9px 18px;
+    border-radius:10px; font-family:'Jua',sans-serif; font-size:13px; cursor:pointer;
+  }
+  .check-btn:hover{filter:brightness(1.1);}
+  .reveal-btn{
+    background:none; border:1px solid var(--border-soft); color:var(--text-muted);
+    padding:9px 16px; border-radius:10px; font-family:'Gowun Dodum',sans-serif; font-size:12.5px;
+    cursor:pointer;
+  }
+  .reveal-btn:hover{border-color:var(--accent-gold); color:var(--accent-gold);}
+  .sample-box{
+    display:none; margin-top:10px; background:#0D1428; border:1px dashed var(--border-soft);
+    border-radius:12px; padding:12px 16px; font-family:'JetBrains Mono',monospace;
+    font-size:13px; color:#9FC1FF; white-space:pre-line;
+  }
+  .sample-box .tag2{display:block; font-family:'Gowun Dodum',sans-serif; color:var(--text-muted); font-size:11.5px; margin-bottom:6px;}
+
 
   /* ===== MAP VIEW ===== */
   .map-intro{
@@ -522,6 +558,90 @@ const LESSONS = [
       {q:'리스트를 만들 때 사용하는 기호는?', choices:['[ ] 대괄호','( ) 소괄호','{ } 중괄호','< > 부등호'], answer:0},
       {q:'fruits[0] 은 리스트의 몇 번째 것을 가리킬까요?', choices:['첫 번째','두 번째','마지막','세 번째'], answer:0}
     ]
+},
+  {
+    type:'quiz', emoji:'📏', title:'리스트 길이 재기', tag:'퀴즈 · 새 개념(len) · 보통',
+    scenario:'<code>len()</code>은 리스트나 문자열 안에 몇 개가 들어있는지 세어주는 함수예요.<br>다음 코드의 출력 결과는 무엇일까요?',
+    code:'fruits = ["사과", "바나나", "포도"]\nprint(len(fruits))',
+    choices:[
+      {text:'3', correct:true, feedback:'✅ 맞아요! len(fruits)는 리스트 안에 값이 몇 개 있는지 세어줘요. 사과, 바나나, 포도 = 3개!'},
+      {text:'"사과"', correct:false, feedback:'🤔 len()은 첫 번째 값을 꺼내는 게 아니라 개수를 세는 함수예요.'},
+      {text:'포도', correct:false, feedback:'🤔 len()은 마지막 값을 꺼내는 게 아니라 개수를 세는 함수예요.'},
+      {text:'0', correct:false, feedback:'🤔 리스트 안에 값이 분명히 3개 들어있어요. 다시 세어보세요.'}
+    ]
+  },
+  {
+    type:'quiz', emoji:'🔤', title:'글자 하나 꺼내기', tag:'퀴즈 · 새 개념(인덱싱) · 보통',
+    scenario:'문자열도 리스트처럼 <b>순서(인덱스)</b>가 있어요. <code>word[0]</code>은 문자열의 몇 번째 글자를 가져올까요?',
+    code:'word = "파이썬"\nprint(word[0])',
+    choices:[
+      {text:'파', correct:true, feedback:'✅ 정답! 파이썬은 0부터 세니까 word[0]은 첫 번째 글자 "파"예요.'},
+      {text:'이', correct:false, feedback:'🤔 "이"는 word[1]이에요. 파이썬은 0부터 순서를 센다는 걸 기억하세요!'},
+      {text:'썬', correct:false, feedback:'🤔 "썬"은 마지막 글자예요. word[0]은 첫 번째 글자를 가리켜요.'}
+    ]
+  },
+  {
+    type:'quiz', emoji:'🔗', title:'두 조건 모두 참일까?', tag:'퀴즈 · 새 개념(and) · 어려움',
+    scenario:'<code>and</code>는 "그리고"라는 뜻으로, <b>두 조건이 모두 참</b>일 때만 참이 돼요. 다음 코드의 출력 결과는?',
+    code:'if 10 > 5 and 3 > 1:\n    print("참")\nelse:\n    print("거짓")',
+    choices:[
+      {text:'참', correct:true, feedback:'✅ 맞아요! 10 > 5도 참이고, 3 > 1도 참이라서 and로 연결된 조건 전체가 참이 돼요.'},
+      {text:'거짓', correct:false, feedback:'🤔 두 조건을 각각 확인해보세요. 10 > 5 도 맞고, 3 > 1 도 맞아요!'},
+      {text:'아무것도 출력되지 않는다', correct:false, feedback:'🤔 if나 else 둘 중 하나는 반드시 실행돼요.'}
+    ]
+  },
+  {
+    type:'write', emoji:'✍️', title:'직접 써보기: 인사 문장 출력', tag:'직접 작성 · 쉬움',
+    scenario:'아래 문장을 <b>정확히 그대로</b> 화면에 출력하는 코드를 직접 작성해보세요.',
+    targetLabel:'나는 파이썬을 배우고 있어요',
+    placeholder:'print("여기에 문장을 넣어보세요")',
+    hint:'💡 print( ) 괄호 안에 따옴표로 문장을 감싸서 써보세요.',
+    sampleAnswer:'print("나는 파이썬을 배우고 있어요")',
+    validate:(code)=>{
+      const norm = code.replace(/[’‘]/g,"'").trim();
+      const m = norm.match(/^print\(\s*["'](.+?)["']\s*\)$/);
+      return !!(m && m[1].trim() === '나는 파이썬을 배우고 있어요');
+    }
+  },
+  {
+    type:'write', emoji:'✍️', title:'직접 써보기: 변수와 출력', tag:'직접 작성 · 보통',
+    scenario:'변수 <code>age</code>에 <b>13</b>을 저장하고, 그 값을 출력하는 코드를 <b>두 줄</b>로 작성해보세요.',
+    targetLabel:'13',
+    placeholder:'age = ?\nprint(age)',
+    hint:'💡 1번째 줄: age = 13 처럼 값을 저장하고, 2번째 줄: print(age)로 꺼내보세요.',
+    sampleAnswer:'age = 13\nprint(age)',
+    validate:(code)=>{
+      const lines = code.split('\n').map(l=>l.trim()).filter(Boolean);
+      return lines.length>=2 && /^age\s*=\s*13$/.test(lines[0]) && /^print\(\s*age\s*\)$/.test(lines[1]);
+    }
+  },
+  {
+    type:'write', emoji:'✍️', title:'직접 써보기: 짝수/홀수 판별', tag:'직접 작성 · 어려움',
+    scenario:'변수 <code>num = 8</code> 이 이미 정해져 있다고 가정해요.<br>num이 짝수면 <b>"짝수"</b>를, 홀수면 <b>"홀수"</b>를 출력하는 if / else 코드를 작성해보세요.',
+    targetLabel:'짝수',
+    placeholder:'if num % 2 == 0:\n    print(?)\nelse:\n    print(?)',
+    hint:'💡 나머지 연산 % 를 사용해서 num % 2 == 0 이면 짝수예요. print("짝수")와 print("홀수")를 각각 넣어보세요.',
+    sampleAnswer:'if num % 2 == 0:\n    print("짝수")\nelse:\n    print("홀수")',
+    validate:(code)=>{
+      const hasIf = /if\s+num\s*%\s*2\s*==\s*0\s*:/.test(code);
+      const hasEven = /print\(\s*["']짝수["']\s*\)/.test(code);
+      const hasElse = /else\s*:/.test(code);
+      const hasOdd = /print\(\s*["']홀수["']\s*\)/.test(code);
+      return hasIf && hasEven && hasElse && hasOdd;
+    }
+  },
+  {
+    type:'write', emoji:'✍️', title:'직접 써보기: 1부터 5까지 출력', tag:'직접 작성 · 보통',
+    scenario:'<code>for</code>와 <code>range()</code>를 사용해서 1부터 5까지 순서대로 출력하는 코드를 작성해보세요.',
+    targetLabel:'1\n2\n3\n4\n5',
+    placeholder:'for i in range(?, ?):\n    print(i)',
+    hint:'💡 range(1, 6)은 1부터 5까지 반복해요(6은 포함되지 않아요!).',
+    sampleAnswer:'for i in range(1, 6):\n    print(i)',
+    validate:(code)=>{
+      const hasFor = /for\s+\w+\s+in\s+range\(\s*1\s*,\s*6\s*\)\s*:/.test(code);
+      const hasPrint = /print\(\s*\w+\s*\)/.test(code);
+      return hasFor && hasPrint;
+    }
   }
 ];
 
@@ -893,7 +1013,7 @@ function showTrophy(){
 /* ---------------- APPLIED THINKING PROBLEMS ---------------- */
 const PROBLEMS = [
   {
-    emoji:'🍬', title:'사탕 나누기', tag:'문제해결 · 쉬움',
+    type:'quiz', emoji:'🍬', title:'사탕 나누기', tag:'문제해결 · 쉬움',
     scenario:'민준이는 사탕 12개를 가지고 있어요. 친구 3명에게 <b>똑같이</b> 나누어 주려고 해요.<br>한 명이 사탕을 몇 개씩 받게 될지 알려주는 코드는 무엇일까요?',
     code:null,
     choices:[
@@ -903,7 +1023,7 @@ const PROBLEMS = [
     ]
   },
   {
-    emoji:'🐞', title:'오류 찾기', tag:'디버깅 · 쉬움',
+    type:'quiz', emoji:'🐞', title:'오류 찾기', tag:'디버깅 · 쉬움',
     scenario:'다음 코드를 실행하면 오류가 나요. 무엇이 문제일까요?',
     code:'print(안녕하세요)',
     choices:[
@@ -913,7 +1033,7 @@ const PROBLEMS = [
     ]
   },
   {
-    emoji:'🔮', title:'출력 예측하기', tag:'예측하기 · 보통',
+    type:'quiz', emoji:'🔮', title:'출력 예측하기', tag:'예측하기 · 보통',
     scenario:'다음 코드를 실행하면 화면에 무엇이 나올까요? 코드를 천천히 읽고 먼저 머릿속으로 계산해보세요.',
     code:'score = 72\nif score >= 90:\n    print("최우수")\nelif score >= 70:\n    print("우수")\nelse:\n    print("노력")',
     choices:[
@@ -924,7 +1044,7 @@ const PROBLEMS = [
     ]
   },
   {
-    emoji:'🔁', title:'몇 번 출력될까?', tag:'반복 추론 · 보통',
+    type:'quiz', emoji:'🔁', title:'몇 번 출력될까?', tag:'반복 추론 · 보통',
     scenario:'아래 코드를 실행하면 숫자가 몇 번 출력될까요? 0부터 5까지 하나씩 손가락으로 짚어가며 세어보세요.',
     code:'for i in range(6):\n    if i % 2 == 0:\n        print(i)',
     choices:[
@@ -935,7 +1055,7 @@ const PROBLEMS = [
     ]
   },
   {
-    emoji:'🧩', title:'순서를 맞춰라', tag:'논리적 사고 · 보통',
+    type:'quiz', emoji:'🧩', title:'순서를 맞춰라', tag:'논리적 사고 · 보통',
     scenario:'이름을 저장하고 인사말을 출력하는 프로그램을 만들려고 해요.<br><br>① <code>print(name + "야, 반가워!")</code><br>② <code>name = "하늘"</code><br><br>①과 ② 중 어떤 순서로 실행해야 올바르게 동작할까요?',
     code:null,
     choices:[
@@ -945,7 +1065,7 @@ const PROBLEMS = [
     ]
   },
   {
-    emoji:'🏆', title:'가장 큰 키 찾기', tag:'개념 이해 · 보통',
+    type:'quiz', emoji:'🏆', title:'가장 큰 키 찾기', tag:'개념 이해 · 보통',
     scenario:'친구들의 키가 담긴 리스트 <code>[132, 145, 128, 150]</code> 에서 가장 큰 키를 컴퓨터는 어떻게 찾아낼까요?',
     code:null,
     choices:[
@@ -955,7 +1075,7 @@ const PROBLEMS = [
     ]
   },
   {
-    emoji:'🧠', title:'멈추지 않는 코드', tag:'디버깅 · 어려움',
+    type:'quiz', emoji:'🧠', title:'멈추지 않는 코드', tag:'디버깅 · 어려움',
     scenario:'다음 코드를 실행하면 어떤 일이 벌어질까요?',
     code:'n = 5\nwhile n > 0:\n    print(n)',
     choices:[
@@ -965,7 +1085,7 @@ const PROBLEMS = [
     ]
   },
   {
-    emoji:'🎨', title:'알맞은 도구 고르기', tag:'개념 이해 · 어려움',
+    type:'quiz', emoji:'🎨', title:'알맞은 도구 고르기', tag:'개념 이해 · 어려움',
     scenario:'구슬치기에서 이긴 친구에게 "축하해!"라는 메시지를 <b>정확히 5번</b> 출력하고 싶어요.<br><code>for</code>와 <code>while</code> 중 어떤 것이 더 어울릴까요?',
     code:null,
     choices:[
@@ -973,6 +1093,90 @@ const PROBLEMS = [
       {text:'while - 조건 없이 무조건 쓰는 게 좋으니까', correct:false, feedback:'🤔 while은 조건에 따라 반복 횟수가 달라질 때 유용해요. 정해진 횟수엔 for가 더 어울려요.'},
       {text:'둘 다 어울리지 않는다', correct:false, feedback:'🤔 사실 둘 다 사용은 가능하지만, 이 상황엔 더 알맞은 도구가 있어요!'}
     ]
+},
+  {
+    type:'quiz', emoji:'📏', title:'리스트 길이 재기', tag:'퀴즈 · 새 개념(len) · 보통',
+    scenario:'<code>len()</code>은 리스트나 문자열 안에 몇 개가 들어있는지 세어주는 함수예요.<br>다음 코드의 출력 결과는 무엇일까요?',
+    code:'fruits = ["사과", "바나나", "포도"]\nprint(len(fruits))',
+    choices:[
+      {text:'3', correct:true, feedback:'✅ 맞아요! len(fruits)는 리스트 안에 값이 몇 개 있는지 세어줘요. 사과, 바나나, 포도 = 3개!'},
+      {text:'"사과"', correct:false, feedback:'🤔 len()은 첫 번째 값을 꺼내는 게 아니라 개수를 세는 함수예요.'},
+      {text:'포도', correct:false, feedback:'🤔 len()은 마지막 값을 꺼내는 게 아니라 개수를 세는 함수예요.'},
+      {text:'0', correct:false, feedback:'🤔 리스트 안에 값이 분명히 3개 들어있어요. 다시 세어보세요.'}
+    ]
+  },
+  {
+    type:'quiz', emoji:'🔤', title:'글자 하나 꺼내기', tag:'퀴즈 · 새 개념(인덱싱) · 보통',
+    scenario:'문자열도 리스트처럼 <b>순서(인덱스)</b>가 있어요. <code>word[0]</code>은 문자열의 몇 번째 글자를 가져올까요?',
+    code:'word = "파이썬"\nprint(word[0])',
+    choices:[
+      {text:'파', correct:true, feedback:'✅ 정답! 파이썬은 0부터 세니까 word[0]은 첫 번째 글자 "파"예요.'},
+      {text:'이', correct:false, feedback:'🤔 "이"는 word[1]이에요. 파이썬은 0부터 순서를 센다는 걸 기억하세요!'},
+      {text:'썬', correct:false, feedback:'🤔 "썬"은 마지막 글자예요. word[0]은 첫 번째 글자를 가리켜요.'}
+    ]
+  },
+  {
+    type:'quiz', emoji:'🔗', title:'두 조건 모두 참일까?', tag:'퀴즈 · 새 개념(and) · 어려움',
+    scenario:'<code>and</code>는 "그리고"라는 뜻으로, <b>두 조건이 모두 참</b>일 때만 참이 돼요. 다음 코드의 출력 결과는?',
+    code:'if 10 > 5 and 3 > 1:\n    print("참")\nelse:\n    print("거짓")',
+    choices:[
+      {text:'참', correct:true, feedback:'✅ 맞아요! 10 > 5도 참이고, 3 > 1도 참이라서 and로 연결된 조건 전체가 참이 돼요.'},
+      {text:'거짓', correct:false, feedback:'🤔 두 조건을 각각 확인해보세요. 10 > 5 도 맞고, 3 > 1 도 맞아요!'},
+      {text:'아무것도 출력되지 않는다', correct:false, feedback:'🤔 if나 else 둘 중 하나는 반드시 실행돼요.'}
+    ]
+  },
+  {
+    type:'write', emoji:'✍️', title:'직접 써보기: 인사 문장 출력', tag:'직접 작성 · 쉬움',
+    scenario:'아래 문장을 <b>정확히 그대로</b> 화면에 출력하는 코드를 직접 작성해보세요.',
+    targetLabel:'나는 파이썬을 배우고 있어요',
+    placeholder:'print("여기에 문장을 넣어보세요")',
+    hint:'💡 print( ) 괄호 안에 따옴표로 문장을 감싸서 써보세요.',
+    sampleAnswer:'print("나는 파이썬을 배우고 있어요")',
+    validate:(code)=>{
+      const norm = code.replace(/[’‘]/g,"'").trim();
+      const m = norm.match(/^print\(\s*["'](.+?)["']\s*\)$/);
+      return !!(m && m[1].trim() === '나는 파이썬을 배우고 있어요');
+    }
+  },
+  {
+    type:'write', emoji:'✍️', title:'직접 써보기: 변수와 출력', tag:'직접 작성 · 보통',
+    scenario:'변수 <code>age</code>에 <b>13</b>을 저장하고, 그 값을 출력하는 코드를 <b>두 줄</b>로 작성해보세요.',
+    targetLabel:'13',
+    placeholder:'age = ?\nprint(age)',
+    hint:'💡 1번째 줄: age = 13 처럼 값을 저장하고, 2번째 줄: print(age)로 꺼내보세요.',
+    sampleAnswer:'age = 13\nprint(age)',
+    validate:(code)=>{
+      const lines = code.split('\n').map(l=>l.trim()).filter(Boolean);
+      return lines.length>=2 && /^age\s*=\s*13$/.test(lines[0]) && /^print\(\s*age\s*\)$/.test(lines[1]);
+    }
+  },
+  {
+    type:'write', emoji:'✍️', title:'직접 써보기: 짝수/홀수 판별', tag:'직접 작성 · 어려움',
+    scenario:'변수 <code>num = 8</code> 이 이미 정해져 있다고 가정해요.<br>num이 짝수면 <b>"짝수"</b>를, 홀수면 <b>"홀수"</b>를 출력하는 if / else 코드를 작성해보세요.',
+    targetLabel:'짝수',
+    placeholder:'if num % 2 == 0:\n    print(?)\nelse:\n    print(?)',
+    hint:'💡 나머지 연산 % 를 사용해서 num % 2 == 0 이면 짝수예요. print("짝수")와 print("홀수")를 각각 넣어보세요.',
+    sampleAnswer:'if num % 2 == 0:\n    print("짝수")\nelse:\n    print("홀수")',
+    validate:(code)=>{
+      const hasIf = /if\s+num\s*%\s*2\s*==\s*0\s*:/.test(code);
+      const hasEven = /print\(\s*["']짝수["']\s*\)/.test(code);
+      const hasElse = /else\s*:/.test(code);
+      const hasOdd = /print\(\s*["']홀수["']\s*\)/.test(code);
+      return hasIf && hasEven && hasElse && hasOdd;
+    }
+  },
+  {
+    type:'write', emoji:'✍️', title:'직접 써보기: 1부터 5까지 출력', tag:'직접 작성 · 보통',
+    scenario:'<code>for</code>와 <code>range()</code>를 사용해서 1부터 5까지 순서대로 출력하는 코드를 작성해보세요.',
+    targetLabel:'1\n2\n3\n4\n5',
+    placeholder:'for i in range(?, ?):\n    print(i)',
+    hint:'💡 range(1, 6)은 1부터 5까지 반복해요(6은 포함되지 않아요!).',
+    sampleAnswer:'for i in range(1, 6):\n    print(i)',
+    validate:(code)=>{
+      const hasFor = /for\s+\w+\s+in\s+range\(\s*1\s*,\s*6\s*\)\s*:/.test(code);
+      const hasPrint = /print\(\s*\w+\s*\)/.test(code);
+      return hasFor && hasPrint;
+    }
   }
 ];
 const problemState = PROBLEMS.map(()=>false);
@@ -983,12 +1187,79 @@ function updateProblemsProgress(){
   document.getElementById('probTotalCount').textContent = PROBLEMS.length;
 }
 
+function markProblemSolved(idx, card, anchorEl){
+  if(!problemState[idx]){
+    problemState[idx] = true;
+    card.classList.add('solved');
+    const rect = anchorEl.getBoundingClientRect();
+    burstConfetti(rect.left, rect.top);
+    updateProblemsProgress();
+  }
+}
+
 function renderProblems(){
   const list = document.getElementById('problemsList');
   list.innerHTML = '';
   PROBLEMS.forEach((p, idx)=>{
     const card = document.createElement('div');
     card.className = 'problem-card';
+
+    if(p.type === 'write'){
+      card.innerHTML = `
+        <div class="problem-head">
+          <div class="pnum">${idx+1}</div>
+          <div class="ptitle">
+            <div class="pname">${p.emoji} ${p.title}</div>
+            <div class="ptag">${p.tag}</div>
+          </div>
+          <div class="pchev">▼</div>
+        </div>
+        <div class="problem-body">
+          <div class="problem-scenario">${p.scenario}</div>
+          <div class="target-output">🎯 목표 출력: <b>${escapeHtml(p.targetLabel)}</b></div>
+          <textarea class="code-input" placeholder="${escapeHtml(p.placeholder)}" spellcheck="false"></textarea>
+          <div class="write-actions">
+            <button class="check-btn">▶ 실행 확인하기</button>
+            <button class="reveal-btn">모범답안 보기</button>
+          </div>
+          <div class="explain-box"></div>
+          <div class="sample-box"><span class="tag2">모범답안 예시</span>${escapeHtml(p.sampleAnswer)}</div>
+        </div>
+      `;
+      const head = card.querySelector('.problem-head');
+      head.addEventListener('click', ()=>{ card.classList.toggle('open'); });
+
+      const textarea = card.querySelector('.code-input');
+      const explainBox = card.querySelector('.explain-box');
+      const sampleBox = card.querySelector('.sample-box');
+
+      card.querySelector('.check-btn').addEventListener('click', (e)=>{
+        e.stopPropagation();
+        const code = textarea.value;
+        explainBox.style.display = 'block';
+        if(!code.trim()){
+          explainBox.className = 'explain-box wrong-tone';
+          explainBox.textContent = '🤔 코드를 입력한 다음 확인해보세요!';
+          return;
+        }
+        if(p.validate(code)){
+          explainBox.className = 'explain-box correct-tone';
+          explainBox.textContent = '✅ 정답이에요! 코드를 정확하게 작성했어요.';
+          markProblemSolved(idx, card, e.currentTarget);
+        } else {
+          explainBox.className = 'explain-box wrong-tone';
+          explainBox.textContent = '🤔 아직이에요. ' + p.hint;
+        }
+      });
+      card.querySelector('.reveal-btn').addEventListener('click', (e)=>{
+        e.stopPropagation();
+        sampleBox.style.display = sampleBox.style.display==='block' ? 'none' : 'block';
+      });
+
+      list.appendChild(card);
+      return; // quiz 렌더링 로직을 건너뜀
+    }
+
     card.innerHTML = `
       <div class="problem-head">
         <div class="pnum">${idx+1}</div>
@@ -1021,16 +1292,12 @@ function renderProblems(){
         explainBox.textContent = c.feedback;
         if(c.correct){
           btn.classList.add('correct');
+          explainBox.className = 'explain-box correct-tone';
           choicesWrap.querySelectorAll('.choice-btn').forEach(x=>x.disabled=true);
-          if(!problemState[idx]){
-            problemState[idx] = true;
-            card.classList.add('solved');
-            const rect = btn.getBoundingClientRect();
-            burstConfetti(rect.left, rect.top);
-            updateProblemsProgress();
-          }
+          markProblemSolved(idx, card, btn);
         } else {
           btn.classList.add('wrong');
+          explainBox.className = 'explain-box wrong-tone';
           setTimeout(()=>btn.classList.remove('wrong'), 400);
         }
       });
