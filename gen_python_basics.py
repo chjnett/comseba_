@@ -1178,6 +1178,58 @@ const PROBLEMS = [
       return hasFor && hasPrint;
     }
   }
+  ,
+  {
+    type:'quiz', emoji:'🔍', title:'리스트에 있나 없나?', tag:'퀴즈 · 새 개념(in) · 보통',
+    scenario:'<code>in</code> 키워드는 값이 리스트 안에 있는지 확인해줘요. 다음 코드의 출력 결과는 무엇일까요?',
+    code:'backpack = ["지도", "나침반", "물"]\nprint("물" in backpack)',
+    choices:[
+      {text:'True (참)', correct:true, feedback:'✅ 맞아요! "물"이 배낭(backpack) 안에 들어있기 때문에 True(참)가 나와요.'},
+      {text:'False (거짓)', correct:false, feedback:'🤔 배낭 안에 "물"이 확실히 들어있어요! 다시 확인해보세요.'},
+      {text:'"물"', correct:false, feedback:'🤔 in 키워드는 들어있는 값 자체가 아니라, 있는지 없는지(True/False)만 알려줘요.'}
+    ]
+  },
+  {
+    type:'write', emoji:'✍️', title:'직접 써보기: 리스트에 추가하기', tag:'직접 작성 · 보통',
+    scenario:'리스트에 새로운 값을 추가할 때는 <code>append()</code>를 사용해요.<br><code>fruits</code> 리스트에 <b>"딸기"</b>를 추가하는 코드를 완성해보세요.',
+    targetLabel:'["사과", "바나나", "딸기"]',
+    placeholder:'fruits = ["사과", "바나나"]\nfruits.?\nprint(fruits)',
+    hint:'💡 과일 리스트 이름 뒤에 .append("딸기") 를 붙여보세요.',
+    sampleAnswer:'fruits = ["사과", "바나나"]\nfruits.append("딸기")\nprint(fruits)',
+    validate:(code)=>{
+      const hasAppend = /fruits\s*\.\s*append\(\s*["']딸기["']\s*\)/.test(code);
+      const hasPrint = /print\(\s*fruits\s*\)/.test(code);
+      return hasAppend && hasPrint;
+    }
+  },
+  {
+    type:'write', emoji:'✍️', title:'직접 써보기: 카운트다운', tag:'직접 작성 · 어려움',
+    scenario:'<code>while</code>문을 사용해서 5부터 1까지 <b>거꾸로</b> 숫자를 출력해보세요.',
+    targetLabel:'5\n4\n3\n2\n1',
+    placeholder:'n = 5\nwhile n > ?:\n    print(n)\n    n = ?',
+    hint:'💡 1까지만 출력하려면 조건은 n > 0 이어야 해요. 숫자를 줄이려면 n = n - 1 을 쓰면 됩니다!',
+    sampleAnswer:'n = 5\nwhile n > 0:\n    print(n)\n    n = n - 1',
+    validate:(code)=>{
+      const hasWhile = /while\s+n\s*>\s*0\s*:/.test(code);
+      const hasPrint = /print\(\s*n\s*\)/.test(code);
+      const hasDecrease = /n\s*=\s*n\s*-\s*1/.test(code) || /n\s*-=\s*1/.test(code);
+      return hasWhile && hasPrint && hasDecrease;
+    }
+  },
+  {
+    type:'write', emoji:'✍️', title:'직접 써보기: 나만의 함수', tag:'직접 작성 · 어려움',
+    scenario:'두 숫자를 받아서 <b>더한 값</b>을 출력하는 <code>add</code>라는 함수를 직접 만들어보세요.',
+    targetLabel:'8',
+    placeholder:'def add(a, b):\n    ?\n\nadd(3, 5)',
+    hint:'💡 함수 안에서 a와 b를 더한 값을 print()로 출력해야 해요. print(a + b)',
+    sampleAnswer:'def add(a, b):\n    print(a + b)\n\nadd(3, 5)',
+    validate:(code)=>{
+      const hasDef = /def\s+add\(\s*[a-zA-Z]+\s*,\s*[a-zA-Z]+\s*\)\s*:/.test(code);
+      const hasPrint = /print\(\s*[a-zA-Z]+\s*\+\s*[a-zA-Z]+\s*\)/.test(code);
+      const hasCall = /add\(\s*3\s*,\s*5\s*\)/.test(code);
+      return hasDef && hasPrint && hasCall;
+    }
+  }
 ];
 const problemState = PROBLEMS.map(()=>false);
 
