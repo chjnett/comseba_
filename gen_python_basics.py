@@ -881,13 +881,13 @@ function openLesson(id){
     qDiv.className = 'quiz-q';
     qDiv.innerHTML = `<div class="qtext">Q${qi+1}. ${q.q}</div><div class="mission-choices" style="font-family:'Gowun Dodum',sans-serif;"></div>`;
     const choicesWrap = qDiv.querySelector('.mission-choices');
-    q.choices.forEach((choiceText, ci)=>{
+    q.shuffledChoices.forEach((choiceObj, ci)=>{
       const b = document.createElement('button');
       b.className = 'choice-btn';
       b.style.fontFamily = "'Gowun Dodum',sans-serif";
-      b.textContent = `${['①','②','③','④'][ci]} ${choiceText}`;
+      b.textContent = `${['①','②','③','④'][ci]} ${choiceObj.text}`;
       b.addEventListener('click', ()=>{
-        if(ci===q.answer){
+        if(choiceObj.isCorrect){
           b.classList.add('correct');
           choicesWrap.querySelectorAll('.choice-btn').forEach(x=>x.disabled=true);
           const key = qi===0?'q0':'q1';
@@ -952,13 +952,13 @@ function openBoss(){
     qDiv.className='quiz-q';
     qDiv.innerHTML = `<div class="qtext">Q${qi+1}. ${q.q}</div><div class="mission-choices"></div>`;
     const wrap = qDiv.querySelector('.mission-choices');
-    q.choices.forEach((choiceText,ci)=>{
+    q.shuffledChoices.forEach((choiceObj,ci)=>{
       const b = document.createElement('button');
       b.className='choice-btn';
       b.style.fontFamily = "'Gowun Dodum',sans-serif";
-      b.textContent = `${['①','②','③','④'][ci]} ${choiceText}`;
+      b.textContent = `${['①','②','③','④'][ci]} ${choiceObj.text}`;
       b.addEventListener('click', ()=>{
-        if(ci===q.answer){
+        if(choiceObj.isCorrect){
           b.classList.add('correct');
           wrap.querySelectorAll('.choice-btn').forEach(x=>x.disabled=true);
           if(!state.bossProgress[qi]){
@@ -1366,6 +1366,36 @@ function renderProblems(){
 }
 
 /* ---------------- init ---------------- */
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+LESSONS.forEach(l => {
+  if (l.mission && l.mission.choices) shuffleArray(l.mission.choices);
+  if (l.quiz) {
+    l.quiz.forEach(q => {
+      let objs = q.choices.map((text, i) => ({ text, isCorrect: i === q.answer }));
+      shuffleArray(objs);
+      q.shuffledChoices = objs;
+    });
+  }
+});
+if (BOSS && BOSS.quiz) {
+  BOSS.quiz.forEach(q => {
+    let objs = q.choices.map((text, i) => ({ text, isCorrect: i === q.answer }));
+    shuffleArray(objs);
+    q.shuffledChoices = objs;
+  });
+}
+if (typeof PROBLEMS !== 'undefined') {
+  PROBLEMS.forEach(p => {
+    if (p.choices) shuffleArray(p.choices);
+  });
+}
+
 renderMap();
 renderProblems();
 </script>
