@@ -841,8 +841,10 @@ function switchTab(tab){
   document.getElementById('tabTest').classList.toggle('active', tab==='test');
   if(tab==='explore'){
     showView('map');
-  } else {
+  } else if(tab==='problems') {
     showView('problems');
+  } else if(tab==='test') {
+    showView('test');
   }
 }
 document.getElementById('tabExplore').addEventListener('click', ()=>switchTab('explore'));
