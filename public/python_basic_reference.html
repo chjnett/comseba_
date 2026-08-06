@@ -708,7 +708,7 @@ function renderMap(){
     html += `
     <div class="planet-row ${side}">
       ${i<LESSONS.length ? `<div class="connector"></div>` : ''}
-      <button class="planet-node ${cls}" data-id="${i}" ${unlocked?'':'disabled'}>
+      <button class="planet-node ${cls}" data-id="${i}">
         ${done ? `<span class="badge-check">✓</span>` : ''}
         ${unlocked ? l.emoji : '🔒'}
       </button>
@@ -728,7 +728,7 @@ function renderMap(){
   html += `
   <div class="planet-row boss-row">
     <div class="connector"></div>
-    <button class="planet-node ${bCls}" data-boss="1" ${bUnlocked?'':'disabled'}>
+    <button class="planet-node ${bCls}" data-boss="1">
       ${bDone ? `<span class="badge-check">✓</span>` : ''}
       ${bUnlocked ? BOSS.emoji : '🔒'}
     </button>
@@ -743,14 +743,30 @@ function renderMap(){
 
   wrap.querySelectorAll('.planet-node[data-id]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
-      if(btn.disabled) return;
+      if(btn.classList.contains('locked')) {
+        const pwd = prompt("잠겨있는 행성입니다. 비밀번호를 입력하세요:");
+        if (pwd === "1000") {
+          openLesson(parseInt(btn.dataset.id));
+        } else if (pwd !== null) {
+          alert("비밀번호가 틀렸습니다!");
+        }
+        return;
+      }
       openLesson(parseInt(btn.dataset.id));
     });
   });
   const bossBtn = wrap.querySelector('.planet-node[data-boss]');
   if(bossBtn){
     bossBtn.addEventListener('click', ()=>{
-      if(bossBtn.disabled) return;
+      if(bossBtn.classList.contains('locked')) {
+        const pwd = prompt("잠겨있는 행성입니다. 비밀번호를 입력하세요:");
+        if (pwd === "1000") {
+          openBoss();
+        } else if (pwd !== null) {
+          alert("비밀번호가 틀렸습니다!");
+        }
+        return;
+      }
       openBoss();
     });
   }
