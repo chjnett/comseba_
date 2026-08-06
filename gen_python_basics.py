@@ -397,7 +397,7 @@ html_content = r"""<!DOCTYPE html>
 
 
   <!-- SCORE TEST TAB VIEW -->
-  <div class="test-view" id="testView" style="display:none;">
+  <div class="test-view" id="testView">
     <div class="problem-card">
       <div class="lesson-head">
         <div class="emoji">💯</div>
