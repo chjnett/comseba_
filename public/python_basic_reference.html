@@ -1659,7 +1659,18 @@ document.getElementById('submitTestBtn').addEventListener('click', ()=>{
 });
 
 /* --- Typing Practice Logic --- */
-const typingState = { currentStage: -1, text: '', input: '', startTime: null, timerInterval: null, finished: false };
+const typingState = { 
+  currentStage: -1, text: '', input: '', startTime: null, timerInterval: null, finished: false,
+  records: []
+};
+
+// Load records from local storage
+try {
+  const data = localStorage.getItem('pythonTypingRecords');
+  if(data) {
+    typingState.records = JSON.parse(data);
+  }
+} catch(e) {}
 
 function renderTypingLobby(){
   const lobby = document.getElementById('typingLobbyList');
@@ -1667,7 +1678,10 @@ function renderTypingLobby(){
   TYPING_SNIPPETS.forEach((snip, i) => {
     const btn = document.createElement('button');
     btn.className = 'typing-stage-btn';
-    btn.textContent = `${i+1}단계: ${snip.title}`;
+    let recordText = typingState.records[i] ? `<span style="float:right; color:var(--accent-mint); font-size:14px;">👑 최고: ${typingState.records[i]}초</span>` : '';
+    btn.innerHTML = `<span>${i+1}단계: ${snip.title}</span>${recordText}`;
+    if(typingState.records[i]) btn.classList.add('completed');
+    
     btn.addEventListener('click', () => openTypingStage(i));
     lobby.appendChild(btn);
   });
@@ -1790,10 +1804,14 @@ function finishTypingStage(){
     fb.textContent = '완벽해요! 빠르고 정확합니다! 🎉';
     burstConfetti(window.innerWidth/2, window.innerHeight/2);
     
-    // Add completed mark to lobby button
-    const lobbyBtns = document.querySelectorAll('.typing-stage-btn');
-    if(lobbyBtns[typingState.currentStage]){
-      lobbyBtns[typingState.currentStage].classList.add('completed');
+    let oldRecord = typingState.records[typingState.currentStage];
+    let recordNum = parseFloat(elapsed.toFixed(1));
+    if(!oldRecord || recordNum < oldRecord){
+      typingState.records[typingState.currentStage] = recordNum;
+      try {
+        localStorage.setItem('pythonTypingRecords', JSON.stringify(typingState.records));
+      } catch(e) {}
+      fb.textContent += ' 👑 신기록 달성!';
     }
   } else if (acc >= 90){
     fb.textContent = '아주 좋아요! 오타만 조금 줄여볼까요? 👍';
@@ -1806,6 +1824,7 @@ function finishTypingStage(){
 
 document.getElementById('typingBackBtn').addEventListener('click', renderTypingLobby);
 document.getElementById('typingRetryBtn').addEventListener('click', () => openTypingStage(typingState.currentStage));
+
 
 
 function updateProblemsProgress(){
