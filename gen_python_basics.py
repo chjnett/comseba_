@@ -421,12 +421,14 @@ html_content = r"""<!DOCTYPE html>
   <div class="test-view" id="testView">
     <!-- LOBBY -->
     <div id="mockLobby">
-      <div class="lesson-head">
-        <div class="emoji">💯</div>
-        <h2>실전 모의고사 (총 10회)</h2>
+      <div class="problem-card">
+        <div class="lesson-head">
+          <div class="emoji">💯</div>
+          <h2>실전 모의고사 (총 10회)</h2>
+        </div>
+        <div class="speech">🐍 회차를 거듭할수록 조금씩 새로워집니다! 100점에 도전하세요.</div>
+        <div id="mockLobbyList" style="display:flex; flex-direction:column; gap:10px; margin-top:20px;"></div>
       </div>
-      <div class="speech">🐍 회차를 거듭할수록 조금씩 새로워집니다! 100점에 도전하세요.</div>
-      <div id="mockLobbyList" style="display:flex; flex-direction:column; gap:10px; margin-top:20px;"></div>
     </div>
 
     <!-- EXAM ROOM -->
