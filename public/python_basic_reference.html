@@ -133,6 +133,7 @@
   .tab-bar{
     display:flex; gap:8px; margin-bottom:22px;
     border-bottom:1px solid var(--border-soft); padding-bottom:0;
+    overflow-x:auto; white-space:nowrap;
   }
   .tab-btn{
     background:none; border:none; color:var(--text-muted);
@@ -141,6 +142,30 @@
   }
   .tab-btn:hover{color:var(--text-light);}
   .tab-btn.active{color:var(--accent-gold); border-bottom-color:var(--accent-gold);}
+
+  /* ===== STUDY VIEW ===== */
+  .study-view { display: none; }
+  .study-view.show { display: block; animation: fadeIn 0.4s ease forwards; }
+  .study-card {
+    background:var(--bg-panel); border:2px solid var(--border-soft);
+    border-radius:12px; padding:20px; margin-bottom:20px;
+    box-shadow:0 4px 15px var(--shadow-color);
+  }
+  .study-card h3 {
+    margin-top:0; color:var(--accent-pink); font-size:22px;
+    border-bottom:2px dashed var(--border-soft); padding-bottom:10px;
+  }
+  .study-card p {
+    font-size:16px; color:var(--text-color); line-height:1.6; margin:10px 0;
+  }
+  .study-card ul {
+    font-size:16px; color:var(--text-color); line-height:1.6; margin:10px 0; padding-left: 20px;
+  }
+  .study-card .example-box {
+    background:#1E293B; border-radius:8px; padding:15px;
+    font-family:'Consolas','Monaco',monospace; color:#A78BFA;
+    margin-top:10px; font-size:15px; border-left:4px solid var(--accent-mint); white-space: pre-wrap;
+  }
 
   /* ===== PROBLEMS TAB ===== */
   .problems-view{display:none;}
@@ -412,12 +437,22 @@
 
 
   <nav class="tab-bar">
+    <button class="tab-btn" id="tabStudy" data-tab="study">📖 기초 요약 노트</button>
     <button class="tab-btn active" id="tabExplore" data-tab="explore">🚀 행성 탐험</button>
     <button class="tab-btn" id="tabProblems" data-tab="problems">🧠 생각하는 응용문제</button>
     <button class="tab-btn" id="tabConcept" data-tab="concept">💡 개념 쏙쏙 점검</button>
     <button class="tab-btn" id="tabTest" data-tab="test">💯 실전 모의고사</button>
     <button class="tab-btn" id="tabTyping" data-tab="typing">⌨️ 타자 연습 (복습)</button>
   </nav>
+
+  <!-- STUDY VIEW -->
+  <div id="studyView" class="study-view">
+    <div class="map-intro">
+      <div class="mascot">📖</div>
+      <p>파이썬의 핵심 개념들을 한눈에 쏙쏙! 코딩하다가 기억이 안 날 때 언제든 여기로 와서 복습해봐요! ✨</p>
+    </div>
+    <div id="studyList"></div>
+  </div>
 
   <!-- MAP VIEW -->
   <div id="mapView">
@@ -943,6 +978,7 @@ function showView(name){
   document.getElementById('testView').classList.toggle('show', name==='test');
   document.getElementById('conceptView').classList.toggle('show', name==='concept');
   document.getElementById('typingView').classList.toggle('show', name==='typing');
+  document.getElementById('studyView').classList.toggle('show', name==='study');
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
@@ -953,6 +989,7 @@ function switchTab(tab){
   document.getElementById('tabConcept').classList.toggle('active', tab==='concept');
   document.getElementById('tabTest').classList.toggle('active', tab==='test');
   document.getElementById('tabTyping').classList.toggle('active', tab==='typing');
+  document.getElementById('tabStudy').classList.toggle('active', tab==='study');
   if(tab==='explore'){
     showView('map');
   } else if(tab==='problems') {
@@ -963,8 +1000,11 @@ function switchTab(tab){
     showView('test');
   } else if(tab==='typing') {
     showView('typing');
+  } else if(tab==='study') {
+    showView('study');
   }
 }
+document.getElementById('tabStudy').addEventListener('click', ()=>switchTab('study'));
 document.getElementById('tabExplore').addEventListener('click', ()=>switchTab('explore'));
 document.getElementById('tabProblems').addEventListener('click', ()=>switchTab('problems'));
 document.getElementById('tabConcept').addEventListener('click', ()=>switchTab('concept'));
@@ -2051,11 +2091,102 @@ if (typeof PROBLEMS !== 'undefined') {
   });
 }
 
+function renderStudyNotes() {
+  const container = document.getElementById('studyList');
+  if(!container) return;
+  container.innerHTML = '';
+  STUDY_NOTES.forEach(note => {
+    let html = `<div class="study-card">
+      <h3>${note.title}</h3>
+      <p>${note.content}</p>`;
+    if(note.list && note.list.length > 0){
+      html += `<ul>`;
+      note.list.forEach(item => {
+        html += `<li>${item}</li>`;
+      });
+      html += `</ul>`;
+    }
+    if(note.code){
+      html += `<div class="example-box">${note.code}</div>`;
+    }
+    html += `</div>`;
+    container.innerHTML += html;
+  });
+}
+
+const STUDY_NOTES = [
+  {
+    title: "📦 1. 변수와 기본 자료형 (Variables & Types)",
+    content: "<b>변수</b>란 데이터를 담아두는 '이름표가 붙은 상자'입니다.<br>파이썬에서는 상자 안에 숫자나 문자를 넣고 나중에 꺼내 쓸 수 있어요.",
+    list: [
+      "숫자 (Integer, Float): 계산이 가능한 진짜 숫자 (예: 100, 3.14)",
+      "문자열 (String): 따옴표로 감싼 글자 (예: '안녕', \"사과\")",
+      "불리언 (Boolean): 참과 거짓 (True, False)"
+    ],
+    code: "name = '지민'\\nage = 12\\nis_student = True\\nprint(name, age)"
+  },
+  {
+    title: "➕ 2. 파이썬의 연산자 (Operators)",
+    content: "파이썬으로 더하기, 빼기 등 다양한 계산을 할 수 있습니다.",
+    list: [
+      "기본 사칙연산: 더하기(+), 빼기(-), 곱하기(*), 나누기(/)",
+      "특수 연산: 몫(//), 나머지(%), 제곱(**)",
+      "비교 연산: 같다(==), 다르다(!=), 크다(>), 작다(<) -> 결과는 True 또는 False!"
+    ],
+    code: "print(10 + 5)    # 15\\nprint(10 // 3)   # 3 (몫)\\nprint(10 % 3)    # 1 (나머지)\\nprint(10 == 10)  # True"
+  },
+  {
+    title: "🚂 3. 리스트 (Lists)",
+    content: "여러 개의 값을 한꺼번에 보관할 수 있는 <b>기차</b> 같은 구조입니다.<br>각 칸에는 0번부터 번호(인덱스)가 매겨져 있어요.",
+    list: [
+      "리스트 만들기: 대괄호 [ ] 를 사용해요.",
+      "인덱싱: a[0] (첫 번째), a[-1] (마지막)",
+      "항목 추가: append() (맨 끝에 추가)",
+      "항목 삭제: del a[0] (0번 삭제), remove('사과') (값으로 삭제)"
+    ],
+    code: "fruits = ['사과', '바나나']\\nfruits.append('포도')\\nprint(fruits[0])  # 사과\\ndel fruits[1]     # 바나나 삭제"
+  },
+  {
+    title: "🚦 4. 조건문 (If Statement)",
+    content: "<b>'만약 ~라면'</b>이라는 뜻으로, 조건에 따라 다른 코드를 실행합니다.",
+    list: [
+      "if 조건:: 조건이 참(True)일 때 실행",
+      "elif 조건:: 위의 조건이 거짓이고 새 조건이 참일 때 실행",
+      "else:: 모든 조건이 거짓일 때 실행",
+      "중요! 조건문 아래의 코드는 반드시 들여쓰기(스페이스 4칸)를 해야 합니다.",
+      "논리 연산: 둘 다 참이면(and), 하나라도 참이면(or), 반대로(not)"
+    ],
+    code: "score = 85\\nif score >= 90:\\n    print('A학점')\\nelif score >= 80:\\n    print('B학점')\\nelse:\\n    print('C학점')"
+  },
+  {
+    title: "🔁 5. 반복문 (Loops)",
+    content: "같은 작업을 여러 번 반복할 때 사용합니다.",
+    list: [
+      "for문: 정해진 횟수나 범위 안에서 반복합니다. (range, 리스트 활용)",
+      "while문: 조건이 참(True)인 동안 계속해서 반복합니다.",
+      "break: 반복문을 중간에 멈추고 완전히 빠져나옵니다.",
+      "continue: 이번 차례만 건너뛰고 다음 반복으로 넘어갑니다."
+    ],
+    code: "for i in range(3):\\n    print('안녕!')  # 3번 출력\\n\\nwhile True:\\n    print('무한반복')\\n    break  # 바로 탈출!"
+  },
+  {
+    title: "🪄 6. 함수 (Functions)",
+    content: "자주 사용하는 코드를 묶어놓은 <b>'나만의 마법 주문'</b>입니다.",
+    list: [
+      "만들기: def 함수이름(매개변수):",
+      "매개변수: 함수에 전달하는 입력값입니다.",
+      "결과값 반환: return 을 사용해 계산 결과를 함수 밖으로 던져줍니다."
+    ],
+    code: "def add(a, b):\\n    return a + b\\n\\nresult = add(3, 4)\\nprint(result)  # 7"
+  }
+];
+
 renderMap();
 renderProblems();
 renderConcept();
 renderMockLobby();
 renderTypingLobby();
+renderStudyNotes();
 </script>
 </body>
 </html>
