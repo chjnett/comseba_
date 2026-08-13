@@ -28,6 +28,7 @@ html_content = """<!DOCTYPE html>
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   /* Arcade Dark theme */
+  html { scroll-behavior: smooth; }
   body{ background:var(--paper); color:var(--ink); font-family:var(--sans); line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
   ::selection{ background:var(--c-var); color:#fff; }
   .wrap{ max-width:940px; margin:0 auto; padding:0 24px; }
@@ -44,6 +45,33 @@ html_content = """<!DOCTYPE html>
   h1 em{ font-style:normal; color:var(--water); text-shadow: 0 0 15px rgba(0,255,204,0.4); }
   .lede{ font-size:18px; color:var(--ink-soft); max-width:60ch; margin:0 auto; }
   .lede b{ color:var(--ink); font-weight:600; }
+
+  /* TOC Grid style */
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 30px;
+  }
+  .toc-item {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 12px 16px;
+    text-align: left;
+    color: var(--ink-soft);
+    font-size: 14px;
+    font-family: var(--sans);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  .toc-item:hover {
+    border-color: var(--c-var);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 0 10px rgba(0,255,204,0.3);
+  }
 
   .fig{ padding:52px 0; border-top:1px solid var(--rule); }
   .fig-head{ display:flex; align-items:center; gap:14px; margin-bottom:18px; flex-wrap:wrap; }
@@ -92,10 +120,23 @@ html_content = """<!DOCTYPE html>
       터틀 그래픽을 넘어, 진짜 상용 게임도 만들 수 있는 <b>Pygame(파이게임)</b>의 세계로 오신 것을 환영합니다!<br>
       초당 수십 번 화면을 다시 그리며 부드럽게 움직이는 2D 게임의 기초를 배워보아요.
     </p>
+    <div class="toc-grid">
+      <a href="#prep" class="toc-item">📦 0. 설치 준비물</a>
+      <a href="#heart" class="toc-item">❤️ 1. 게임 루프 만들기</a>
+      <a href="#char" class="toc-item">👤 2. 내 캐릭터 나타내기</a>
+      <a href="#control" class="toc-item">🕹️ 3. 캐릭터 조종하기</a>
+      <a href="#star" class="toc-item">⭐ 4. 프로젝트: 별 잡기</a>
+      <a href="#bird" class="toc-item">🐦 5. 프로젝트: 점핑 버드</a>
+      <a href="#pong" class="toc-item">🏓 6. 프로젝트: 마우스 핑퐁</a>
+      <a href="#snake" class="toc-item">🐍 7. 프로젝트: 뱀 꼬리잡기</a>
+      <a href="#shoot" class="toc-item">🚀 8. 프로젝트: 스페이스 슈팅</a>
+      <a href="#mole" class="toc-item">🔨 9. 프로젝트: 두더지 잡기</a>
+      <a href="#brick" class="toc-item" style="border-color: var(--c-var); font-weight: bold; color: #fff; box-shadow: 0 0 8px rgba(0,255,204,0.2);">🧱 10. 신규! 벽돌 깨기 게임</a>
+    </div>
   </section>
 
   <!-- 0. 설치 -->
-  <section class="fig" style="--accent:var(--water)">
+  <section class="fig" id="prep" style="--accent:var(--water)">
     <div class="fig-head">
       <div class="fig-emoji">📦</div>
       <h2 class="fig-title">0. 게임 만들기 준비물 (Pygame 설치)</h2>
@@ -111,7 +152,7 @@ html_content = """<!DOCTYPE html>
   </section>
 
   <!-- 1. 파이게임의 심장 -->
-  <section class="fig" style="--accent:var(--c-var)">
+  <section class="fig" id="heart" style="--accent:var(--c-var)">
     <div class="fig-head">
       <div class="fig-emoji">❤️</div>
       <h2 class="fig-title">1. 게임의 심장 (게임 루프 만들기)</h2>
@@ -153,7 +194,7 @@ clock = pygame.time.<span class="fn">Clock</span>()  <span class="cm"># 시간 �
   </section>
 
   <!-- 2. 캐릭터 그리기 -->
-  <section class="fig" style="--accent:var(--c-loop)">
+  <section class="fig" id="char" style="--accent:var(--c-loop)">
     <div class="fig-head">
       <div class="fig-emoji">🛸</div>
       <h2 class="fig-title">2. 화면에 내 캐릭터 나타나기!</h2>
@@ -192,7 +233,7 @@ clock = pygame.time.<span class="fn">Clock</span>()
   </section>
 
   <!-- 3. 키보드로 조종하기 -->
-  <section class="fig" style="--accent:var(--c-list)">
+  <section class="fig" id="control" style="--accent:var(--c-list)">
     <div class="fig-head">
       <div class="fig-emoji">🎮</div>
       <h2 class="fig-title">3. 방향키로 내 캐릭터 조종하기</h2>
@@ -241,7 +282,7 @@ player_speed = <span class="num">5</span>
   </section>
 
   <!-- 4. 마스터 프로젝트 (별 잡기 게임) -->
-  <section class="fig" style="--accent:var(--c-def)">
+  <section class="fig" id="star" style="--accent:var(--c-def)">
     <div class="fig-head">
       <div class="fig-emoji">⭐</div>
       <h2 class="fig-title">4. 게임 마스터 프로젝트: 별 잡기!</h2>
@@ -319,7 +360,7 @@ star_y = -<span class="num">50</span>
   </section>
 
   <!-- 5. 프로젝트: 점핑 버드 -->
-  <section class="fig" style="--accent:var(--c-var)">
+  <section class="fig" id="bird" style="--accent:var(--c-var)">
     <div class="fig-head">
       <div class="fig-emoji">🦅</div>
       <h2 class="fig-title">5. 프로젝트: 점핑 버드 (중력과 점프)</h2>
@@ -394,7 +435,7 @@ score = <span class="num">0</span>
   </section>
 
   <!-- 6. 프로젝트: 마우스 핑퐁 -->
-  <section class="fig" style="--accent:var(--water-deep)">
+  <section class="fig" id="pong" style="--accent:var(--water-deep)">
     <div class="fig-head">
       <div class="fig-emoji">🏓</div>
       <h2 class="fig-title">6. 프로젝트: 마우스 핑퐁 (반사각과 마우스)</h2>
@@ -456,7 +497,7 @@ ball_dx = <span class="num">5</span>;  ball_dy = -<span class="num">5</span>    
 
 
   <!-- 7. 프로젝트: 뱀 꼬리잡기 -->
-  <section class="fig" style="--accent:var(--c-list)">
+  <section class="fig" id="snake" style="--accent:var(--c-list)">
     <div class="fig-head">
       <div class="fig-emoji">🐍</div>
       <h2 class="fig-title">7. 프로젝트: 뱀 꼬리잡기 (리스트 활용)</h2>
@@ -524,7 +565,7 @@ score = <span class="num">0</span>
   </section>
 
   <!-- 8. 프로젝트: 스페이스 슈팅 -->
-  <section class="fig" style="--accent:var(--c-var)">
+  <section class="fig" id="shoot" style="--accent:var(--c-var)">
     <div class="fig-head">
       <div class="fig-emoji">🛸</div>
       <h2 class="fig-title">8. 프로젝트: 스페이스 슈팅 (레이저와 다중 충돌)</h2>
@@ -605,7 +646,7 @@ enemy_timer = <span class="num">0</span>
   </section>
 
   <!-- 9. 프로젝트: 두더지 잡기 -->
-  <section class="fig" style="--accent:var(--water-deep)">
+  <section class="fig" id="mole" style="--accent:var(--water-deep)">
     <div class="fig-head">
       <div class="fig-emoji">🔨</div>
       <h2 class="fig-title">9. 프로젝트: 두더지 잡기 (마우스 클릭)</h2>
@@ -673,7 +714,7 @@ timer = <span class="num">60</span> <span class="cm"># 두더지가 위치를 �
   </section>
 
   <!-- 10. 프로젝트: 벽돌 깨기 -->
-  <section class="fig" style="--accent:var(--c-var)">
+  <section class="fig" id="brick" style="--accent:var(--c-var)">
     <div class="fig-head">
       <div class="fig-emoji">🧱</div>
       <h2 class="fig-title">10. 프로젝트: 벽돌 깨기 (충돌과 배열)</h2>
