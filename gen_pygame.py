@@ -672,6 +672,83 @@ timer = <span class="num">60</span> <span class="cm"># 두더지가 위치를 �
     </div>
   </section>
 
+  <!-- 10. 프로젝트: 벽돌 깨기 -->
+  <section class="fig" style="--accent:var(--c-var)">
+    <div class="fig-head">
+      <div class="fig-emoji">🧱</div>
+      <h2 class="fig-title">10. 프로젝트: 벽돌 깨기 (충돌과 배열)</h2>
+    </div>
+    
+    <div class="board-card">
+      <p>이번엔 마우스로 패들을 조종해 떨어지는 공을 튕겨내고, 상단의 벽돌들을 깨부수는 <b>벽돌 깨기 게임</b>입니다! 공이 벽이나 패들, 벽돌에 부딪힐 때 속도 방향을 뒤집는 물리 연산과 리스트의 값을 제거하는 기법을 실습합니다.</p>
+      <div class="code-block" style="position:relative;">
+        <button class="copy-btn" onclick="copyCode(this)">복사 📋</button>
+<pre><span class="kw">import</span> pygame, sys
+pygame.<span class="fn">init</span>()
+screen = pygame.<span class="fn">display</span>.<span class="fn">set_mode</span>((<span class="num">800</span>, <span class="num">600</span>))
+pygame.<span class="fn">display</span>.<span class="fn">set_caption</span>(<span class="str">"벽돌 깨기 게임!"</span>)
+clock = pygame.time.<span class="fn">Clock</span>()
+
+<span class="cm"># 1. 패들, 공 설정</span>
+paddle = pygame.<span class="fn">Rect</span>(<span class="num">350</span>, <span class="num">550</span>, <span class="num">100</span>, <span class="num">15</span>)
+ball = pygame.<span class="fn">Rect</span>(<span class="num">400</span>, <span class="num">300</span>, <span class="num">16</span>, <span class="num">16</span>)
+ball_dx, ball_dy = <span class="num">5</span>, -<span class="num">5</span>
+
+<span class="cm"># 2. 벽돌 여러 개 만들기 (배열)</span>
+bricks = []
+<span class="kw">for</span> r <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):      <span class="cm"># 3줄</span>
+    <span class="kw">for</span> c <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>):  <span class="cm"># 10칸</span>
+        brick = pygame.<span class="fn">Rect</span>(c * <span class="num">75</span> + <span class="num">30</span>, r * <span class="num">35</span> + <span class="num">50</span>, <span class="num">65</span>, <span class="num">20</span>)
+        bricks.<span class="fn">append</span>(brick)
+
+<span class="kw">while True</span>:
+    <span class="kw">for</span> event <span class="kw">in</span> pygame.event.<span class="fn">get</span>():
+        <span class="kw">if</span> event.type == pygame.<span class="fn">QUIT</span>:
+            pygame.<span class="fn">quit</span>(); sys.<span class="fn">exit</span>()
+
+    <span class="cm"># 3. 마우스 좌표로 패들 움직이기</span>
+    mx, my = pygame.mouse.<span class="fn">get_pos</span>()
+    paddle.x = mx - <span class="num">50</span> <span class="cm"># 마우스가 패들의 가운데 오도록 함</span>
+
+    <span class="cm"># 4. 공 움직이기</span>
+    ball.x += ball_dx
+    ball.y += ball_dy
+
+    <span class="cm"># 5. 공이 벽에 부딪힐 때 반사</span>
+    <span class="kw">if</span> ball.left &lt;= <span class="num">0</span> <span class="kw">or</span> ball.right &gt;= <span class="num">800</span>:
+        ball_dx *= -<span class="num">1</span>
+    <span class="kw">if</span> ball.top &lt;= <span class="num">0</span>:
+        ball_dy *= -<span class="num">1</span>
+    <span class="kw">if</span> ball.bottom &gt;= <span class="num">600</span>: <span class="cm"># 바닥에 닿으면 게임 오버 느낌으로 공 초기화</span>
+        ball.x, ball.y = <span class="num">400</span>, <span class="num">300</span>
+        ball_dy = -<span class="num">5</span>
+
+    <span class="cm"># 6. 공이 패들과 충돌했을 때 반사</span>
+    <span class="kw">if</span> ball.<span class="fn">colliderect</span>(paddle):
+        ball_dy *= -<span class="num">1</span>
+
+    <span class="cm"># 7. 공이 벽돌과 충돌했을 때 (벽돌이 사라지고 공 반사)</span>
+    <span class="kw">for</span> brick <span class="kw">in</span> bricks[:]: <span class="cm"># 복사본을 만들어 루프 돌기</span>
+        <span class="kw">if</span> ball.<span class="fn">colliderect</span>(brick):
+            bricks.<span class="fn">remove</span>(brick)
+            ball_dy *= -<span class="num">1</span>
+            <span class="kw">break</span> <span class="cm"># 한 번에 벽돌 하나만 깨뜨림</span>
+
+    <span class="cm"># 8. 그리기</span>
+    screen.<span class="fn">fill</span>((<span class="num">30</span>, <span class="num">30</span>, <span class="num">40</span>)) <span class="cm"># 배경은 어두운 남색</span>
+    
+    <span class="cm"># 패들(하늘색), 공(빨간색), 벽돌(노란색) 그리기</span>
+    pygame.draw.<span class="fn">rect</span>(screen, (<span class="num">100</span>, <span class="num">200</span>, <span class="num">255</span>), paddle)
+    pygame.draw.<span class="fn">ellipse</span>(screen, (<span class="num">255</span>, <span class="num">100</span>, <span class="num">100</span>), ball)
+    <span class="kw">for</span> brick <span class="kw">in</span> bricks:
+        pygame.draw.<span class="fn">rect</span>(screen, (<span class="num">255</span>, <span class="num">200</span>, <span class="num">100</span>), brick)
+
+    pygame.<span class="fn">display</span>.<span class="fn">update</span>()
+    clock.<span class="fn">tick</span>(<span class="num">60</span>)</pre>
+      </div>
+    </div>
+  </section>
+
   <footer>
     <div class="footer-title">👾 훌륭한 게임 개발자가 되셨어요!</div>
     <p style="color:var(--ink-soft);">이제 직접 코드를 수정해서 속도를 높이거나, 장애물을 추가해 보세요.</p>
